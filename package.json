@@ -1,0 +1,58 @@
+{
+  "name": "mi-gpt",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Seamlessly integrate your XiaoAI speaker and Mi Home devices with ChatGPT for an enhanced smart home experience.",
+  "license": "MIT",
+  "author": {
+    "name": "Del Wang",
+    "email": "hello@xbox.work",
+    "url": "https://github.com/idootop"
+  },
+  "keywords": [
+    "GPT",
+    "ChatGPT",
+    "mi",
+    "xiaomi",
+    "xiaoai",
+    "mi-home",
+    "home-assistant"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "axios": "^1.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.9",
+    "dotenv": "^16.3.2",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.js"
+  },
+  "homepage": "https://github.com/idootop/mi-gpt",
+  "bugs": {
+    "url": "https://github.com/idootop/mi-gpt/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idootop/mi-gpt.git"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Test.ts",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/tests/index.ts"],
+      "runtimeArgs": [
+        "--no-warnings",
+        "--experimental-specifier-resolution=node",
+        "--loader",
+        "./tests/esm-loader.js"
+      ],
+      "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnSessionStart"
+    }
+  ]
+}
