@@ -20,10 +20,15 @@
   ],
   "scripts": {
     "build": "tsup",
+    "db:gen": "npx prisma generate",
+    "db:reset": "npx prisma migrate reset",
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "axios": "^1.6.5"
+    "@prisma/client": "^5.8.1",
+    "axios": "^1.6.5",
+    "openai": "^4.25.0",
+    "prisma": "^5.8.1"
   },
   "devDependencies": {
     "@types/node": "^20.4.9",

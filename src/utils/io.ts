@@ -1,11 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import { jsonDecode, jsonEncode } from "./json";
+import { jsonDecode, jsonEncode } from "./base";
 
 export const kRoot = process.cwd();
-
-export const kEnvs = process.env as any;
 
 export const exists = (filePath: string) => fs.existsSync(filePath);
 
@@ -16,6 +14,14 @@ export const deleteFile = (filePath: string) => {
   } catch {
     return false;
   }
+};
+
+export const getFiles = (dir: string) => {
+  return new Promise<string[]>((resolve) => {
+    fs.readdir(dir, (err, files) => {
+      resolve(err ? [] : files);
+    });
+  });
 };
 
 export const readFile = <T = any>(
@@ -31,6 +37,17 @@ export const readFile = <T = any>(
       resolve(err ? undefined : (data as any));
     });
   });
+};
+
+export const readFileSync = (
+  filePath: string,
+  options?: fs.WriteFileOptions
+) => {
+  const dirname = path.dirname(filePath);
+  if (!fs.existsSync(dirname)) {
+    return undefined;
+  }
+  return fs.readFileSync(filePath, options);
 };
 
 export const writeFile = (
@@ -58,19 +75,17 @@ export const writeFile = (
 export const readString = (filePath: string) =>
   readFile<string>(filePath, "utf8");
 
+export const readStringSync = (filePath: string) =>
+  readFileSync(filePath, "utf8")?.toString();
+
 export const writeString = (filePath: string, content: string) =>
   writeFile(filePath, content, "utf8");
 
 export const readJSON = async (filePath: string) =>
-  jsonDecode(await readFile<string>(filePath, "utf8"));
+  jsonDecode(await readString(filePath));
+
+export const readJSONSync = (filePath: string) =>
+  jsonDecode(readStringSync(filePath));
 
 export const writeJSON = (filePath: string, content: any) =>
   writeFile(filePath, jsonEncode(content) ?? "", "utf8");
-
-export const getFiles = (dir: string) => {
-  return new Promise<string[]>((resolve) => {
-    fs.readdir(dir, (err, files) => {
-      resolve(err ? [] : files);
-    });
-  });
-};

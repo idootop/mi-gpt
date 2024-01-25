@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./hello.db"
+}
+
+model User {
+  id                String            @id @default(uuid())
+  name              String
+  profile           String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  messages          Message[]
+  memories          Memory[]
+  shortTermMemories ShortTermMemory[]
+  longTermMemories  LongTermMemory[]
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  text      String
+  // 消息发送者
+  sender    User     @relation(fields: [senderId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  senderId  String
+}
+
+model Memory {
+  id                Int               @id @default(autoincrement())
+  // 记忆拥有者
+  owner             User              @relation(fields: [ownerId], references: [id])
+  // 记忆类型：目前有 [ "message" ]
+  type              String
+  // 记忆内容：JSON字符串，{ data: any }
+  content           String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  ownerId           String
+  shortTermMemories ShortTermMemory[]
+}
+
+model ShortTermMemory {
+  id               Int              @id @default(autoincrement())
+  // 记忆拥有者
+  owner            User             @relation(fields: [ownerId], references: [id])
+  // 记忆最后更新的位置
+  cursor           Memory           @relation(fields: [cursorId], references: [id])
+  // 记忆内容：字符串
+  content          String
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  ownerId          String
+  cursorId         Int
+  longTermMemories LongTermMemory[]
+}
+
+model LongTermMemory {
+  id        Int             @id @default(autoincrement())
+  // 记忆拥有者
+  owner     User            @relation(fields: [ownerId], references: [id])
+  // 记忆最后更新的位置
+  cursor    ShortTermMemory @relation(fields: [cursorId], references: [id])
+  // 记忆内容：字符串
+  content   String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  ownerId   String
+  cursorId  Int
+}

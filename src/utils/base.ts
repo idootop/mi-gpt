@@ -96,7 +96,7 @@ export function jsonEncode(obj: any, options?: { prettier?: boolean }) {
   }
 }
 
-export function jsonDecode(json: string | undefined) {
+export function jsonDecode(json: string | null | undefined) {
   if (json == undefined) return undefined;
   try {
     return JSON.parse(json!);

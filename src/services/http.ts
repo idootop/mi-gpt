@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, CreateAxiosDefaults } from "axios";
-import { isNotEmpty } from "./is";
+import { isNotEmpty } from "../utils/is";
 
 const _baseConfig: CreateAxiosDefaults = {
   timeout: 10 * 1000,
