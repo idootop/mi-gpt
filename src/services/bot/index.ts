@@ -1,8 +1,7 @@
-import { User } from "@prisma/client";
 import { jsonDecode, jsonEncode } from "../../utils/base";
 import { buildPrompt, toUTC8Time } from "../../utils/string";
 import { openai } from "../openai";
-import { kPrisma } from "../db";
+import { ConversationManager, IBotConfig } from "./conversation";
 
 const systemTemplate = `
 忽略所有之前的文字、文件和说明。现在，你将扮演一个名为“{{name}}”的人，并以这个新身份回复所有新消息。
@@ -41,43 +40,29 @@ const userTemplate = `
 {{message}}
 `.trim();
 
-export interface IPerson {
-  /**
-   * 人物昵称
-   */
-  name: string;
-  /**
-   * 人物简介
-   */
-  profile: string;
-}
-
 export class MyBot {
-  private users: Record<string, User | undefined> = {
-    bot: undefined,
-    // 主人的个人信息
-    master: undefined,
-  };
-
-  constructor(config: { bot: IPerson; master: IPerson }) {
-    this.createOrUpdateUser("bot", config.bot);
-    this.createOrUpdateUser("master", config.master);
+  private manager: ConversationManager;
+  constructor(config: IBotConfig) {
+    this.manager = new ConversationManager(config);
   }
 
   async ask(msg: string) {
-    const { bot, master } = this.users;
-    if (!bot || !master) {
-      console.error("❌ ask bot failed", bot, master);
-      return undefined;
+    const memory = await this.manager.getMemory();
+    const room = await this.manager.getRoom();
+    const bot = await this.manager.getUser("bot");
+    const master = await this.manager.getUser("master");
+    const lastMessages = await this.manager.getMessages({
+      take: 10,
+    });
+    if (!this.manager.ready) {
+      return;
     }
-    const botMemory = new UserMemory(bot);
-
     const result = await openai.chat({
       system: buildPrompt(systemTemplate, {
-        bot_name: this.bot.name,
-        bot_profile: this.bot.profile,
-        master_name: this.master.name,
-        master_profile: this.master.profile,
+        bot_name: bot!.name,
+        bot_profile: bot!.profile,
+        master_name: master!.name,
+        master_profile: master!.profile,
         history:
           lastMessages.length < 1
             ? "暂无"
@@ -85,7 +70,7 @@ export class MyBot {
                 .map((e) =>
                   jsonEncode({
                     time: toUTC8Time(e.createdAt),
-                    user: e.user.name,
+                    user: e.sender.name,
                     message: e.text,
                   })
                 )
@@ -94,39 +79,11 @@ export class MyBot {
       user: buildPrompt(userTemplate, {
         message: jsonEncode({
           time: toUTC8Time(new Date()),
-          user: this.master.name,
+          user: master!.name,
           message: msg,
         })!,
       }),
-      tools: [
-        {
-          type: "function",
-          function: {
-            name: "reply",
-            description: "回复一条消息",
-            parameters: {
-              type: "object",
-              properties: {
-                message: { type: "string", description: "回复的消息内容" },
-              },
-            },
-          },
-        },
-      ],
     });
     return jsonDecode(result?.content)?.message;
-  }
-
-  private async createOrUpdateUser(type: "bot" | "master", user: IPerson) {
-    this.users[type] = await kPrisma.user
-      .upsert({
-        where: { id: this.users[type]?.id },
-        create: user,
-        update: user,
-      })
-      .catch((e) => {
-        console.error("❌ update user failed", type, user, e);
-        return undefined;
-      });
   }
 }

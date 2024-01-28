@@ -59,7 +59,7 @@ model Memory {
   // 关联数据
   owner             User?             @relation(fields: [ownerId], references: [id]) // owner 为空时，即房间自己的公共记忆
   ownerId           String?
-  Room              Room              @relation(fields: [roomId], references: [id])
+  room              Room              @relation(fields: [roomId], references: [id])
   roomId            String
   shortTermMemories ShortTermMemory[]
   // 时间日期
@@ -75,7 +75,7 @@ model ShortTermMemory {
   cursorId         Int
   owner            User?            @relation(fields: [ownerId], references: [id]) // owner 为空时，即房间自己的公共记忆
   ownerId          String?
-  Room             Room             @relation(fields: [roomId], references: [id])
+  room             Room             @relation(fields: [roomId], references: [id])
   roomId           String
   longTermMemories LongTermMemory[]
   // 时间日期
