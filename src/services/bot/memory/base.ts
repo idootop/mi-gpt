@@ -5,6 +5,7 @@ import { ShortTermMemory } from "./short-term";
 import { LongTermMemory } from "./long-term";
 
 // todo 在会话中，向会话的参与者分发消息（记忆），公共记忆，个人记忆
+// todo 通知会话参与者
 export class UserMemory {
   private user: User;
 
