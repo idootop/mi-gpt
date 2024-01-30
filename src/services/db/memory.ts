@@ -1,5 +1,5 @@
 import { Memory, Room, User } from "@prisma/client";
-import { kPrisma } from ".";
+import { k404, kPrisma } from ".";
 
 class _MemoryCRUD {
   async count(options?: { cursorId?: number; room?: Room; owner?: User }) {
@@ -72,7 +72,7 @@ class _MemoryCRUD {
     };
     return kPrisma.memory
       .upsert({
-        where: { id: memory.id },
+        where: { id: memory.id || k404 },
         create: data,
         update: data,
       })

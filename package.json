@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "db:gen": "npx prisma generate",
+    "db:gen": "npx prisma migrate dev --name hello",
     "db:reset": "npx prisma migrate reset",
     "prepublish": "npm run build"
   },

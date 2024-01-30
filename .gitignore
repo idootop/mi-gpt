@@ -3,5 +3,6 @@ dist
 .DS_Store
 .yarn
 .env
+.bot.json
 .mi.json
 *.db*

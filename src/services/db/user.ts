@@ -1,5 +1,5 @@
 import { Prisma, User } from "@prisma/client";
-import { kPrisma } from ".";
+import { k404, kPrisma } from ".";
 
 class _UserCRUD {
   async count() {
@@ -50,7 +50,7 @@ class _UserCRUD {
     user.profile = user.profile.trim();
     return kPrisma.user
       .upsert({
-        where: { id: user.id },
+        where: { id: user.id || k404.toString() },
         create: user,
         update: user,
       })

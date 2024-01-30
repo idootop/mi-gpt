@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
+export const k404 = -404;
+
 export const kPrisma = new PrismaClient();
 
 export function runWithDB(main: () => Promise<void>) {

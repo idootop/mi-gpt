@@ -1,5 +1,5 @@
 import { Message, Prisma, Room, User } from "@prisma/client";
-import { kPrisma } from ".";
+import { k404, kPrisma } from ".";
 
 class _MessageCRUD {
   async count(options?: { cursorId?: number; room?: Room; sender?: User }) {
@@ -75,7 +75,7 @@ class _MessageCRUD {
     };
     return kPrisma.message
       .upsert({
-        where: { id: message.id },
+        where: { id: message.id || k404 },
         create: data,
         update: data,
       })

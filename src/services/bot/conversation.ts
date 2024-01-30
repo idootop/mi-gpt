@@ -3,35 +3,8 @@ import { UserCRUD } from "../db/user";
 import { RoomCRUD, getRoomID } from "../db/room";
 import { MemoryManager } from "./memory";
 import { MessageCRUD } from "../db/message";
-
-export interface IPerson {
-  /**
-   * 人物昵称
-   */
-  name: string;
-  /**
-   * 人物简介
-   */
-  profile: string;
-}
-
-const kDefaultBot: IPerson = {
-  name: "用户",
-  profile: "",
-};
-const kDefaultMaster: IPerson = {
-  name: "小爱同学",
-  profile: "",
-};
-
-export type IBotConfig = {
-  bot?: IPerson;
-  master?: IPerson;
-  room?: {
-    name: string;
-    description: string;
-  };
-};
+import { BotConfig, IBotConfig } from "./config";
+import { jsonEncode } from "../../utils/base";
 
 export class ConversationManager {
   private config: IBotConfig;
@@ -40,27 +13,27 @@ export class ConversationManager {
   }
 
   async getMemory() {
-    const isReady = await this.loadConfig();
-    if (!isReady) {
+    await this.loadOrUpdateConfig();
+    if (!this.isReady) {
       return undefined;
     }
     return this.memory;
   }
 
   async getRoom() {
-    const isReady = await this.loadConfig();
-    if (!isReady) {
+    const { room } = await this.loadOrUpdateConfig();
+    if (!this.isReady) {
       return undefined;
     }
-    return this.room;
+    return room as Room;
   }
 
   async getUser(key: "bot" | "master") {
-    const isReady = await this.loadConfig();
-    if (!isReady) {
+    const config = await this.loadOrUpdateConfig();
+    if (!this.isReady) {
       return undefined;
     }
-    return this.users[key];
+    return config[key] as User;
   }
 
   async getMessages(options?: {
@@ -74,14 +47,11 @@ export class ConversationManager {
      */
     order?: "asc" | "desc";
   }) {
-    const isReady = await this.loadConfig();
-    if (!isReady) {
+    const room = await this.getRoom();
+    if (!this.isReady) {
       return [];
     }
-    return MessageCRUD.gets({
-      room: this.room,
-      ...options,
-    });
+    return MessageCRUD.gets({ room, ...options });
   }
 
   async onMessage(message: Message) {
@@ -89,51 +59,32 @@ export class ConversationManager {
     return memory?.addMessage2Memory(message);
   }
 
-  private users: Record<string, User> = {};
-  private room?: Room;
   private memory?: MemoryManager;
 
-  get ready() {
-    const { bot, master } = this.users;
-    return bot && master && this.room && this.memory;
+  get isReady() {
+    return !!this.memory;
   }
 
-  private async loadConfig() {
-    if (this.ready) {
-      return true;
+  async loadOrUpdateConfig() {
+    const { config, diffs } = await BotConfig.update(this.config);
+    if (!config.bot?.id || diffs?.includes("bot")) {
+      config.bot = await UserCRUD.addOrUpdate(config.bot);
     }
-    let { bot, master } = this.users;
-    if (!bot) {
-      await this.addOrUpdateUser("bot", this.config.bot ?? kDefaultBot);
+    if (!config.master?.id || diffs?.includes("master")) {
+      config.master = await UserCRUD.addOrUpdate(config.master);
     }
-    if (!master) {
-      await this.addOrUpdateUser(
-        "master",
-        this.config.master ?? kDefaultMaster
-      );
-    }
-    if (!this.room && bot && master) {
-      const defaultRoomName = `${master.name}和${bot.name}的私聊`;
-      this.room = await RoomCRUD.addOrUpdate({
-        id: getRoomID([bot, master]),
-        name: this.config.room?.name ?? defaultRoomName,
-        description: this.config.room?.description ?? defaultRoomName,
+    if (!config.room?.id || diffs?.includes("room")) {
+      const defaultRoomName = `${config.master.name}和${config.bot.name}的私聊`;
+      config.room = await RoomCRUD.addOrUpdate({
+        id: getRoomID([config.bot.id, config.master.id]),
+        name: config.room?.name ?? defaultRoomName,
+        description: config.room?.description ?? defaultRoomName,
       });
     }
-    if (bot && master && this.room && !this.memory) {
-      this.memory = new MemoryManager(this.room!);
+    const { config: newConfig } = await BotConfig.update(config);
+    if (!this.memory && config.bot && config.master && config.room) {
+      this.memory = new MemoryManager(config.room);
     }
-    return this.ready;
-  }
-
-  private async addOrUpdateUser(type: "bot" | "master", user: IPerson) {
-    const oldUser = this.users[type];
-    const res = await UserCRUD.addOrUpdate({
-      id: oldUser?.id,
-      ...user,
-    });
-    if (res) {
-      this.users[type] = res;
-    }
+    return newConfig as IBotConfig;
   }
 }

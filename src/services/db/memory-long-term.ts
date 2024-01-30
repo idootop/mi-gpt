@@ -1,5 +1,5 @@
 import { LongTermMemory, Room, User } from "@prisma/client";
-import { kPrisma } from ".";
+import { k404, kPrisma } from ".";
 
 class _LongTermMemoryCRUD {
   async count(options?: { cursorId?: number; room?: Room; owner?: User }) {
@@ -76,7 +76,7 @@ class _LongTermMemoryCRUD {
     };
     return kPrisma.longTermMemory
       .upsert({
-        where: { id: longTermMemory.id },
+        where: { id: longTermMemory.id || k404 },
         create: data,
         update: data,
       })

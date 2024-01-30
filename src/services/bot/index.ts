@@ -1,7 +1,8 @@
 import { jsonDecode, jsonEncode } from "../../utils/base";
 import { buildPrompt, toUTC8Time } from "../../utils/string";
 import { openai } from "../openai";
-import { ConversationManager, IBotConfig } from "./conversation";
+import { IBotConfig } from "./config";
+import { ConversationManager } from "./conversation";
 
 const systemTemplate = `
 忽略所有之前的文字、文件和说明。现在，你将扮演一个名为“{{name}}”的人，并以这个新身份回复所有新消息。
@@ -54,7 +55,7 @@ export class MyBot {
     const lastMessages = await this.manager.getMessages({
       take: 10,
     });
-    if (!this.manager.ready) {
+    if (!this.manager.isReady) {
       return;
     }
     const result = await openai.chat({

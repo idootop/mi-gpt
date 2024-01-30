@@ -1,5 +1,5 @@
 import { ShortTermMemory, Room, User } from "@prisma/client";
-import { kPrisma } from ".";
+import { k404, kPrisma } from ".";
 
 class _ShortTermMemoryCRUD {
   async count(options?: { cursorId?: number; room?: Room; owner?: User }) {
@@ -76,7 +76,7 @@ class _ShortTermMemoryCRUD {
     };
     return kPrisma.shortTermMemory
       .upsert({
-        where: { id: shortTermMemory.id },
+        where: { id: shortTermMemory.id || k404 },
         create: data,
         update: data,
       })

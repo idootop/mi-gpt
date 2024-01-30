@@ -1,11 +1,8 @@
 import { Prisma, Room, User } from "@prisma/client";
-import { kPrisma } from ".";
+import { k404, kPrisma } from ".";
 
-export function getRoomID(users: User[]) {
-  return users
-    .map((e) => e.id)
-    .sort()
-    .join("_");
+export function getRoomID(users: string[]) {
+  return users.sort().join("_");
 }
 
 class _RoomCRUD {
@@ -72,7 +69,7 @@ class _RoomCRUD {
     room.description = room.description.trim();
     return kPrisma.room
       .upsert({
-        where: { id: room.id },
+        where: { id: room.id || k404.toString() },
         create: room,
         update: room,
       })
