@@ -1,5 +1,6 @@
 import { Message, Prisma, Room, User } from "@prisma/client";
-import { k404, kPrisma } from ".";
+import { removeEmpty } from "../../utils/base";
+import { getSkipWithCursor, k404, kPrisma } from "./index";
 
 class _MessageCRUD {
   async count(options?: { cursorId?: number; room?: Room; sender?: User }) {
@@ -48,12 +49,11 @@ class _MessageCRUD {
     } = options ?? {};
     const messages = await kPrisma.message
       .findMany({
-        where: { roomId: room?.id, senderId: sender?.id },
+        where: removeEmpty({ roomId: room?.id, senderId: sender?.id }),
         take,
-        skip,
         include,
-        cursor: { id: cursorId },
         orderBy: { createdAt: order },
+        ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
         console.error("❌ get messages failed", options, e);
@@ -73,12 +73,8 @@ class _MessageCRUD {
     const text = _text?.trim();
     const data = {
       text,
-      room: {
-        connect: { id: roomId },
-      },
-      sender: {
-        connect: { id: senderId },
-      },
+      room: { connect: { id: roomId } },
+      sender: { connect: { id: senderId } },
     };
     return kPrisma.message
       .upsert({

@@ -1,5 +1,6 @@
 import { Memory, Room, User } from "@prisma/client";
-import { k404, kPrisma } from ".";
+import { getSkipWithCursor, k404, kPrisma } from "./index";
+import { removeEmpty } from "../../utils/base";
 
 class _MemoryCRUD {
   async count(options?: { cursorId?: number; room?: Room; owner?: User }) {
@@ -46,11 +47,10 @@ class _MemoryCRUD {
     } = options ?? {};
     const memories = await kPrisma.memory
       .findMany({
-        where: { roomId: room?.id, ownerId: owner?.id },
+        where: removeEmpty({ roomId: room?.id, ownerId: owner?.id }),
         take,
-        skip,
-        cursor: { id: cursorId },
         orderBy: { createdAt: order },
+        ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
         console.error("❌ get memories failed", options, e);
@@ -70,12 +70,8 @@ class _MemoryCRUD {
     const text = _text?.trim();
     const data = {
       text,
-      room: {
-        connect: { id: roomId },
-      },
-      owner: {
-        connect: { id: ownerId },
-      },
+      room: { connect: { id: roomId } },
+      owner: ownerId ? { connect: { id: ownerId } } : undefined,
     };
     return kPrisma.memory
       .upsert({

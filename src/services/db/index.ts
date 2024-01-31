@@ -15,3 +15,10 @@ export function runWithDB(main: () => Promise<void>) {
       process.exit(1);
     });
 }
+
+export function getSkipWithCursor(skip: number, cursorId: any) {
+  return {
+    skip: cursorId ? skip + 1 : skip,
+    cursor: cursorId ? { id: cursorId } : undefined,
+  };
+}

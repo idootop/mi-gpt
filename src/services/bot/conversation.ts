@@ -43,8 +43,20 @@ export class ConversationManager {
     return MessageCRUD.gets({ room, ...options });
   }
 
-  async onMessage(message: Message) {
-    const { memory } = await this.get();
-    return memory?.addMessage2Memory(message);
+  async onMessage(payload: { sender: User; text: string }) {
+    const { sender, text } = payload;
+    const { room, memory } = await this.get();
+    if (memory) {
+      const message = await MessageCRUD.addOrUpdate({
+        text,
+        roomId: room!.id,
+        senderId: sender.id,
+      });
+      if (message) {
+        // 异步加入记忆
+        memory?.addMessage2Memory(message);
+        return message;
+      }
+    }
   }
 }

@@ -6,6 +6,8 @@ export class ShortTermMemoryAgent {
     newMemories: Memory[],
     lastShortTermMemory?: Memory
   ): Promise<string | undefined> {
-    return "";
+    return `count: ${newMemories.length}\n${newMemories
+      .map((e, idx) => idx.toString() + ". " + e.text)
+      .join("\n")}`;
   }
 }

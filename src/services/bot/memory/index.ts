@@ -55,7 +55,7 @@ export class MemoryManager {
       roomId: this.room.id,
       ownerId: message.senderId,
     });
-    // 更新长短期记忆
+    // 异步更新长短期记忆
     this.updateLongShortTermMemory();
     return res;
   }

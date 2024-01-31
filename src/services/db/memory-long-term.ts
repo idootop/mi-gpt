@@ -1,5 +1,6 @@
 import { LongTermMemory, Room, User } from "@prisma/client";
-import { k404, kPrisma } from ".";
+import { removeEmpty } from "../../utils/base";
+import { getSkipWithCursor, k404, kPrisma } from "./index";
 
 class _LongTermMemoryCRUD {
   async count(options?: { cursorId?: number; room?: Room; owner?: User }) {
@@ -46,11 +47,10 @@ class _LongTermMemoryCRUD {
     } = options ?? {};
     const memories = await kPrisma.longTermMemory
       .findMany({
-        where: { roomId: room?.id, ownerId: owner?.id },
+        where: removeEmpty({ roomId: room?.id, ownerId: owner?.id }),
         take,
-        skip,
-        cursor: { id: cursorId },
         orderBy: { createdAt: order },
+        ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
         console.error("❌ get long term memories failed", options, e);
@@ -71,15 +71,9 @@ class _LongTermMemoryCRUD {
     const text = _text?.trim();
     const data = {
       text,
-      cursor: {
-        connect: { id: cursorId },
-      },
-      room: {
-        connect: { id: roomId },
-      },
-      owner: {
-        connect: { id: ownerId },
-      },
+      cursor: { connect: { id: cursorId } },
+      room: { connect: { id: roomId } },
+      owner: ownerId ? { connect: { id: ownerId } } : undefined,
     };
     return kPrisma.longTermMemory
       .upsert({

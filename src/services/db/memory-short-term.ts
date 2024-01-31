@@ -1,5 +1,6 @@
-import { ShortTermMemory, Room, User } from "@prisma/client";
-import { k404, kPrisma } from ".";
+import { Room, ShortTermMemory, User } from "@prisma/client";
+import { removeEmpty } from "../../utils/base";
+import { getSkipWithCursor, k404, kPrisma } from "./index";
 
 class _ShortTermMemoryCRUD {
   async count(options?: { cursorId?: number; room?: Room; owner?: User }) {
@@ -46,11 +47,10 @@ class _ShortTermMemoryCRUD {
     } = options ?? {};
     const memories = await kPrisma.shortTermMemory
       .findMany({
-        where: { roomId: room?.id, ownerId: owner?.id },
+        where: removeEmpty({ roomId: room?.id, ownerId: owner?.id }),
         take,
-        skip,
-        cursor: { id: cursorId },
         orderBy: { createdAt: order },
+        ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
         console.error("❌ get short term memories failed", options, e);
@@ -71,15 +71,9 @@ class _ShortTermMemoryCRUD {
     const text = _text?.trim();
     const data = {
       text,
-      cursor: {
-        connect: { id: cursorId },
-      },
-      room: {
-        connect: { id: roomId },
-      },
-      owner: {
-        connect: { id: ownerId },
-      },
+      cursor: { connect: { id: cursorId } },
+      room: { connect: { id: roomId } },
+      owner: ownerId ? { connect: { id: ownerId } } : undefined,
     };
     return kPrisma.shortTermMemory
       .upsert({

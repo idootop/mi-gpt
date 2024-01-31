@@ -144,3 +144,7 @@ export const deepClone = <T>(obj: T): T => {
   }
   return copy;
 };
+
+export function repeat(text: string, count: number) {
+  return Array(count).fill(text).join("");
+}

@@ -1,5 +1,5 @@
 import { Prisma, User } from "@prisma/client";
-import { k404, kPrisma } from ".";
+import { getSkipWithCursor, k404, kPrisma } from "./index";
 
 class _UserCRUD {
   async count() {
@@ -36,10 +36,9 @@ class _UserCRUD {
     const users = await kPrisma.user
       .findMany({
         take,
-        skip,
         include,
-        cursor: { id: cursorId },
         orderBy: { createdAt: order },
+        ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
         console.error("❌ get users failed", options, e);

@@ -1,5 +1,5 @@
 import { Prisma, Room, User } from "@prisma/client";
-import { k404, kPrisma } from ".";
+import { k404, kPrisma, getSkipWithCursor } from "./index";
 
 export function getRoomID(users: User[]) {
   return users
@@ -55,12 +55,11 @@ class _RoomCRUD {
     } = options ?? {};
     const rooms = await kPrisma.room
       .findMany({
-        where: { members: { some: { id: user?.id } } },
+        where: user?.id ? { members: { some: { id: user.id } } } : undefined,
         take,
-        skip,
-        cursor: { id: cursorId },
         include,
         orderBy: { createdAt: order },
+        ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
         console.error("❌ get rooms failed", options, e);
