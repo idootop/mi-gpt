@@ -1,39 +1,28 @@
-import { Message, Prisma, Room, User } from "@prisma/client";
-import { UserCRUD } from "../db/user";
-import { RoomCRUD, getRoomID } from "../db/room";
+import { Message, Prisma, User } from "@prisma/client";
 import { MemoryManager } from "./memory";
 import { MessageCRUD } from "../db/message";
 import { BotConfig, IBotConfig } from "./config";
-import { jsonEncode } from "../../utils/base";
+import { DeepPartial } from "../../utils/type";
 
 export class ConversationManager {
-  private config: IBotConfig;
-  constructor(config: IBotConfig) {
+  private config: DeepPartial<IBotConfig>;
+  constructor(config: DeepPartial<IBotConfig>) {
     this.config = config;
   }
 
-  async getMemory() {
-    await this.loadOrUpdateConfig();
-    if (!this.isReady) {
-      return undefined;
+  async get(): Promise<Partial<IBotConfig & { memory: MemoryManager }>> {
+    const config = await this.update();
+    if (!config) {
+      return {};
     }
-    return this.memory;
+    return {
+      ...config,
+      memory: new MemoryManager(config.room),
+    };
   }
 
-  async getRoom() {
-    const { room } = await this.loadOrUpdateConfig();
-    if (!this.isReady) {
-      return undefined;
-    }
-    return room as Room;
-  }
-
-  async getUser(key: "bot" | "master") {
-    const config = await this.loadOrUpdateConfig();
-    if (!this.isReady) {
-      return undefined;
-    }
-    return config[key] as User;
+  async update(config?: DeepPartial<IBotConfig>) {
+    return BotConfig.update(config ?? this.config);
   }
 
   async getMessages(options?: {
@@ -47,44 +36,15 @@ export class ConversationManager {
      */
     order?: "asc" | "desc";
   }) {
-    const room = await this.getRoom();
-    if (!this.isReady) {
+    const { room } = await this.get();
+    if (!room) {
       return [];
     }
     return MessageCRUD.gets({ room, ...options });
   }
 
   async onMessage(message: Message) {
-    const memory = await this.getMemory();
+    const { memory } = await this.get();
     return memory?.addMessage2Memory(message);
-  }
-
-  private memory?: MemoryManager;
-
-  get isReady() {
-    return !!this.memory;
-  }
-
-  async loadOrUpdateConfig() {
-    const { config, diffs } = await BotConfig.update(this.config);
-    if (!config.bot?.id || diffs?.includes("bot")) {
-      config.bot = await UserCRUD.addOrUpdate(config.bot);
-    }
-    if (!config.master?.id || diffs?.includes("master")) {
-      config.master = await UserCRUD.addOrUpdate(config.master);
-    }
-    if (!config.room?.id || diffs?.includes("room")) {
-      const defaultRoomName = `${config.master.name}和${config.bot.name}的私聊`;
-      config.room = await RoomCRUD.addOrUpdate({
-        id: getRoomID([config.bot.id, config.master.id]),
-        name: config.room?.name ?? defaultRoomName,
-        description: config.room?.description ?? defaultRoomName,
-      });
-    }
-    const { config: newConfig } = await BotConfig.update(config);
-    if (!this.memory && config.bot && config.master && config.room) {
-      this.memory = new MemoryManager(config.room);
-    }
-    return newConfig as IBotConfig;
   }
 }

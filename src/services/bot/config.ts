@@ -1,57 +1,113 @@
 import { Room, User } from "@prisma/client";
 import { readJSON, writeJSON } from "../../utils/io";
+import { deepClone, removeEmpty } from "../../utils/base";
+import { UserCRUD } from "../db/user";
+import { RoomCRUD, getRoomID } from "../db/room";
 import { DeepPartial } from "../../utils/type";
-import { deepClone } from "../../utils/base";
-import { diff } from "../../utils/diff";
 
-export type IBotConfig = DeepPartial<{
+const kDefaultMaster = {
+  name: "用户",
+  profile: "",
+};
+
+const kDefaultBot = {
+  name: "小爱同学",
+  profile: "",
+};
+
+interface IBotIndex {
+  botId: string;
+  masterId: string;
+}
+
+export interface IBotConfig {
   bot: User;
   master: User;
   room: Room;
-}>;
+}
 
 class _BotConfig {
-  config?: IBotConfig;
+  private botIndex?: IBotIndex;
 
-  private _config_path = ".bot.json";
+  private _index_path = ".bot.json";
 
-  async get() {
-    if (!this.config) {
-      this.config = await readJSON(this._config_path);
+  private async _getIndex(): Promise<IBotIndex | undefined> {
+    if (!this.botIndex) {
+      this.botIndex = await readJSON(this._index_path);
     }
-    return this.config;
+    return this.botIndex;
   }
 
-  async update(config: IBotConfig) {
-    let currentConfig: any = await this.get();
-    const oldConfig = deepClone(currentConfig ?? {});
-    if (!currentConfig) {
-      currentConfig = {
-        master: {
-          name: "用户",
-          profile: "",
-        },
-        bot: {
-          name: "小爱同学",
-          profile: "",
-        },
-      };
-    }
-    for (const key of ["bot", "master", "room"]) {
-      currentConfig[key] = {
-        ...currentConfig[key],
-        ...(config as any)[key],
-      };
-    }
-    const diffs = diff(currentConfig, oldConfig);
-    const diffKeys = diffs.map((e) => e.path[0]);
-    if (diffKeys.length > 0) {
-      const success = await writeJSON(this._config_path, currentConfig);
-      if (success) {
-        return { config: currentConfig, diffs: diffKeys };
+  async get(): Promise<IBotConfig | undefined> {
+    const index = await this._getIndex();
+    if (!index) {
+      // create db records
+      const bot = await UserCRUD.addOrUpdate(kDefaultBot);
+      if (!bot) {
+        console.error("❌ create bot failed");
+        return undefined;
       }
+      const master = await UserCRUD.addOrUpdate(kDefaultMaster);
+      if (!master) {
+        console.error("❌ create master failed");
+        return undefined;
+      }
+      const defaultRoomName = `${master.name}和${bot.name}的私聊`;
+      const room = await RoomCRUD.addOrUpdate({
+        id: getRoomID([bot, master]),
+        name: defaultRoomName,
+        description: defaultRoomName,
+      });
+      if (!room) {
+        console.error("❌ create room failed");
+        return undefined;
+      }
+      this.botIndex = {
+        botId: bot.id,
+        masterId: master.id,
+      };
+      await writeJSON(this._index_path, this.botIndex);
     }
-    return { config: oldConfig };
+    const bot = await UserCRUD.get(this.botIndex!.botId);
+    if (!bot) {
+      console.error("❌ find bot failed");
+      return undefined;
+    }
+    const master = await UserCRUD.get(this.botIndex!.masterId);
+    if (!master) {
+      console.error("❌ find master failed");
+      return undefined;
+    }
+    const room = await RoomCRUD.get(getRoomID([bot, master]));
+    if (!room) {
+      console.error("❌ find room failed");
+      return undefined;
+    }
+    return { bot, master, room };
+  }
+
+  async update(
+    config: DeepPartial<IBotConfig>
+  ): Promise<IBotConfig | undefined> {
+    let currentConfig = await this.get();
+    if (!currentConfig) {
+      return undefined;
+    }
+    const oldConfig = deepClone(currentConfig);
+    for (const key in currentConfig) {
+      const _key = key as keyof IBotConfig;
+      currentConfig[_key] = {
+        ...currentConfig[_key],
+        ...removeEmpty(config[_key]),
+        updatedAt: undefined, // reset update date
+      } as any;
+    }
+    let { bot, master, room } = currentConfig;
+    bot = (await UserCRUD.addOrUpdate(currentConfig.bot)) ?? oldConfig.bot;
+    master =
+      (await UserCRUD.addOrUpdate(currentConfig.master)) ?? oldConfig.master;
+    room = (await RoomCRUD.addOrUpdate(currentConfig.room)) ?? oldConfig.room;
+    return { bot, master, room };
   }
 }
 

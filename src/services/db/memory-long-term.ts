@@ -18,6 +18,13 @@ class _LongTermMemoryCRUD {
       });
   }
 
+  async get(id: number) {
+    return kPrisma.longTermMemory.findFirst({ where: { id } }).catch((e) => {
+      console.error("❌ get long term memory failed", id, e);
+      return undefined;
+    });
+  }
+
   async gets(options?: {
     room?: Room;
     owner?: User;

@@ -9,6 +9,13 @@ class _UserCRUD {
     });
   }
 
+  async get(id: string) {
+    return kPrisma.user.findFirst({ where: { id } }).catch((e) => {
+      console.error("❌ get user failed", id, e);
+      return undefined;
+    });
+  }
+
   async gets(options?: {
     take?: number;
     skip?: number;
@@ -23,13 +30,14 @@ class _UserCRUD {
       take = 10,
       skip = 0,
       cursorId,
-      include = { members: true },
+      include = { rooms: true },
       order = "desc",
     } = options ?? {};
     const users = await kPrisma.user
       .findMany({
         take,
         skip,
+        include,
         cursor: { id: cursorId },
         orderBy: { createdAt: order },
       })

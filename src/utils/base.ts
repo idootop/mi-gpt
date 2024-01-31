@@ -110,6 +110,9 @@ export function withDefault<T = any>(e: any, defaultValue: T): T {
 }
 
 export function removeEmpty<T = any>(data: T): T {
+  if (!data) {
+    return data;
+  }
   if (Array.isArray(data)) {
     return data.filter((e) => e != undefined) as any;
   }

@@ -18,6 +18,13 @@ class _ShortTermMemoryCRUD {
       });
   }
 
+  async get(id: number) {
+    return kPrisma.shortTermMemory.findFirst({ where: { id } }).catch((e) => {
+      console.error("❌ get short term memory failed", id, e);
+      return undefined;
+    });
+  }
+
   async gets(options?: {
     room?: Room;
     owner?: User;

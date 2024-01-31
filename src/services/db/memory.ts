@@ -18,6 +18,13 @@ class _MemoryCRUD {
       });
   }
 
+  async get(id: number) {
+    return kPrisma.memory.findFirst({ where: { id } }).catch((e) => {
+      console.error("❌ get memory failed", id, e);
+      return undefined;
+    });
+  }
+
   async gets(options?: {
     room?: Room;
     owner?: User;

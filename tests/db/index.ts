@@ -17,7 +17,7 @@ export async function testDB() {
       description: "王黎的客厅，小爱同学放在角落里",
     },
   });
-  const { room } = await manager.loadOrUpdateConfig();
+  const { room } = await manager.get();
   assert(room, "❌ load config failed");
   println("✅ hello world！");
 }

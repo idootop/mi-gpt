@@ -1,8 +1,11 @@
 import { Prisma, Room, User } from "@prisma/client";
 import { k404, kPrisma } from ".";
 
-export function getRoomID(users: string[]) {
-  return users.sort().join("_");
+export function getRoomID(users: User[]) {
+  return users
+    .map((e) => e.id)
+    .sort()
+    .join("_");
 }
 
 class _RoomCRUD {
@@ -22,6 +25,13 @@ class _RoomCRUD {
         console.error("❌ get room count failed", e);
         return -1;
       });
+  }
+
+  async get(id: string) {
+    return kPrisma.room.findFirst({ where: { id } }).catch((e) => {
+      console.error("❌ get room failed", id, e);
+      return undefined;
+    });
   }
 
   async gets(options?: {
