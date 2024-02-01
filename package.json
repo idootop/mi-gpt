@@ -22,7 +22,7 @@
     "build": "tsup",
     "db:gen": "npx prisma migrate dev --name hello",
     "db:reset": "rm .bot.json && npx prisma migrate reset",
-    "prepublish": "npm run build"
+    "prepublish": "yarn db:gen && npm run build"
   },
   "dependencies": {
     "@prisma/client": "^5.8.1",

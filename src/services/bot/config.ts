@@ -103,10 +103,16 @@ class _BotConfig {
       } as any;
     }
     let { bot, master, room } = currentConfig;
-    bot = (await UserCRUD.addOrUpdate(currentConfig.bot)) ?? oldConfig.bot;
-    master =
-      (await UserCRUD.addOrUpdate(currentConfig.master)) ?? oldConfig.master;
-    room = (await RoomCRUD.addOrUpdate(currentConfig.room)) ?? oldConfig.room;
+    const newDefaultRoomName = `${master.name}和${bot.name}的私聊`;
+    if (room.name.endsWith("的私聊")) {
+      room.name = config.room?.name ?? newDefaultRoomName;
+    }
+    if (room.description.endsWith("的私聊")) {
+      room.description = config.room?.description ?? newDefaultRoomName;
+    }
+    bot = (await UserCRUD.addOrUpdate(bot)) ?? oldConfig.bot;
+    master = (await UserCRUD.addOrUpdate(master)) ?? oldConfig.master;
+    room = (await RoomCRUD.addOrUpdate(room)) ?? oldConfig.room;
     return { bot, master, room };
   }
 }
