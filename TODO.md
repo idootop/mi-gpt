@@ -1,0 +1,3 @@
+- ❌ Auto mute XiaoAi reply
+- Stream response
+- Update long/short memories

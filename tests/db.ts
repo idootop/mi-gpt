@@ -1,7 +1,7 @@
 import { assert } from "console";
-import { ConversationManager } from "../../src/services/bot/conversation";
-import { println } from "../../src/utils/base";
-import { MessageCRUD } from "../../src/services/db/message";
+import { ConversationManager } from "../src/services/bot/conversation";
+import { println } from "../src/utils/base";
+import { MessageCRUD } from "../src/services/db/message";
 
 export async function testDB() {
   const manager = new ConversationManager({

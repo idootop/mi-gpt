@@ -6,7 +6,6 @@ export default defineConfig(() => ({
   target: "node16",
   platform: "node",
   format: ["esm", "cjs"],
-  splitting: false,
   sourcemap: false,
   treeshake: true,
   minify: true,

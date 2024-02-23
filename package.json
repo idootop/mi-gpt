@@ -1,6 +1,6 @@
 {
   "name": "mi-gpt",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Seamlessly integrate your XiaoAI speaker and Mi Home devices with ChatGPT for an enhanced smart home experience.",
   "license": "MIT",
@@ -27,6 +27,7 @@
   "dependencies": {
     "@prisma/client": "^5.8.1",
     "axios": "^1.6.5",
+    "mi-service-lite": "^2.0.0",
     "openai": "^4.25.0",
     "prisma": "^5.8.1"
   },
