@@ -48,16 +48,13 @@ export class MyBot {
   }
 
   async ask(msg: string) {
-    const memory = await this.manager.getMemory();
-    const room = await this.manager.getRoom();
-    const bot = await this.manager.getUser("bot");
-    const master = await this.manager.getUser("master");
+    const { bot, master, room, memory } = await this.manager.get();
+    if (!memory) {
+      return;
+    }
     const lastMessages = await this.manager.getMessages({
       take: 10,
     });
-    if (!this.manager.isReady) {
-      return;
-    }
     const result = await openai.chat({
       system: buildPrompt(systemTemplate, {
         bot_name: bot!.name,
