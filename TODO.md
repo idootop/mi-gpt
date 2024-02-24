@@ -1,3 +1,4 @@
 - ❌ Auto mute XiaoAi reply
-- Stream response
+- ✅ Stream response
 - Update long/short memories
+- Deactivate Xiaoai

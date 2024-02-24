@@ -27,8 +27,9 @@
   "dependencies": {
     "@prisma/client": "^5.8.1",
     "axios": "^1.6.5",
+    "https-proxy-agent": "^7.0.4",
     "mi-service-lite": "^2.0.0",
-    "openai": "^4.25.0",
+    "openai": "^4.28.0",
     "prisma": "^5.8.1"
   },
   "devDependencies": {

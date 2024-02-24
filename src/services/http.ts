@@ -1,5 +1,10 @@
 import axios, { AxiosRequestConfig, CreateAxiosDefaults } from "axios";
+import { HttpsProxyAgent } from "https-proxy-agent";
 import { isNotEmpty } from "../utils/is";
+
+export const kProxyAgent = new HttpsProxyAgent(
+  process.env.HTTP_PROXY ?? "http://127.0.0.1:7890"
+);
 
 const _baseConfig: CreateAxiosDefaults = {
   timeout: 10 * 1000,
