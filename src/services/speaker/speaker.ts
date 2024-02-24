@@ -266,7 +266,7 @@ export class Speaker extends BaseSpeaker {
       const ttsAnswer = e.answers.find((e) => e.type === "TTS") as any;
       return {
         text: e.query,
-        answer: ttsAnswer?.tts?.text,
+        answer: ttsAnswer?.tts?.text?.trim(),
         timestamp: e.time,
       };
     });
