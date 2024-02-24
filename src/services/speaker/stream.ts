@@ -13,14 +13,6 @@ interface StreamResponseOptions {
    * 默认值：200，(0 为立即响应)
    */
   firstSubmitTimeout?: number;
-  /**
-   * 批量提交响应句子的收集时长（单位：毫秒）
-   *
-   * 例子：1000ms => 收集每隔 1s 内收到的文本，作为一次 Response
-   *
-   * 默认值：1s，(0 为立即提交)
-   */
-  batchSubmitTimeout?: number;
 }
 
 export class StreamResponse {
@@ -37,16 +29,10 @@ export class StreamResponse {
 
   maxSentenceLength: number;
   firstSubmitTimeout: number;
-  batchSubmitTimeout: number;
   constructor(options?: StreamResponseOptions) {
-    const {
-      maxSentenceLength = 100,
-      firstSubmitTimeout = 200,
-      batchSubmitTimeout = 1000,
-    } = options ?? {};
+    const { maxSentenceLength = 100, firstSubmitTimeout = 200 } = options ?? {};
     this.maxSentenceLength = maxSentenceLength;
     this.firstSubmitTimeout = firstSubmitTimeout;
-    this.batchSubmitTimeout = batchSubmitTimeout;
   }
 
   status: ResponseStatus = "responding";
@@ -70,6 +56,11 @@ export class StreamResponse {
 
   private _nextChunkIdx = 0;
   getNextResponse() {
+    const isFirstSubmit = this._preSubmitTimestamp === 0;
+    if (!isFirstSubmit) {
+      // 在请求下一条消息前，提交当前收到的所有消息
+      this._batchSubmitImmediately();
+    }
     const nextSentence = this._chunks[this._nextChunkIdx];
     if (nextSentence) {
       this._nextChunkIdx++;
@@ -82,11 +73,7 @@ export class StreamResponse {
 
   finish() {
     if (["idle", "responding"].includes(this.status)) {
-      if (this._tempText) {
-        // 提交暂存的文本
-        this._addResponse(this._tempText);
-        this._tempText = "";
-      }
+      this._batchSubmitImmediately();
       if (this._remainingText) {
         // 提交完整句子
         this._chunks.push(this._remainingText);
@@ -102,6 +89,13 @@ export class StreamResponse {
   private _remainingText: string = "";
   private _preSubmitTimestamp = 0;
 
+  private _batchSubmitImmediately() {
+    if (this._tempText) {
+      this._addResponse(this._tempText);
+      this._tempText = "";
+    }
+  }
+
   /**
    * 批量收集/提交收到的文字响应
    *
@@ -109,40 +103,29 @@ export class StreamResponse {
    */
   private _batchSubmit(text: string, immediately?: boolean) {
     this._tempText += text;
-    const submitImmediately = () => {
-      if (this._tempText) {
-        this._addResponse(this._tempText);
-        this._tempText = "";
-      }
-      this._preSubmitTimestamp = Date.now();
-    };
-    immediately =
-      immediately ??
-      (this.firstSubmitTimeout < 100 || this.batchSubmitTimeout < 100);
+    immediately = immediately ?? this.firstSubmitTimeout < 100;
     if (immediately) {
-      return submitImmediately();
+      return this._batchSubmitImmediately();
     }
     const isFirstSubmit = this._preSubmitTimestamp === 0;
-    const batchSubmit = (timeout: number) => {
-      // 当消息长度积攒到一定长度，或达到一定时间间隔后，批量提交消息
-      if (
-        Date.now() - this._preSubmitTimestamp > timeout ||
-        this._tempText.length > this.maxSentenceLength
-      ) {
-        submitImmediately();
-      }
-    };
-    const submit = (timeout: number) => {
-      batchSubmit(timeout);
-      setTimeout(() => {
-        batchSubmit(timeout);
-      }, timeout);
-    };
     if (isFirstSubmit) {
       this._preSubmitTimestamp = Date.now();
+      const batchSubmit = (timeout: number) => {
+        // 当消息长度积攒到一定长度，或达到一定时间间隔后，批量提交消息
+        if (
+          Date.now() - this._preSubmitTimestamp >= timeout ||
+          this._tempText.length >= this.maxSentenceLength
+        ) {
+          this._batchSubmitImmediately();
+        }
+      };
+      const submit = (timeout: number) => {
+        batchSubmit(timeout);
+        setTimeout(() => {
+          batchSubmit(timeout);
+        }, timeout);
+      };
       submit(this.firstSubmitTimeout);
-    } else {
-      submit(this.batchSubmitTimeout);
     }
   }
 
@@ -172,8 +155,6 @@ export class StreamResponse {
     return lastCutIndex;
   }
 }
-
-const stream = new StreamResponse();
 
 // ai onNewText
 // {

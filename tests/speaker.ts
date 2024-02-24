@@ -13,11 +13,11 @@ export async function testSpeaker() {
   const speaker = new AISpeaker(config);
   await speaker.initMiServices();
   // await testSpeakerResponse(speaker);
-  // await testSpeakerStreamResponse(speaker);
+  await testSpeakerStreamResponse(speaker);
   // await testSpeakerGetMessages(speaker);
   // await testSwitchSpeaker(speaker);
   // await testSpeakerUnWakeUp(speaker);
-  await testAISpeaker(speaker);
+  // await testAISpeaker(speaker);
 }
 
 async function testAISpeaker(speaker: AISpeaker) {
