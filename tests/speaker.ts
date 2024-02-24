@@ -1,5 +1,5 @@
 import { AISpeaker } from "../src/services/speaker/ai";
-import { ResponseStream } from "../src/services/speaker/stream";
+import { StreamResponse } from "../src/services/speaker/stream";
 import { sleep } from "../src/utils/base";
 
 export async function testSpeaker() {
@@ -13,16 +13,16 @@ export async function testSpeaker() {
   const speaker = new AISpeaker(config);
   await speaker.initMiServices();
   // await testSpeakerResponse(speaker);
-  await testSpeakerStreamResponse(speaker);
+  // await testSpeakerStreamResponse(speaker);
   // await testSpeakerGetMessages(speaker);
   // await testSwitchSpeaker(speaker);
   // await testSpeakerUnWakeUp(speaker);
-  // await testAISpeaker(speaker);
+  await testAISpeaker(speaker);
 }
 
 async function testAISpeaker(speaker: AISpeaker) {
   speaker.askAI = async (msg) => {
-    return "你说：" + msg.text;
+    return { text: "你说：" + msg.text };
   };
   await speaker.run();
   console.log("finished");
@@ -60,7 +60,7 @@ async function testSpeakerResponse(speaker: AISpeaker) {
 }
 
 async function testSpeakerStreamResponse(speaker: AISpeaker) {
-  const stream = new ResponseStream();
+  const stream = new StreamResponse();
   const add = async (text: string) => {
     stream.addResponse(text);
     await sleep(100);

@@ -1,6 +1,6 @@
 type ResponseStatus = "idle" | "responding" | "finished" | "canceled";
 
-interface ResponseStreamOptions {
+interface StreamResponseOptions {
   /**
    * 单次响应句子的最大长度
    */
@@ -23,12 +23,12 @@ interface ResponseStreamOptions {
   batchSubmitTimeout?: number;
 }
 
-export class ResponseStream {
+export class StreamResponse {
   // 将已有的大篇文字回复 chuck 成 stream 回复
-  static createResponseStream(text: string, options?: ResponseStreamOptions) {
+  static createStreamResponse(text: string, options?: StreamResponseOptions) {
     const { maxSentenceLength = 100 } = options ?? {};
     if (text.length > maxSentenceLength) {
-      const stream = new ResponseStream(options);
+      const stream = new StreamResponse(options);
       stream.addResponse(text);
       stream.finish();
       return stream;
@@ -38,7 +38,7 @@ export class ResponseStream {
   maxSentenceLength: number;
   firstSubmitTimeout: number;
   batchSubmitTimeout: number;
-  constructor(options?: ResponseStreamOptions) {
+  constructor(options?: StreamResponseOptions) {
     const {
       maxSentenceLength = 100,
       firstSubmitTimeout = 200,
@@ -173,7 +173,7 @@ export class ResponseStream {
   }
 }
 
-const stream = new ResponseStream();
+const stream = new StreamResponse();
 
 // ai onNewText
 // {

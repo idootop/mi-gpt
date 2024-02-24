@@ -4,10 +4,11 @@ import {
   SpeakerCommand,
   SpeakerConfig,
   QueryMessage,
+  SpeakerAnswer,
 } from "./speaker";
 
 export type AISpeakerConfig = SpeakerConfig & {
-  askAI?: (msg: QueryMessage) => Promise<string>;
+  askAI?: (msg: QueryMessage) => Promise<SpeakerAnswer>;
   /**
    * 切换音色前缀
    *
@@ -200,7 +201,7 @@ export class AISpeaker extends Speaker {
   ];
 
   async askAIForAnswer(msg: QueryMessage) {
-    let data: any = {};
+    let data: { answer?: SpeakerAnswer } = {};
     const { hasNewMsg } = this.checkIfHasNewMsg(msg);
     for (const action of this._askAIForAnswerSteps) {
       const res = await action(msg, data);

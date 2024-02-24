@@ -8,7 +8,7 @@ import {
 } from "mi-service-lite";
 import { sleep } from "../../utils/base";
 import { Http } from "../http";
-import { ResponseStream } from "./stream";
+import { StreamResponse } from "./stream";
 
 export type TTSProvider = "xiaoai" | "doubao";
 
@@ -59,7 +59,7 @@ export class BaseSpeaker {
   async response(options: {
     tts?: TTSProvider;
     text?: string;
-    stream?: ResponseStream;
+    stream?: StreamResponse;
     audio?: string;
     speaker?: string;
     keepAlive?: boolean;
@@ -79,7 +79,7 @@ export class BaseSpeaker {
 
     if (ttsNotXiaoai && !stream) {
       // 长文本 TTS 转化成 stream 分段模式
-      stream = ResponseStream.createResponseStream(text!);
+      stream = StreamResponse.createStreamResponse(text!);
     }
 
     let res;
@@ -139,7 +139,7 @@ export class BaseSpeaker {
   private async _response(options: {
     tts?: TTSProvider;
     text?: string;
-    stream?: ResponseStream;
+    stream?: StreamResponse;
     audio?: string;
     speaker?: string;
     keepAlive?: boolean;

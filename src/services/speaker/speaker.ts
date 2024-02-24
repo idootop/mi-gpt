@@ -1,5 +1,6 @@
 import { firstOf, lastOf, sleep } from "../../utils/base";
 import { BaseSpeaker, BaseSpeakerConfig } from "./base";
+import { StreamResponse } from "./stream";
 
 export interface QueryMessage {
   text: string;
@@ -10,12 +11,18 @@ export interface QueryMessage {
   timestamp: number;
 }
 
+export interface SpeakerAnswer {
+  text?: string;
+  url?: string;
+  steam?: StreamResponse;
+}
+
 export interface SpeakerCommand {
   match: (msg: QueryMessage) => boolean;
   /**
    * 命中后执行的操作，返回值非空时会自动回复给用户
    */
-  run: (msg: QueryMessage) => Promise<string | undefined | void>;
+  run: (msg: QueryMessage) => Promise<SpeakerAnswer | undefined | void>;
 }
 
 export type SpeakerConfig = BaseSpeakerConfig & {
@@ -105,7 +112,7 @@ export class Speaker extends BaseSpeaker {
         if (answer) {
           if (noNewMsg()) {
             await this.response({
-              text: answer,
+              ...answer,
               keepAlive: this.keepAlive,
             });
           }
