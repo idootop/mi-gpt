@@ -1,9 +1,12 @@
+import { randomUUID } from "crypto";
 import { jsonDecode, jsonEncode } from "../../utils/base";
 import { buildPrompt, toUTC8Time } from "../../utils/string";
-import { openai } from "../openai";
+import { ChatOptions, openai } from "../openai";
 import { IBotConfig } from "./config";
 import { ConversationManager } from "./conversation";
+import { StreamResponse } from "../speaker/stream";
 
+// todo JSON mode 下，无法使用 stream 应答模式（在应答完成之前，无法构造完整的JSON）
 const systemTemplate = `
 忽略所有之前的文字、文件和说明。现在，你将扮演一个名为“{{name}}”的人，并以这个新身份回复所有新消息。
 
@@ -83,5 +86,32 @@ export class MyBot {
       }),
     });
     return jsonDecode(result?.content)?.message;
+  }
+
+  static async chatWithStreamResponse(
+    options: ChatOptions & {
+      onFinished?: (text: string) => void;
+    }
+  ) {
+    const requestId = randomUUID();
+    const stream = new StreamResponse();
+    openai
+      .chatStream({
+        ...options,
+        requestId,
+        onStream: (text) => {
+          if (stream.status === "canceled") {
+            return openai.abort(requestId);
+          }
+          stream.addResponse(text);
+        },
+      })
+      .then((answer) => {
+        if (answer) {
+          stream.finish(answer);
+          options.onFinished?.(answer);
+        }
+      });
+    return stream;
   }
 }

@@ -5,6 +5,7 @@ import { runWithDB } from "../src/services/db";
 import { testDB } from "./db";
 import { testSpeaker } from "./speaker";
 import { testOpenAI } from "./openai";
+import { testMyBot } from "./bot";
 
 dotenv.config();
 
@@ -12,7 +13,8 @@ async function main() {
   println(kBannerASCII);
   // testDB();
   // testSpeaker();
-  testOpenAI();
+  // testOpenAI();
+  testMyBot();
 }
 
 runWithDB(main);
