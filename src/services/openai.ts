@@ -7,6 +7,13 @@ import {
 import { kEnvs } from "../utils/env";
 import { kProxyAgent } from "./http";
 
+export interface ChatOptions {
+  user: string;
+  system?: string;
+  tools?: Array<ChatCompletionTool>;
+  jsonMode?: boolean;
+}
+
 class OpenAIClient {
   private _client = new OpenAI({
     httpAgent: kProxyAgent,
@@ -24,12 +31,7 @@ class OpenAIClient {
     }
   }
 
-  async chat(options: {
-    user: string;
-    system?: string;
-    tools?: Array<ChatCompletionTool>;
-    jsonMode?: boolean;
-  }) {
+  async chat(options: ChatOptions) {
     const { user, system, tools, jsonMode } = options;
     const systemMsg: ChatCompletionMessageParam[] = system
       ? [{ role: "system", content: system }]
@@ -48,14 +50,12 @@ class OpenAIClient {
     return chatCompletion?.choices?.[0]?.message;
   }
 
-  async chatStream(options: {
-    user: string;
-    system?: string;
-    tools?: Array<ChatCompletionTool>;
-    jsonMode?: boolean;
-    requestId?: string;
-    onStream?: (text: string) => void;
-  }) {
+  async chatStream(
+    options: ChatOptions & {
+      requestId?: string;
+      onStream?: (text: string) => void;
+    }
+  ) {
     const { user, system, tools, jsonMode, onStream, requestId } = options;
     const systemMsg: ChatCompletionMessageParam[] = system
       ? [{ role: "system", content: system }]

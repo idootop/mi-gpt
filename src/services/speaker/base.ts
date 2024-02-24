@@ -155,6 +155,7 @@ export class BaseSpeaker {
       speaker = this._defaultSpeaker,
     } = options ?? {};
 
+    const ttsText = text?.replace(/\n\s*\n/g, "\n")?.trim();
     const ttsNotXiaoai = !stream && !!text && !audio && tts !== "xiaoai";
     playSFX = ttsNotXiaoai && playSFX;
 
@@ -169,7 +170,7 @@ export class BaseSpeaker {
         await this.unWakeUp();
       }
       await this.MiNA!.play(args);
-      console.log("✅ " + text ?? audio);
+      console.log("✅ " + ttsText ?? audio);
       // 等待回答播放完毕
       while (true) {
         const res = await this.MiNA!.getStatus();
@@ -200,18 +201,18 @@ export class BaseSpeaker {
     if (audio) {
       // 音频回复
       res = await play({ url: audio });
-    } else if (text) {
+    } else if (ttsText) {
       // 文字回复
       switch (tts) {
         case "doubao":
-          const _text = encodeURIComponent(text);
+          const _text = encodeURIComponent(ttsText);
           const doubaoTTS = process.env.TTS_DOUBAO;
           const url = `${doubaoTTS}?speaker=${speaker}&text=${_text}`;
           res = await play({ url });
           break;
         case "xiaoai":
         default:
-          res = await play({ tts: text });
+          res = await play({ tts: ttsText });
           break;
       }
     }

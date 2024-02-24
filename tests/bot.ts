@@ -21,6 +21,6 @@ async function testStreamResponse() {
   const speaker = new AISpeaker(config);
   await speaker.initMiServices();
   await speaker.response({ stream });
-  const res = await stream.wasFinished();
+  const res = await stream.getFinalResult();
   console.log("\nFinal result 222:\n", res);
 }
