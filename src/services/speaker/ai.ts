@@ -154,7 +154,6 @@ export class AISpeaker extends Speaker {
         run: async (msg) => {
           await this.response({
             text: "正在切换音色，请稍等...",
-            keepAlive: this.keepAlive,
           });
           const speaker = msg.text.replace(this.switchSpeakerPrefix, "");
           const success = await this.switchDefaultSpeaker(speaker);
@@ -180,7 +179,6 @@ export class AISpeaker extends Speaker {
       await this.response({
         audio: process.env.AUDIO_ACTIVE,
         text: pickOne(this.onAIAsking)!,
-        keepAlive: this.keepAlive,
       });
     },
     async (msg, data) => {

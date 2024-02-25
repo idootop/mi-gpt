@@ -12,9 +12,9 @@ dotenv.config();
 async function main() {
   println(kBannerASCII);
   // testDB();
-  // testSpeaker();
+  testSpeaker();
   // testOpenAI();
-  testMyBot();
+  // testMyBot();
 }
 
 runWithDB(main);

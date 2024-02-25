@@ -50,9 +50,8 @@ export class BaseSpeaker {
   }
 
   async unWakeUp() {
-    // ! FIXME 新版小爱音箱固件在关闭/打开麦克风时会有提示音
-    await this.MiIOT!.setProperty(4, 1, true); // 关闭麦克风
-    await this.MiIOT!.setProperty(4, 1, false); // 打开麦克风
+    // 通过 TTS 不发音文本，使小爱退出唤醒状态
+    await this.MiIOT!.doAction(5, 1, "¿ʞо ∩оʎ ǝɹɐ"); // are you ok?
   }
 
   responding = false;
