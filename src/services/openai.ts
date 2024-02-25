@@ -12,6 +12,7 @@ export interface ChatOptions {
   system?: string;
   tools?: Array<ChatCompletionTool>;
   jsonMode?: boolean;
+  requestId?: string;
 }
 
 class OpenAIClient {
@@ -32,17 +33,26 @@ class OpenAIClient {
   }
 
   async chat(options: ChatOptions) {
-    const { user, system, tools, jsonMode } = options;
+    let { user, system, tools, jsonMode, requestId } = options;
     const systemMsg: ChatCompletionMessageParam[] = system
       ? [{ role: "system", content: system }]
       : [];
+    let signal: AbortSignal | undefined;
+    if (requestId) {
+      const controller = new AbortController();
+      this._abortCallbacks[requestId] = () => controller.abort();
+      signal = controller.signal;
+    }
     const chatCompletion = await this._client.chat.completions
-      .create({
-        tools,
-        messages: [...systemMsg, { role: "user", content: user }],
-        model: kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
-        response_format: jsonMode ? { type: "json_object" } : undefined,
-      })
+      .create(
+        {
+          tools,
+          messages: [...systemMsg, { role: "user", content: user }],
+          model: kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
+          response_format: jsonMode ? { type: "json_object" } : undefined,
+        },
+        { signal }
+      )
       .catch((e) => {
         console.error("❌ openai chat failed", e);
         return null;
@@ -52,11 +62,10 @@ class OpenAIClient {
 
   async chatStream(
     options: ChatOptions & {
-      requestId?: string;
       onStream?: (text: string) => void;
     }
   ) {
-    const { user, system, tools, jsonMode, onStream, requestId } = options;
+    let { user, system, tools, jsonMode, requestId, onStream } = options;
     const systemMsg: ChatCompletionMessageParam[] = system
       ? [{ role: "system", content: system }]
       : [];

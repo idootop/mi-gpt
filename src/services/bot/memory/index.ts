@@ -5,6 +5,7 @@ import { MemoryCRUD } from "../../db/memory";
 import { ShortTermMemoryCRUD } from "../../db/memory-short-term";
 import { LongTermMemoryCRUD } from "../../db/memory-long-term";
 import { ShortTermMemoryAgent } from "./short-term";
+import { openai } from "../../openai";
 
 export class MemoryManager {
   private room: Room;
@@ -48,33 +49,57 @@ export class MemoryManager {
     return [];
   }
 
+  private _currentMemory?: Memory;
   async addMessage2Memory(message: Message) {
     // todo create memory embedding
-    const res = await MemoryCRUD.addOrUpdate({
+    const currentMemory = await MemoryCRUD.addOrUpdate({
       text: message.text,
       roomId: this.room.id,
       ownerId: message.senderId,
     });
+    if (currentMemory) {
+      this._onMemory(currentMemory);
+    }
+    return currentMemory;
+  }
+
+  private _onMemory(currentMemory: Memory) {
+    if (this._currentMemory) {
+      // 取消之前的更新记忆任务
+      openai.abort(`update-short-memory-${this._currentMemory.id}`);
+      openai.abort(`update-long-memory-${this._currentMemory.id}`);
+    }
+    this._currentMemory = currentMemory;
     // 异步更新长短期记忆
-    this.updateLongShortTermMemory();
-    return res;
+    this.updateLongShortTermMemory({ currentMemory });
   }
 
   /**
    * 更新记忆（当新的记忆数量超过阈值时，自动更新长短期记忆）
    */
-  async updateLongShortTermMemory(options?: {
+  async updateLongShortTermMemory(options: {
+    currentMemory: Memory;
     shortThreshold?: number;
     longThreshold?: number;
   }) {
-    const { shortThreshold, longThreshold } = options ?? {};
-    const success = await this._updateShortTermMemory(shortThreshold);
+    const { currentMemory, shortThreshold, longThreshold } = options ?? {};
+    const success = await this._updateShortTermMemory({
+      currentMemory,
+      threshold: shortThreshold,
+    });
     if (success) {
-      await this._updateLongTermMemory(longThreshold);
+      await this._updateLongTermMemory({
+        currentMemory,
+        threshold: longThreshold,
+      });
     }
   }
 
-  private async _updateShortTermMemory(threshold = 10) {
+  private async _updateShortTermMemory(options: {
+    currentMemory: Memory;
+    threshold?: number;
+  }) {
+    const { currentMemory, threshold = 10 } = options;
     const lastMemory = firstOf(await this.getShortTermMemories(1));
     const newMemories = await MemoryCRUD.gets({
       cursorId: lastMemory?.cursorId,
@@ -85,10 +110,11 @@ export class MemoryManager {
     if (newMemories.length < 1 || newMemories.length < threshold) {
       return true;
     }
-    const newMemory = await ShortTermMemoryAgent.generate(
+    const newMemory = await ShortTermMemoryAgent.generate({
+      currentMemory,
       newMemories,
-      lastMemory
-    );
+      lastMemory,
+    });
     if (!newMemory) {
       return false;
     }
@@ -101,7 +127,11 @@ export class MemoryManager {
     return res != null;
   }
 
-  private async _updateLongTermMemory(threshold = 10) {
+  private async _updateLongTermMemory(options: {
+    currentMemory: Memory;
+    threshold?: number;
+  }) {
+    const { currentMemory, threshold = 10 } = options;
     const lastMemory = firstOf(await this.getLongTermMemories(1));
     const newMemories = await ShortTermMemoryCRUD.gets({
       cursorId: lastMemory?.cursorId,
@@ -112,10 +142,11 @@ export class MemoryManager {
     if (newMemories.length < 1 || newMemories.length < threshold) {
       return true;
     }
-    const newMemory = await LongTermMemoryAgent.generate(
+    const newMemory = await LongTermMemoryAgent.generate({
+      currentMemory,
       newMemories,
-      lastMemory
-    );
+      lastMemory,
+    });
     if (!newMemory) {
       return false;
     }
