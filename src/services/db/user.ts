@@ -9,8 +9,14 @@ class _UserCRUD {
     });
   }
 
-  async get(id: string) {
-    return kPrisma.user.findFirst({ where: { id } }).catch((e) => {
+  async get(
+    id: string,
+    options?: {
+      include?: Prisma.UserInclude;
+    }
+  ) {
+    const { include = { rooms: false } } = options ?? {};
+    return kPrisma.user.findFirst({ where: { id }, include }).catch((e) => {
       console.error("❌ get user failed", id, e);
       return undefined;
     });
@@ -30,7 +36,7 @@ class _UserCRUD {
       take = 10,
       skip = 0,
       cursorId,
-      include = { rooms: true },
+      include = { rooms: false },
       order = "desc",
     } = options ?? {};
     const users = await kPrisma.user

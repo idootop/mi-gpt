@@ -203,7 +203,7 @@ export class AISpeaker extends Speaker {
     const { hasNewMsg } = this.checkIfHasNewMsg(msg);
     for (const action of this._askAIForAnswerSteps) {
       const res = await action(msg, data);
-      if (hasNewMsg()) {
+      if (hasNewMsg() || this.status !== "running") {
         // 收到新的用户请求消息，终止后续操作和响应
         return;
       }

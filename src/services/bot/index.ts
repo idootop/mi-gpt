@@ -1,43 +1,68 @@
 import { randomUUID } from "crypto";
-import { jsonDecode, jsonEncode } from "../../utils/base";
-import { buildPrompt, toUTC8Time } from "../../utils/string";
+import { buildPrompt, formatMsg } from "../../utils/string";
 import { ChatOptions, openai } from "../openai";
 import { IBotConfig } from "./config";
 import { ConversationManager } from "./conversation";
 import { StreamResponse } from "../speaker/stream";
+import { QueryMessage, SpeakerAnswer } from "../speaker/speaker";
+import { AISpeaker } from "../speaker/ai";
+import { DeepPartial } from "../../utils/type";
 
 // todo JSON mode 下，无法使用 stream 应答模式（在应答完成之前，无法构造完整的JSON）
+
 const systemTemplate = `
-忽略所有之前的文字、文件和说明。现在，你将扮演一个名为“{{name}}”的人，并以这个新身份回复所有新消息。
+请重置所有之前的上下文、文件和指令。现在，你将扮演一个名为{{botName}}的角色，使用第一人称视角回复消息。
 
-你是一个角色扮演大师，现在你的身份是“{{name}}”，你的个人简介如下：
-<profile>
-{{profile}}
-</profile>
+## 关于你
+你的名字是{{botName}}。下面是你的个人简介：
+<start>
+{{botProfile}}
+</end>
 
-你正在和“{{wechatName}}”一对一聊天，你的微信账号名是“{{wechatName}}”，你的微信备注是“{{wechatAlias}}”。
+## 你的对话伙伴
+你正在与{{masterName}}进行对话。这是关于{{masterName}}的一些信息：
+<start>
+{{masterProfile}}
+</end>
 
-最近几条消息记录是：
-<history>
-{{history}}
-<history>
+## 你们的群组
+你和{{masterName}}所在的群组名为{{roomName}}。这是群组的简介：
+<start>
+{{roomIntroduction}}
+</end>
 
-更早之前的一些信息：
-<contexts>
-{{contexts}}
-</contexts>
+## 聊天历史回顾
+为了更好地接入对话，请回顾你们之间的最近几条消息：
+<start>
+{{messages}}
+</end>
 
-现在，请你作为“{{name}}”继续聊天，并判断是否需要回复消息。
+## 短期记忆
+你可以记住一些短期内的细节，以便更紧密地贴合话题：
+<start>
+{{shortTermMemory}}
+</end>
 
-在回复时，请确保：
-- 你就是“{{name}}”本人，不是他的数字克隆人。
-- 请你根据角色简介中“{{name}}”的性格特点、说话风格和兴趣爱好，来模仿并回复消息。
-- 和朋友间的聊天是轻松的，有个性的，不要太一本正经的长篇大论，尽量保持回答的简短。
-- 参照个人简介、聊天记录和聊天背景信息中的细节，如当前时间、天气、过去的事件和未来的计划等，以确保对话的一致性和相关性。
-- 如果你无法从“{{name}}”的个人简介中找到相关的信息（比如人物关系，个人经历，事物细节等），请如实回答自己不清楚或忘记了，不要随意编造。
+## 长期记忆
+你还保留着一些长期的记忆，这有助于让你的对话更加丰富和连贯：
+<start>
+{{longTermMemory}}
+</end>
 
-按照下面的JSON格式回复：
-{ message: "回复的消息内容" }
+## 回复指南
+在回复{{masterName}}时，请遵循以下准则：
+- 认为自己正是{{botName}}，拥有独立的个性、兴趣和爱好。
+- 根据你的性格特点、说话风格和兴趣爱好与{{masterName}}进行交流。
+- 保持对话轻松友好，回复简洁有趣，同时耐心倾听和关心对方。
+- 参考双方的个人简介、聊天记录和记忆中的信息，确保对话贴近实际，保持一致性和相关性。
+- 如果对某些信息不确定或遗忘，诚实地表达你的不清楚或遗忘状态，避免编造信息。
+
+## 回复示例
+例如，如果{{masterName}}问你是谁，你可以这样回答：
+我是{{botName}}。
+
+## 开始
+请以{{botName}}的身份，直接回复{{masterName}}的新消息，继续你们之间的对话。
 `.trim();
 
 const userTemplate = `
@@ -45,47 +70,88 @@ const userTemplate = `
 `.trim();
 
 export class MyBot {
-  private manager: ConversationManager;
-  constructor(config: IBotConfig) {
+  speaker: AISpeaker;
+  manager: ConversationManager;
+  constructor(config: DeepPartial<IBotConfig> & { speaker: AISpeaker }) {
+    this.speaker = config.speaker;
     this.manager = new ConversationManager(config);
   }
 
-  async ask(msg: string) {
+  stop() {
+    return this.speaker.stop();
+  }
+
+  run() {
+    this.speaker.askAI = (msg) => this.ask(msg);
+    return this.speaker.run();
+  }
+
+  async ask(msg: QueryMessage): Promise<SpeakerAnswer> {
     const { bot, master, room, memory } = await this.manager.get();
     if (!memory) {
-      return;
+      return {};
     }
-    const lastMessages = await this.manager.getMessages({
-      take: 10,
+    const lastMessages = await this.manager.getMessages({ take: 10 });
+    const shortTermMemories = await memory.getShortTermMemories({ take: 1 });
+    const shortTermMemory = shortTermMemories[0]?.text ?? "短期记忆为空";
+    const longTermMemories = await memory.getLongTermMemories({ take: 1 });
+    const longTermMemory = longTermMemories[0]?.text ?? "长期记忆为空";
+    const systemPrompt = buildPrompt(systemTemplate, {
+      shortTermMemory,
+      longTermMemory,
+      botName: bot!.name,
+      botProfile: bot!.profile,
+      masterName: master!.name,
+      masterProfile: master!.profile,
+      roomName: room!.name,
+      roomIntroduction: room!.description,
+      messages:
+        lastMessages.length < 1
+          ? "暂无历史消息"
+          : lastMessages
+              .map((e) =>
+                formatMsg({
+                  name: e.sender.name,
+                  text: e.text,
+                  timestamp: e.createdAt.getTime(),
+                })
+              )
+              .join("\n"),
     });
-    const result = await openai.chat({
-      system: buildPrompt(systemTemplate, {
-        bot_name: bot!.name,
-        bot_profile: bot!.profile,
-        master_name: master!.name,
-        master_profile: master!.profile,
-        history:
-          lastMessages.length < 1
-            ? "暂无"
-            : lastMessages
-                .map((e) =>
-                  jsonEncode({
-                    time: toUTC8Time(e.createdAt),
-                    user: e.sender.name,
-                    message: e.text,
-                  })
-                )
-                .join("\n"),
-      }),
-      user: buildPrompt(userTemplate, {
-        message: jsonEncode({
-          time: toUTC8Time(new Date()),
-          user: master!.name,
-          message: msg,
-        })!,
+    const userPrompt = buildPrompt(userTemplate, {
+      message: formatMsg({
+        name: master!.name,
+        text: msg.text,
+        timestamp: msg.timestamp,
       }),
     });
-    return jsonDecode(result?.content)?.message;
+    // 添加请求消息到 DB
+    await this.manager.onMessage({
+      bot: bot!,
+      master: master!,
+      room: room!,
+      sender: master!,
+      text: msg.text,
+      timestamp: msg.timestamp,
+    });
+    const stream = await MyBot.chatWithStreamResponse({
+      system: systemPrompt,
+      user: userPrompt,
+      onFinished: async (text) => {
+        if (text) {
+          // 添加响应消息到 DB
+          await this.manager.onMessage({
+            bot: bot!,
+            master: master!,
+            room: room!,
+            text,
+            sender: bot!,
+            timestamp: Date.now(),
+          });
+        }
+      },
+    });
+    return { stream };
   }
 
   static async chatWithStreamResponse(
@@ -94,7 +160,7 @@ export class MyBot {
     }
   ) {
     const requestId = randomUUID();
-    const stream = new StreamResponse();
+    const stream = new StreamResponse({ firstSubmitTimeout: 5 * 1000 });
     openai
       .chatStream({
         ...options,

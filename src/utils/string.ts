@@ -1,6 +1,6 @@
-import { readJSONSync } from './io';
+import { readJSONSync } from "./io";
 
-export const kVersion = readJSONSync('package.json').version;
+export const kVersion = readJSONSync("package.json").version;
 
 export const kBannerASCII = `
 
@@ -15,21 +15,21 @@ export const kBannerASCII = `
                                                                                                                  
       MiGPT v1.0.0  by: del-wang.eth
 
-`.replace('1.0.0', kVersion);
+`.replace("1.0.0", kVersion);
 
 /**
  * 转北京时间：2023年12月12日星期二 12:46
  */
 export function toUTC8Time(date: Date) {
-  return date.toLocaleString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    weekday: 'long',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+  return date.toLocaleString("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    weekday: "long",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: false,
-    timeZone: 'Asia/Shanghai',
+    timeZone: "Asia/Shanghai",
   });
 }
 
@@ -42,4 +42,13 @@ export function buildPrompt(
     template = template.replaceAll(`{{${key}}}`, value);
   }
   return template;
+}
+
+export function formatMsg(msg: {
+  name: string;
+  text: string;
+  timestamp: number;
+}) {
+  const { name, text, timestamp } = msg;
+  return `${toUTC8Time(new Date(timestamp))} ${name}: ${text}`;
 }

@@ -48,6 +48,7 @@ model Message {
   senderId  String
   room      Room     @relation(fields: [roomId], references: [id])
   roomId    String
+  memories  Memory[]
   // 时间日期
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -55,8 +56,9 @@ model Message {
 
 model Memory {
   id                Int               @id @default(autoincrement())
-  text              String
   // 关联数据
+  msg               Message           @relation(fields: [msgId], references: [id])
+  msgId             Int
   owner             User?             @relation(fields: [ownerId], references: [id]) // owner 为空时，即房间自己的公共记忆
   ownerId           String?
   room              Room              @relation(fields: [roomId], references: [id])

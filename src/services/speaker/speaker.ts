@@ -14,7 +14,7 @@ export interface QueryMessage {
 export interface SpeakerAnswer {
   text?: string;
   url?: string;
-  steam?: StreamResponse;
+  stream?: StreamResponse;
 }
 
 export interface SpeakerCommand {
@@ -53,10 +53,10 @@ export class Speaker extends BaseSpeaker {
     this.exitKeepAliveAfter = exitKeepAliveAfter;
   }
 
-  private _status: "running" | "stopped" = "running";
+  status: "running" | "stopped" = "running";
 
   stop() {
-    this._status = "stopped";
+    this.status = "stopped";
   }
 
   async run() {
@@ -66,7 +66,7 @@ export class Speaker extends BaseSpeaker {
     }
     console.log("✅ 服务已启动...");
     this.activeKeepAliveMode();
-    while (this._status === "running") {
+    while (this.status === "running") {
       const nextMsg = await this.fetchNextMessage();
       if (nextMsg) {
         this.responding = false;
@@ -79,7 +79,7 @@ export class Speaker extends BaseSpeaker {
   }
 
   async activeKeepAliveMode() {
-    while (this._status === "running") {
+    while (this.status === "running") {
       if (this.keepAlive) {
         // 唤醒中
         if (!this.responding) {
@@ -110,7 +110,7 @@ export class Speaker extends BaseSpeaker {
         const answer = await command.run(msg);
         // 回复用户
         if (answer) {
-          if (noNewMsg()) {
+          if (noNewMsg() && this.status === "running") {
             await this.response({
               ...answer,
               keepAlive: this.keepAlive,
@@ -146,7 +146,12 @@ export class Speaker extends BaseSpeaker {
     }
     const { noNewMsg } = this.checkIfHasNewMsg();
     this._preTimer = setTimeout(async () => {
-      if (this.keepAlive && !this.responding && noNewMsg()) {
+      if (
+        this.keepAlive &&
+        !this.responding &&
+        noNewMsg() &&
+        this.status === "running"
+      ) {
         await this.exitKeepAlive();
       }
     }, this.exitKeepAliveAfter * 1000);

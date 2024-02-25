@@ -27,7 +27,13 @@ class _RoomCRUD {
       });
   }
 
-  async get(id: string) {
+  async get(
+    id: string,
+    options?: {
+      include?: Prisma.RoomInclude;
+    }
+  ) {
+    const { include = { members: true } } = options ?? {};
     return kPrisma.room.findFirst({ where: { id } }).catch((e) => {
       console.error("❌ get room failed", id, e);
       return undefined;

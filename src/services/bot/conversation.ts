@@ -17,6 +17,7 @@ export class ConversationManager {
     }
     return {
       ...config,
+      // 记忆存储在公共 room 上
       memory: new MemoryManager(config.room),
     };
   }
@@ -43,18 +44,25 @@ export class ConversationManager {
     return MessageCRUD.gets({ room, ...options });
   }
 
-  async onMessage(payload: { sender: User; text: string }) {
-    const { sender, text } = payload;
+  async onMessage(
+    payload: IBotConfig & {
+      sender: User;
+      text: string;
+      timestamp?: number;
+    }
+  ) {
+    const { sender, text, timestamp = Date.now(), ...botConfig } = payload;
     const { room, memory } = await this.get();
     if (memory) {
       const message = await MessageCRUD.addOrUpdate({
         text,
         roomId: room!.id,
         senderId: sender.id,
+        createdAt: new Date(timestamp),
       });
       if (message) {
-        // 异步加入记忆
-        memory?.addMessage2Memory(message);
+        // 异步加入记忆（到 room）
+        memory?.addMessage2Memory(message,botConfig);
         return message;
       }
     }

@@ -19,8 +19,14 @@ class _MessageCRUD {
       });
   }
 
-  async get(id: number) {
-    return kPrisma.message.findFirst({ where: { id } }).catch((e) => {
+  async get(
+    id: number,
+    options?: {
+      include?: Prisma.MessageInclude;
+    }
+  ) {
+    const { include = { sender: true } } = options ?? {};
+    return kPrisma.message.findFirst({ where: { id }, include }).catch((e) => {
       console.error("❌ get message failed", id, e);
       return undefined;
     });

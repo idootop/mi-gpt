@@ -1,4 +1,4 @@
-import { Memory, Room, User } from "@prisma/client";
+import { Memory, Prisma, Room, User } from "@prisma/client";
 import { getSkipWithCursor, k404, kPrisma } from "./index";
 import { removeEmpty } from "../../utils/base";
 
@@ -19,8 +19,20 @@ class _MemoryCRUD {
       });
   }
 
-  async get(id: number) {
-    return kPrisma.memory.findFirst({ where: { id } }).catch((e) => {
+  async get(
+    id: number,
+    options?: {
+      include?: Prisma.MemoryInclude;
+    }
+  ) {
+    const {
+      include = {
+        msg: {
+          include: { sender: true },
+        },
+      },
+    } = options ?? {};
+    return kPrisma.memory.findFirst({ where: { id }, include }).catch((e) => {
       console.error("❌ get memory failed", id, e);
       return undefined;
     });
@@ -32,6 +44,7 @@ class _MemoryCRUD {
     take?: number;
     skip?: number;
     cursorId?: number;
+    include?: Prisma.MemoryInclude;
     /**
      * 查询顺序（返回按从旧到新排序）
      */
@@ -43,12 +56,18 @@ class _MemoryCRUD {
       take = 10,
       skip = 0,
       cursorId,
+      include = {
+        msg: {
+          include: { sender: true },
+        },
+      },
       order = "desc",
     } = options ?? {};
     const memories = await kPrisma.memory
       .findMany({
         where: removeEmpty({ roomId: room?.id, ownerId: owner?.id }),
         take,
+        include,
         orderBy: { createdAt: order },
         ...getSkipWithCursor(skip, cursorId),
       })
@@ -61,15 +80,14 @@ class _MemoryCRUD {
 
   async addOrUpdate(
     memory: Partial<Memory> & {
-      text: string;
+      msgId: number;
       roomId: string;
       ownerId?: string;
     }
   ) {
-    const { text: _text, roomId, ownerId } = memory;
-    const text = _text?.trim();
+    const { msgId, roomId, ownerId } = memory;
     const data = {
-      text,
+      msg: { connect: { id: msgId } },
       room: { connect: { id: roomId } },
       owner: ownerId ? { connect: { id: ownerId } } : undefined,
     };

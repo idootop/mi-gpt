@@ -6,6 +6,7 @@ import { ShortTermMemoryCRUD } from "../../db/memory-short-term";
 import { LongTermMemoryCRUD } from "../../db/memory-long-term";
 import { ShortTermMemoryAgent } from "./short-term";
 import { openai } from "../../openai";
+import { IBotConfig } from "../config";
 
 export class MemoryManager {
   private room: Room;
@@ -20,27 +21,23 @@ export class MemoryManager {
     this.owner = owner;
   }
 
-  async getMemories(take?: number) {
-    return MemoryCRUD.gets({
-      room: this.room,
-      owner: this.owner,
-      take,
-    });
+  async getMemories(options?: { take?: number }) {
+    return MemoryCRUD.gets({ ...options, room: this.room, owner: this.owner });
   }
 
-  async getShortTermMemories(take?: number) {
+  async getShortTermMemories(options?: { take?: number }) {
     return ShortTermMemoryCRUD.gets({
+      ...options,
       room: this.room,
       owner: this.owner,
-      take,
     });
   }
 
-  async getLongTermMemories(take?: number) {
+  async getLongTermMemories(options?: { take?: number }) {
     return LongTermMemoryCRUD.gets({
+      ...options,
       room: this.room,
       owner: this.owner,
-      take,
     });
   }
 
@@ -50,20 +47,20 @@ export class MemoryManager {
   }
 
   private _currentMemory?: Memory;
-  async addMessage2Memory(message: Message) {
+  async addMessage2Memory(message: Message, botConfig: IBotConfig) {
     // todo create memory embedding
     const currentMemory = await MemoryCRUD.addOrUpdate({
-      text: message.text,
+      msgId: message.id,
       roomId: this.room.id,
       ownerId: message.senderId,
     });
     if (currentMemory) {
-      this._onMemory(currentMemory);
+      this._onMemory(currentMemory, botConfig);
     }
     return currentMemory;
   }
 
-  private _onMemory(currentMemory: Memory) {
+  private _onMemory(currentMemory: Memory, botConfig: IBotConfig) {
     if (this._currentMemory) {
       // 取消之前的更新记忆任务
       openai.abort(`update-short-memory-${this._currentMemory.id}`);
@@ -71,24 +68,28 @@ export class MemoryManager {
     }
     this._currentMemory = currentMemory;
     // 异步更新长短期记忆
-    this.updateLongShortTermMemory({ currentMemory });
+    this.updateLongShortTermMemory({ currentMemory, botConfig });
   }
 
   /**
    * 更新记忆（当新的记忆数量超过阈值时，自动更新长短期记忆）
    */
   async updateLongShortTermMemory(options: {
+    botConfig: IBotConfig;
     currentMemory: Memory;
     shortThreshold?: number;
     longThreshold?: number;
   }) {
-    const { currentMemory, shortThreshold, longThreshold } = options ?? {};
+    const { currentMemory, shortThreshold, longThreshold, botConfig } =
+      options ?? {};
     const success = await this._updateShortTermMemory({
+      botConfig,
       currentMemory,
       threshold: shortThreshold,
     });
     if (success) {
       await this._updateLongTermMemory({
+        botConfig,
         currentMemory,
         threshold: longThreshold,
       });
@@ -96,21 +97,27 @@ export class MemoryManager {
   }
 
   private async _updateShortTermMemory(options: {
+    botConfig: IBotConfig;
     currentMemory: Memory;
     threshold?: number;
   }) {
-    const { currentMemory, threshold = 10 } = options;
-    const lastMemory = firstOf(await this.getShortTermMemories(1));
-    const newMemories = await MemoryCRUD.gets({
+    const { currentMemory, threshold = 10, botConfig } = options;
+    const lastMemory = firstOf(await this.getShortTermMemories({ take: 1 }));
+    const newMemories: (Memory & {
+      msg: Message & {
+        sender: User;
+      };
+    })[] = (await MemoryCRUD.gets({
       cursorId: lastMemory?.cursorId,
       room: this.room,
       owner: this.owner,
       order: "asc", // 从旧到新排序
-    });
+    })) as any;
     if (newMemories.length < 1 || newMemories.length < threshold) {
       return true;
     }
     const newMemory = await ShortTermMemoryAgent.generate({
+      botConfig,
       currentMemory,
       newMemories,
       lastMemory,
@@ -128,11 +135,12 @@ export class MemoryManager {
   }
 
   private async _updateLongTermMemory(options: {
+    botConfig: IBotConfig;
     currentMemory: Memory;
     threshold?: number;
   }) {
-    const { currentMemory, threshold = 10 } = options;
-    const lastMemory = firstOf(await this.getLongTermMemories(1));
+    const { currentMemory, threshold = 10, botConfig } = options;
+    const lastMemory = firstOf(await this.getLongTermMemories({ take: 1 }));
     const newMemories = await ShortTermMemoryCRUD.gets({
       cursorId: lastMemory?.cursorId,
       room: this.room,
@@ -143,6 +151,7 @@ export class MemoryManager {
       return true;
     }
     const newMemory = await LongTermMemoryAgent.generate({
+      botConfig,
       currentMemory,
       newMemories,
       lastMemory,

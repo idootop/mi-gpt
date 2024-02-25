@@ -6,10 +6,13 @@ import {
 
 import { kEnvs } from "../utils/env";
 import { kProxyAgent } from "./http";
+import { withDefault } from "../utils/base";
+import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions";
 
 export interface ChatOptions {
   user: string;
   system?: string;
+  model?: ChatCompletionCreateParamsBase["model"];
   tools?: Array<ChatCompletionTool>;
   jsonMode?: boolean;
   requestId?: string;
@@ -33,7 +36,21 @@ class OpenAIClient {
   }
 
   async chat(options: ChatOptions) {
-    let { user, system, tools, jsonMode, requestId } = options;
+    let {
+      user,
+      system,
+      tools,
+      jsonMode,
+      requestId,
+      model = kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
+    } = options;
+    console.log(
+      `
+🔥🔥🔥 onAskAI start
+🤖️ System: ${system ?? "None"}
+😊 User: ${user}
+`.trim()
+    );
     const systemMsg: ChatCompletionMessageParam[] = system
       ? [{ role: "system", content: system }]
       : [];
@@ -46,9 +63,9 @@ class OpenAIClient {
     const chatCompletion = await this._client.chat.completions
       .create(
         {
+          model,
           tools,
           messages: [...systemMsg, { role: "user", content: user }],
-          model: kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
           response_format: jsonMode ? { type: "json_object" } : undefined,
         },
         { signal }
@@ -57,7 +74,14 @@ class OpenAIClient {
         console.error("❌ openai chat failed", e);
         return null;
       });
-    return chatCompletion?.choices?.[0]?.message;
+    const message = chatCompletion?.choices?.[0]?.message;
+    console.log(
+      `
+  ✅✅✅ onAskAI end
+  🤖️ Answer: ${message?.content ?? "None"}
+  `.trim()
+    );
+    return message;
   }
 
   async chatStream(
@@ -65,16 +89,31 @@ class OpenAIClient {
       onStream?: (text: string) => void;
     }
   ) {
-    let { user, system, tools, jsonMode, requestId, onStream } = options;
+    let {
+      user,
+      system,
+      tools,
+      jsonMode,
+      requestId,
+      onStream,
+      model = kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
+    } = options;
+    console.log(
+      `
+🔥🔥🔥 onAskAI start
+🤖️ System: ${system ?? "None"}
+😊 User: ${user}
+`.trim()
+    );
     const systemMsg: ChatCompletionMessageParam[] = system
       ? [{ role: "system", content: system }]
       : [];
     const stream = await this._client.chat.completions
       .create({
+        model,
         tools,
         stream: true,
         messages: [...systemMsg, { role: "user", content: user }],
-        model: kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
         response_format: jsonMode ? { type: "json_object" } : undefined,
       })
       .catch((e) => {
@@ -88,23 +127,26 @@ class OpenAIClient {
       this._abortCallbacks[requestId] = () => stream.controller.abort();
     }
     let content = "";
-    try {
-      for await (const chunk of stream) {
-        const text = chunk.choices[0]?.delta?.content || "";
-        const aborted =
-          requestId && !Object.keys(this._abortCallbacks).includes(requestId);
-        if (aborted) {
-          return undefined;
-        }
-        if (text) {
-          onStream?.(text);
-          content += text;
-        }
+    for await (const chunk of stream) {
+      const text = chunk.choices[0]?.delta?.content || "";
+      const aborted =
+        requestId && !Object.keys(this._abortCallbacks).includes(requestId);
+      if (aborted) {
+        content = "";
+        break;
       }
-    } catch {
-      return undefined;
+      if (text) {
+        onStream?.(text);
+        content += text;
+      }
     }
-    return content;
+    console.log(
+      `
+  ✅✅✅ onAskAI end
+  🤖️ Answer: ${content ?? "None"}
+  `.trim()
+    );
+    return withDefault(content, undefined);
   }
 }
 

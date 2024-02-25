@@ -21,19 +21,31 @@ export async function testDB() {
   const { room, bot, master, memory } = await manager.get();
   assert(room, "❌ 初始化用户失败");
   let message = await manager.onMessage({
+    bot: bot!,
+    master: master!,
+    room: room!,
     sender: master!,
     text: "你好！",
   });
   assert(message?.text === "你好！", "❌ 插入消息失败");
   message = await manager.onMessage({
+    bot: bot!,
+    master: master!,
+    room: room!,
     sender: bot!,
     text: "你好！很高兴认识你",
   });
   await manager.onMessage({
+    bot: bot!,
+    master: master!,
+    room: room!,
     sender: master!,
     text: "你是谁？",
   });
   await manager.onMessage({
+    bot: bot!,
+    master: master!,
+    room: room!,
     sender: bot!,
     text: "我是小爱同学，你可以叫我小爱！",
   });
