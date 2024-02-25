@@ -77,7 +77,6 @@ async function testSpeakerStreamResponse(speaker: AISpeaker) {
       `地球在赤道处稍微膨胀，而在极地处稍微收缩，最终形成一个近似于球体的形状。因此，地球是圆的`
     );
     await add(`主要原因是由于地球的引力和自转共同作用所致。`);
-    await sleep(10 * 1000);
     console.log("finished!");
     stream.finish();
   });

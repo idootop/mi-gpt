@@ -104,7 +104,8 @@ export class StreamResponse {
   private _chunks: string[] = [];
   private _tempText = "";
   private _remainingText: string = "";
-  private _preSubmitTimestamp = 0;
+  private _isFirstSubmit = true;
+
   private _submitCount = 0;
   private _batchSubmitImmediately() {
     if (this._tempText) {
@@ -121,18 +122,19 @@ export class StreamResponse {
    */
   private _batchSubmit(text: string) {
     this._tempText += text;
-    const isFirstSubmit = this._preSubmitTimestamp === 0;
-    if (isFirstSubmit) {
-      this._preSubmitTimestamp = Date.now();
+    if (this._isFirstSubmit) {
+      this._isFirstSubmit = false;
+      // 达到首次消息收集时长后，批量提交消息
       setTimeout(() => {
-        // 当消息长度积攒到一定长度，或达到一定时间间隔后，批量提交消息
-        if (
-          this._tempText.length > this.maxSentenceLength ||
-          Date.now() - this._preSubmitTimestamp > this.firstSubmitTimeout
-        ) {
+        if (this._submitCount < 1) {
           this._batchSubmitImmediately();
         }
       }, this.firstSubmitTimeout);
+    } else if (this._submitCount < 1) {
+      // 当首次消息积攒到一定长度后，也批量提交消息
+      if (this._tempText.length > this.maxSentenceLength) {
+        this._batchSubmitImmediately();
+      }
     }
   }
 
