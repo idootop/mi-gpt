@@ -7,16 +7,18 @@ import { testSpeaker } from "./speaker";
 import { testOpenAI } from "./openai";
 import { testMyBot } from "./bot";
 import { testLog } from "./log";
+import { testMiGPT } from "./migpt";
 
 dotenv.config();
 
 async function main() {
-  println(kBannerASCII);
+  // println(kBannerASCII);
   // testDB();
   // testSpeaker();
   // testOpenAI();
   // testMyBot();
-  testLog();
+  // testLog();
+  testMiGPT();
 }
 
 runWithDB(main);

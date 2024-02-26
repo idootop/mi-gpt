@@ -9,6 +9,7 @@ import { sleep } from "../../utils/base";
 import { Logger } from "../../utils/log";
 import { Http } from "../http";
 import { StreamResponse } from "./stream";
+import { kAreYouOK } from "../../utils/string";
 
 export type TTSProvider = "xiaoai" | "doubao";
 
@@ -23,6 +24,10 @@ export type BaseSpeakerConfig = MiServiceConfig & {
   tts?: TTSProvider;
   // 检测间隔（单位毫秒，默认 100 毫秒）
   interval?: number;
+  /**
+   * TTS 开始/结束提示音
+   */
+  audio_beep?: string;
 };
 
 export class BaseSpeaker {
@@ -35,7 +40,12 @@ export class BaseSpeaker {
   config: MiServiceConfig;
   constructor(config: BaseSpeakerConfig) {
     this.config = config;
-    const { interval = 100, tts = "doubao" } = config;
+    const {
+      interval = 100,
+      tts = "doubao",
+      audio_beep = process.env.AUDIO_BEEP,
+    } = config;
+    this.audio_beep = audio_beep;
     this.interval = interval;
     this.tts = tts;
   }
@@ -52,9 +62,11 @@ export class BaseSpeaker {
 
   async unWakeUp() {
     // 通过 TTS 不发音文本，使小爱退出唤醒状态
-    await this.MiIOT!.doAction(5, 1, "¿ʞо ∩оʎ ǝɹɐ"); // are you ok?
+    await this.MiNA!.pause()
+    await this.MiIOT!.doAction(5, 1, kAreYouOK);
   }
 
+  audio_beep?: string;
   responding = false;
   async response(options: {
     tts?: TTSProvider;
@@ -93,7 +105,7 @@ export class BaseSpeaker {
           if (_response.length < 1) {
             // 播放开始提示音
             if (playSFX) {
-              await this.MiNA!.play({ url: process.env.AUDIO_BEEP });
+              await this.MiNA!.play({ url: this.audio_beep });
             }
             // 在播放 TTS 语音之前，先取消小爱音箱的唤醒状态，防止将 TTS 语音识别成用户指令
             if (ttsNotXiaoai) {
@@ -117,7 +129,7 @@ export class BaseSpeaker {
           if (_response.length > 0) {
             // 播放结束提示音
             if (playSFX) {
-              await this.MiNA!.play({ url: process.env.AUDIO_BEEP });
+              await this.MiNA!.play({ url: this.audio_beep });
             }
           }
           // 保持唤醒状态
@@ -163,14 +175,14 @@ export class BaseSpeaker {
     const play = async (args?: { tts?: string; url?: string }) => {
       // 播放开始提示音
       if (playSFX) {
-        await this.MiNA!.play({ url: process.env.AUDIO_BEEP });
+        await this.MiNA!.play({ url: this.audio_beep });
       }
       // 在播放 TTS 语音之前，先取消小爱音箱的唤醒状态，防止将 TTS 语音识别成用户指令
       if (ttsNotXiaoai) {
         await this.unWakeUp();
       }
       await this.MiNA!.play(args);
-      this.logger.success(ttsText ?? audio);
+      this.logger.log("🔊 " + (ttsText ?? audio));
       // 等待回答播放完毕
       while (true) {
         const res = await this.MiNA!.getStatus();
@@ -188,7 +200,7 @@ export class BaseSpeaker {
       }
       // 播放结束提示音
       if (playSFX) {
-        await this.MiNA!.play({ url: process.env.AUDIO_BEEP });
+        await this.MiNA!.play({ url: this.audio_beep });
       }
       // 保持唤醒状态
       if (keepAlive) {

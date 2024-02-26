@@ -17,10 +17,14 @@ export interface ChatOptions {
   tools?: Array<ChatCompletionTool>;
   jsonMode?: boolean;
   requestId?: string;
+  trace?: boolean;
 }
 
 class OpenAIClient {
-  private _logger = Logger.create({ tag: "OpenAI" });
+  traceInput = false;
+  traceOutput = true;
+  private _logger = Logger.create({ tag: "Open AI" });
+
   private _client = new OpenAI({
     httpAgent: kProxyAgent,
     apiKey: kEnvs.OPENAI_API_KEY!,
@@ -44,14 +48,14 @@ class OpenAIClient {
       tools,
       jsonMode,
       requestId,
+      trace = false,
       model = kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
     } = options;
-    this._logger.log(
-      `🔥 onAskAI
-🤖️ System: ${system ?? "None"}
-😊 User: ${user}
-`.trim()
-    );
+    if (trace && this.traceInput) {
+      this._logger.log(
+        `🔥 onAskAI\n🤖️ System: ${system ?? "None"}\n😊 User: ${user}`.trim()
+      );
+    }
     const systemMsg: ChatCompletionMessageParam[] = system
       ? [{ role: "system", content: system }]
       : [];
@@ -76,7 +80,9 @@ class OpenAIClient {
         return null;
       });
     const message = chatCompletion?.choices?.[0]?.message;
-    this._logger.success(`🤖️ Answer: ${message?.content ?? "None"}`.trim());
+    if (trace && this.traceOutput) {
+      this._logger.log(`✅ Answer: ${message?.content ?? "None"}`.trim());
+    }
     return message;
   }
 
@@ -92,14 +98,14 @@ class OpenAIClient {
       jsonMode,
       requestId,
       onStream,
+      trace = false,
       model = kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
     } = options;
-    this._logger.log(
-      `🔥 onAskAI
-🤖️ System: ${system ?? "None"}
-😊 User: ${user}
-`.trim()
-    );
+    if (trace && this.traceInput) {
+      this._logger.log(
+        `🔥 onAskAI\n🤖️ System: ${system ?? "None"}\n😊 User: ${user}`.trim()
+      );
+    }
     const systemMsg: ChatCompletionMessageParam[] = system
       ? [{ role: "system", content: system }]
       : [];
@@ -135,7 +141,9 @@ class OpenAIClient {
         content += text;
       }
     }
-    this._logger.success(`🤖️ Answer: ${content ?? "None"}`.trim());
+    if (trace && this.traceOutput) {
+      this._logger.log(`✅ Answer: ${content ?? "None"}`.trim());
+    }
     return withDefault(content, undefined);
   }
 }

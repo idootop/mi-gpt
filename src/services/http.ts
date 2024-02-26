@@ -3,9 +3,9 @@ import { HttpsProxyAgent } from "https-proxy-agent";
 import { isNotEmpty } from "../utils/is";
 import { Logger } from "../utils/log";
 
-export const kProxyAgent = new HttpsProxyAgent(
-  process.env.HTTP_PROXY ?? "http://127.0.0.1:7890"
-);
+export const kProxyAgent = process.env.HTTP_PROXY
+  ? new HttpsProxyAgent(process.env.HTTP_PROXY)
+  : null;
 
 const _baseConfig: CreateAxiosDefaults = {
   timeout: 10 * 1000,

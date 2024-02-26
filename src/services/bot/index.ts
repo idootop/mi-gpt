@@ -67,10 +67,11 @@ const userTemplate = `
 {{message}}
 `.trim();
 
+export type MyBotConfig = DeepPartial<IBotConfig> & { speaker: AISpeaker };
 export class MyBot {
   speaker: AISpeaker;
   manager: ConversationManager;
-  constructor(config: DeepPartial<IBotConfig> & { speaker: AISpeaker }) {
+  constructor(config: MyBotConfig) {
     this.speaker = config.speaker;
     this.manager = new ConversationManager(config);
   }
@@ -154,6 +155,7 @@ export class MyBot {
       .chatStream({
         ...options,
         requestId,
+        trace: true,
         onStream: (text) => {
           if (stream.status === "canceled") {
             return openai.abort(requestId);

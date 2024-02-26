@@ -1,4 +1,4 @@
-import { pickOne } from "../../utils/base";
+import { pickOne, toSet } from "../../utils/base";
 import {
   Speaker,
   SpeakerCommand,
@@ -9,12 +9,6 @@ import {
 
 export type AISpeakerConfig = SpeakerConfig & {
   askAI?: (msg: QueryMessage) => Promise<SpeakerAnswer>;
-  /**
-   * 切换音色前缀
-   *
-   * 比如：音色切换到（文静毛毛）
-   */
-  switchSpeakerPrefix?: string;
   /**
    * AI 开始回答时的提示语
    *
@@ -42,6 +36,12 @@ export type AISpeakerConfig = SpeakerConfig & {
    */
   callAIPrefix?: string[];
   /**
+   * 切换音色前缀
+   *
+   * 比如：音色切换到（文静毛毛）
+   */
+  switchSpeakerPrefix?: string[];
+  /**
    * 唤醒关键词
    *
    * 当消息中包含唤醒关键词时，会进入 AI 唤醒状态
@@ -67,6 +67,14 @@ export type AISpeakerConfig = SpeakerConfig & {
    * 比如：豆包已退出
    */
   onExitAI?: string[];
+  /**
+   * AI 回答开始提示音
+   */
+  audio_active?: string;
+  /**
+   * AI 回答异常提示音
+   */
+  audio_error?: string;
 };
 
 type AnswerStep = (
@@ -77,7 +85,7 @@ type AnswerStep = (
 export class AISpeaker extends Speaker {
   askAI: AISpeakerConfig["askAI"];
   name: string;
-  switchSpeakerPrefix: string;
+  switchSpeakerPrefix: string[];
   onEnterAI: string[];
   onExitAI: string[];
   callAIPrefix: string[];
@@ -85,23 +93,30 @@ export class AISpeaker extends Speaker {
   exitKeywords: string[];
   onAIAsking: string[];
   onAIError: string[];
+  audio_active?: string;
+  audio_error?: string;
 
   constructor(config: AISpeakerConfig) {
     super(config);
     const {
       askAI,
       name = "豆包",
-      switchSpeakerPrefix = "音色切换到",
+      switchSpeakerPrefix,
       wakeUpKeyWords = ["打开", "进入", "召唤"],
       exitKeywords = ["关闭", "退出", "再见"],
       onAIAsking = ["让我先想想", "请稍等"],
       onAIError = ["啊哦，出错了，请稍后再试吧！"],
+      audio_active = process.env.AUDIO_ACTIVE,
+      audio_error = process.env.AUDIO_ERROR,
     } = config;
     this.askAI = askAI;
-    this.switchSpeakerPrefix = switchSpeakerPrefix;
     this.name = name;
     this.onAIError = onAIError;
     this.onAIAsking = onAIAsking;
+    this.audio_active = audio_active;
+    this.audio_error = audio_error;
+    this.switchSpeakerPrefix =
+      switchSpeakerPrefix ?? getDefaultSwitchSpeakerPrefix();
     this.wakeUpKeyWords = wakeUpKeyWords.map((e) => e + this.name);
     this.exitKeywords = exitKeywords.map((e) => e + this.name);
     this.onEnterAI = config.onEnterAI ?? [
@@ -150,12 +165,16 @@ export class AISpeaker extends Speaker {
         },
       },
       {
-        match: (msg) => msg.text.startsWith(this.switchSpeakerPrefix),
+        match: (msg) =>
+          this.switchSpeakerPrefix.some((e) => msg.text.startsWith(e)),
         run: async (msg) => {
           await this.response({
             text: "正在切换音色，请稍等...",
           });
-          const speaker = msg.text.replace(this.switchSpeakerPrefix, "");
+          const prefix = this.switchSpeakerPrefix.find((e) =>
+            msg.text.startsWith(e)
+          )!;
+          const speaker = msg.text.replace(prefix, "");
           const success = await this.switchDefaultSpeaker(speaker);
           await this.response({
             text: success ? "音色已切换！" : "音色切换失败！",
@@ -177,7 +196,7 @@ export class AISpeaker extends Speaker {
     async (msg, data) => {
       // 思考中
       await this.response({
-        audio: process.env.AUDIO_ACTIVE,
+        audio: this.audio_active,
         text: pickOne(this.onAIAsking)!,
       });
     },
@@ -190,7 +209,7 @@ export class AISpeaker extends Speaker {
       if (!data.answer) {
         // 回答异常
         await this.response({
-          audio: process.env.AUDIO_ERROR,
+          audio: this.audio_error,
           text: pickOne(this.onAIError)!,
           keepAlive: this.keepAlive,
         });
@@ -217,3 +236,20 @@ export class AISpeaker extends Speaker {
     return data.answer;
   }
 }
+
+const getDefaultSwitchSpeakerPrefix = () => {
+  let prefixes = ["音色切换到", "切换音色到", "把音色调到"];
+  const replaces = [
+    ["音色", "声音"],
+    ["切换", "调"],
+    ["到", "为"],
+    ["到", "成"],
+  ];
+  for (const r of replaces) {
+    prefixes = toSet([
+      ...prefixes,
+      ...prefixes.map((e) => e.replace(r[0], r[1])),
+    ]);
+  }
+  return prefixes;
+};

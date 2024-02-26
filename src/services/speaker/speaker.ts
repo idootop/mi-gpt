@@ -1,4 +1,5 @@
 import { firstOf, lastOf, sleep } from "../../utils/base";
+import { kAreYouOK } from "../../utils/string";
 import { BaseSpeaker, BaseSpeakerConfig } from "./base";
 import { StreamResponse } from "./stream";
 
@@ -38,6 +39,10 @@ export type SpeakerConfig = BaseSpeakerConfig & {
    * 无响应一段时间后，多久自动退出唤醒模式（单位秒，默认30秒）
    */
   exitKeepAliveAfter?: number;
+  /**
+   * 静音音频链接
+   */
+  audio_silent?: string;
 };
 
 export class Speaker extends BaseSpeaker {
@@ -47,7 +52,12 @@ export class Speaker extends BaseSpeaker {
 
   constructor(config: SpeakerConfig) {
     super(config);
-    const { heartbeat = 1000, exitKeepAliveAfter = 30 } = config;
+    const {
+      heartbeat = 1000,
+      exitKeepAliveAfter = 30,
+      audio_silent = process.env.AUDIO_SILENT,
+    } = config;
+    this.audio_silent = audio_silent;
     this._commands = config.commands ?? [];
     this.heartbeat = heartbeat;
     this.exitKeepAliveAfter = exitKeepAliveAfter;
@@ -78,13 +88,16 @@ export class Speaker extends BaseSpeaker {
     }
   }
 
+  audio_silent?: string;
   async activeKeepAliveMode() {
     while (this.status === "running") {
       if (this.keepAlive) {
         // 唤醒中
         if (!this.responding) {
           // 没有回复时，一直播放静音音频使小爱闭嘴
-          await this.MiNA?.play({ url: process.env.AUDIO_SILENT });
+          await this.MiNA?.play(
+            this.audio_silent ? { url: this.audio_silent } : { tts: kAreYouOK }
+          );
         }
       }
       await sleep(this.interval);

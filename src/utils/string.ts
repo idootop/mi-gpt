@@ -2,6 +2,8 @@ import { readJSONSync } from "./io";
 
 export const kVersion = readJSONSync("package.json").version;
 
+export const kAreYouOK = "¿ʞо ∩оʎ ǝɹɐ"; // are you ok?
+
 export const kBannerASCII = `
 
 /$$      /$$ /$$  /$$$$$$  /$$$$$$$  /$$$$$$$$
