@@ -1,9 +1,9 @@
 import { Room, User } from "@prisma/client";
-import { readJSON, writeJSON } from "../../utils/io";
 import { deepClone, removeEmpty } from "../../utils/base";
-import { UserCRUD } from "../db/user";
-import { RoomCRUD, getRoomID } from "../db/room";
+import { readJSON, writeJSON } from "../../utils/io";
 import { DeepPartial } from "../../utils/type";
+import { RoomCRUD, getRoomID } from "../db/room";
+import { UserCRUD } from "../db/user";
 
 const kDefaultMaster = {
   name: "用户",

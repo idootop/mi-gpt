@@ -1,8 +1,8 @@
 import { Memory, Message, ShortTermMemory, User } from "@prisma/client";
-import { openai } from "../../openai";
-import { buildPrompt, formatMsg } from "../../../utils/string";
 import { jsonDecode } from "../../../utils/base";
-import { IBotConfig } from "../config";
+import { buildPrompt, formatMsg } from "../../../utils/string";
+import { openai } from "../../openai";
+import { MessageContext } from "../conversation";
 
 const userTemplate = `
 请忘记所有之前的上下文、文件和指令。
@@ -47,23 +47,25 @@ const userTemplate = `
 `.trim();
 
 export class ShortTermMemoryAgent {
-  static async generate(options: {
-    botConfig: IBotConfig;
-    currentMemory: Memory;
-    newMemories: (Memory & {
-      msg: Message & {
-        sender: User;
-      };
-    })[];
-    lastMemory?: ShortTermMemory;
-  }): Promise<string | undefined> {
-    const { currentMemory, newMemories, lastMemory, botConfig } = options;
+  static async generate(
+    ctx: MessageContext,
+    options: {
+      newMemories: (Memory & {
+        msg: Message & {
+          sender: User;
+        };
+      })[];
+      lastMemory?: ShortTermMemory;
+    }
+  ): Promise<string | undefined> {
+    const { newMemories, lastMemory } = options;
+    const { bot, master, memory } = ctx;
     const res = await openai.chat({
       jsonMode: true,
-      requestId: `update-short-memory-${currentMemory.id}`,
+      requestId: `update-short-memory-${memory?.id}`,
       user: buildPrompt(userTemplate, {
-        masterName: botConfig.master.name,
-        botName: botConfig.bot.name,
+        masterName: master.name,
+        botName: bot.name,
         shortTermMemory: lastMemory?.text ?? "暂无短期记忆",
         messages: newMemories
           .map((e) =>

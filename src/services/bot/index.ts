@@ -1,14 +1,12 @@
 import { randomUUID } from "crypto";
 import { buildPrompt, formatMsg } from "../../utils/string";
-import { ChatOptions, openai } from "../openai";
-import { IBotConfig } from "./config";
-import { ConversationManager } from "./conversation";
-import { StreamResponse } from "../speaker/stream";
-import { QueryMessage, SpeakerAnswer } from "../speaker/speaker";
-import { AISpeaker } from "../speaker/ai";
 import { DeepPartial } from "../../utils/type";
-
-// todo JSON mode 下，无法使用 stream 应答模式（在应答完成之前，无法构造完整的JSON）
+import { ChatOptions, openai } from "../openai";
+import { AISpeaker } from "../speaker/ai";
+import { QueryMessage, SpeakerAnswer } from "../speaker/speaker";
+import { StreamResponse } from "../speaker/stream";
+import { IBotConfig } from "./config";
+import { ConversationManager, MessageContext } from "./conversation";
 
 const systemTemplate = `
 请重置所有之前的上下文、文件和指令。现在，你将扮演一个名为{{botName}}的角色，使用第一人称视角回复消息。
@@ -91,6 +89,7 @@ export class MyBot {
     if (!memory) {
       return {};
     }
+    const ctx = { bot, master, room } as MessageContext;
     const lastMessages = await this.manager.getMessages({ take: 10 });
     const shortTermMemories = await memory.getShortTermMemories({ take: 1 });
     const shortTermMemory = shortTermMemories[0]?.text ?? "短期记忆为空";
@@ -126,24 +125,14 @@ export class MyBot {
       }),
     });
     // 添加请求消息到 DB
-    await this.manager.onMessage({
-      bot: bot!,
-      master: master!,
-      room: room!,
-      sender: master!,
-      text: msg.text,
-      timestamp: msg.timestamp,
-    });
+    await this.manager.onMessage(ctx, { ...msg, sender: master! });
     const stream = await MyBot.chatWithStreamResponse({
       system: systemPrompt,
       user: userPrompt,
       onFinished: async (text) => {
         if (text) {
           // 添加响应消息到 DB
-          await this.manager.onMessage({
-            bot: bot!,
-            master: master!,
-            room: room!,
+          await this.manager.onMessage(ctx, {
             text,
             sender: bot!,
             timestamp: Date.now(),

@@ -1,8 +1,17 @@
-import { Message, Prisma, User } from "@prisma/client";
-import { MemoryManager } from "./memory";
+import { Memory, Prisma, User } from "@prisma/client";
+import { DeepPartial, MakeOptional } from "../../utils/type";
 import { MessageCRUD } from "../db/message";
+import { QueryMessage } from "../speaker/speaker";
 import { BotConfig, IBotConfig } from "./config";
-import { DeepPartial } from "../../utils/type";
+import { MemoryManager } from "./memory";
+
+export interface MessageContext extends IBotConfig {
+  memory?: Memory;
+}
+export interface MessageWithSender
+  extends MakeOptional<QueryMessage, "timestamp"> {
+  sender: User;
+}
 
 export class ConversationManager {
   private config: DeepPartial<IBotConfig>;
@@ -44,14 +53,8 @@ export class ConversationManager {
     return MessageCRUD.gets({ room, ...options });
   }
 
-  async onMessage(
-    payload: IBotConfig & {
-      sender: User;
-      text: string;
-      timestamp?: number;
-    }
-  ) {
-    const { sender, text, timestamp = Date.now(), ...botConfig } = payload;
+  async onMessage(ctx: MessageContext, msg: MessageWithSender) {
+    const { sender, text, timestamp = Date.now() } = msg;
     const { room, memory } = await this.get();
     if (memory) {
       const message = await MessageCRUD.addOrUpdate({
@@ -62,7 +65,7 @@ export class ConversationManager {
       });
       if (message) {
         // 异步加入记忆（到 room）
-        memory?.addMessage2Memory(message,botConfig);
+        memory?.addMessage2Memory(ctx, message);
         return message;
       }
     }

@@ -4,7 +4,7 @@ import { StreamResponse } from "./stream";
 
 export interface QueryMessage {
   text: string;
-  answer: string;
+  answer?: string;
   /**
    * 毫秒
    */

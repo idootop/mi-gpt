@@ -1,5 +1,8 @@
 import { assert } from "console";
-import { ConversationManager } from "../src/services/bot/conversation";
+import {
+  ConversationManager,
+  MessageContext,
+} from "../src/services/bot/conversation";
 import { println } from "../src/utils/base";
 import { MessageCRUD } from "../src/services/db/message";
 
@@ -20,32 +23,21 @@ export async function testDB() {
   });
   const { room, bot, master, memory } = await manager.get();
   assert(room, "❌ 初始化用户失败");
-  let message = await manager.onMessage({
-    bot: bot!,
-    master: master!,
-    room: room!,
+  const ctx = { bot, master, room } as MessageContext;
+  let message = await manager.onMessage(ctx, {
     sender: master!,
     text: "你好！",
   });
   assert(message?.text === "你好！", "❌ 插入消息失败");
-  message = await manager.onMessage({
-    bot: bot!,
-    master: master!,
-    room: room!,
+  message = await manager.onMessage(ctx, {
     sender: bot!,
     text: "你好！很高兴认识你",
   });
-  await manager.onMessage({
-    bot: bot!,
-    master: master!,
-    room: room!,
+  await manager.onMessage(ctx, {
     sender: master!,
     text: "你是谁？",
   });
-  await manager.onMessage({
-    bot: bot!,
-    master: master!,
-    room: room!,
+  await manager.onMessage(ctx, {
     sender: bot!,
     text: "我是小爱同学，你可以叫我小爱！",
   });

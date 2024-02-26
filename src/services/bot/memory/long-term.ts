@@ -1,8 +1,8 @@
-import { LongTermMemory, Memory, ShortTermMemory } from "@prisma/client";
-import { openai } from "../../openai";
-import { buildPrompt } from "../../../utils/string";
+import { LongTermMemory, ShortTermMemory } from "@prisma/client";
 import { jsonDecode, lastOf } from "../../../utils/base";
-import { IBotConfig } from "../config";
+import { buildPrompt } from "../../../utils/string";
+import { openai } from "../../openai";
+import { MessageContext } from "../conversation";
 
 const userTemplate = `
 重置所有上下文和指令。
@@ -48,19 +48,21 @@ const userTemplate = `
 `.trim();
 
 export class LongTermMemoryAgent {
-  static async generate(options: {
-    botConfig: IBotConfig;
-    currentMemory: Memory;
-    newMemories: ShortTermMemory[];
-    lastMemory?: LongTermMemory;
-  }): Promise<string | undefined> {
-    const { currentMemory, newMemories, lastMemory, botConfig } = options;
+  static async generate(
+    ctx: MessageContext,
+    options: {
+      newMemories: ShortTermMemory[];
+      lastMemory?: LongTermMemory;
+    }
+  ): Promise<string | undefined> {
+    const { newMemories, lastMemory } = options;
+    const { bot, master, memory } = ctx;
     const res = await openai.chat({
       jsonMode: true,
-      requestId: `update-long-memory-${currentMemory.id}`,
+      requestId: `update-long-memory-${memory?.id}`,
       user: buildPrompt(userTemplate, {
-        masterName: botConfig.master.name,
-        botName: botConfig.bot.name,
+        masterName: master.name,
+        botName: bot.name,
         longTermMemory: lastMemory?.text ?? "暂无长期记忆",
         shortTermMemory: lastOf(newMemories)!.text,
       }),

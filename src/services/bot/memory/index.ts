@@ -1,12 +1,12 @@
 import { Memory, Message, Room, User } from "@prisma/client";
 import { firstOf, lastOf } from "../../../utils/base";
-import { LongTermMemoryAgent } from "./long-term";
 import { MemoryCRUD } from "../../db/memory";
-import { ShortTermMemoryCRUD } from "../../db/memory-short-term";
 import { LongTermMemoryCRUD } from "../../db/memory-long-term";
-import { ShortTermMemoryAgent } from "./short-term";
+import { ShortTermMemoryCRUD } from "../../db/memory-short-term";
 import { openai } from "../../openai";
-import { IBotConfig } from "../config";
+import { MessageContext } from "../conversation";
+import { LongTermMemoryAgent } from "./long-term";
+import { ShortTermMemoryAgent } from "./short-term";
 
 export class MemoryManager {
   private room: Room;
@@ -47,7 +47,7 @@ export class MemoryManager {
   }
 
   private _currentMemory?: Memory;
-  async addMessage2Memory(message: Message, botConfig: IBotConfig) {
+  async addMessage2Memory(ctx: MessageContext, message: Message) {
     // todo create memory embedding
     const currentMemory = await MemoryCRUD.addOrUpdate({
       msgId: message.id,
@@ -55,12 +55,12 @@ export class MemoryManager {
       ownerId: message.senderId,
     });
     if (currentMemory) {
-      this._onMemory(currentMemory, botConfig);
+      this._onMemory(ctx, currentMemory);
     }
     return currentMemory;
   }
 
-  private _onMemory(currentMemory: Memory, botConfig: IBotConfig) {
+  private _onMemory(ctx: MessageContext, currentMemory: Memory) {
     if (this._currentMemory) {
       // 取消之前的更新记忆任务
       openai.abort(`update-short-memory-${this._currentMemory.id}`);
@@ -68,40 +68,37 @@ export class MemoryManager {
     }
     this._currentMemory = currentMemory;
     // 异步更新长短期记忆
-    this.updateLongShortTermMemory({ currentMemory, botConfig });
+    this.updateLongShortTermMemory(ctx);
   }
 
   /**
    * 更新记忆（当新的记忆数量超过阈值时，自动更新长短期记忆）
    */
-  async updateLongShortTermMemory(options: {
-    botConfig: IBotConfig;
-    currentMemory: Memory;
-    shortThreshold?: number;
-    longThreshold?: number;
-  }) {
-    const { currentMemory, shortThreshold, longThreshold, botConfig } =
-      options ?? {};
-    const success = await this._updateShortTermMemory({
-      botConfig,
-      currentMemory,
+  async updateLongShortTermMemory(
+    ctx: MessageContext,
+    options?: {
+      shortThreshold?: number;
+      longThreshold?: number;
+    }
+  ) {
+    const { shortThreshold, longThreshold } = options ?? {};
+    const success = await this._updateShortTermMemory(ctx, {
       threshold: shortThreshold,
     });
     if (success) {
-      await this._updateLongTermMemory({
-        botConfig,
-        currentMemory,
+      await this._updateLongTermMemory(ctx, {
         threshold: longThreshold,
       });
     }
   }
 
-  private async _updateShortTermMemory(options: {
-    botConfig: IBotConfig;
-    currentMemory: Memory;
-    threshold?: number;
-  }) {
-    const { currentMemory, threshold = 10, botConfig } = options;
+  private async _updateShortTermMemory(
+    ctx: MessageContext,
+    options: {
+      threshold?: number;
+    }
+  ) {
+    const { threshold = 10 } = options;
     const lastMemory = firstOf(await this.getShortTermMemories({ take: 1 }));
     const newMemories: (Memory & {
       msg: Message & {
@@ -116,9 +113,7 @@ export class MemoryManager {
     if (newMemories.length < 1 || newMemories.length < threshold) {
       return true;
     }
-    const newMemory = await ShortTermMemoryAgent.generate({
-      botConfig,
-      currentMemory,
+    const newMemory = await ShortTermMemoryAgent.generate(ctx, {
       newMemories,
       lastMemory,
     });
@@ -134,12 +129,13 @@ export class MemoryManager {
     return res != null;
   }
 
-  private async _updateLongTermMemory(options: {
-    botConfig: IBotConfig;
-    currentMemory: Memory;
-    threshold?: number;
-  }) {
-    const { currentMemory, threshold = 10, botConfig } = options;
+  private async _updateLongTermMemory(
+    ctx: MessageContext,
+    options: {
+      threshold?: number;
+    }
+  ) {
+    const { threshold = 10 } = options;
     const lastMemory = firstOf(await this.getLongTermMemories({ take: 1 }));
     const newMemories = await ShortTermMemoryCRUD.gets({
       cursorId: lastMemory?.cursorId,
@@ -150,9 +146,7 @@ export class MemoryManager {
     if (newMemories.length < 1 || newMemories.length < threshold) {
       return true;
     }
-    const newMemory = await LongTermMemoryAgent.generate({
-      botConfig,
-      currentMemory,
+    const newMemory = await LongTermMemoryAgent.generate(ctx, {
       newMemories,
       lastMemory,
     });
