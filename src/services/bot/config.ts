@@ -4,6 +4,7 @@ import { readJSON, writeJSON } from "../../utils/io";
 import { DeepPartial } from "../../utils/type";
 import { RoomCRUD, getRoomID } from "../db/room";
 import { UserCRUD } from "../db/user";
+import { Logger } from "../../utils/log";
 
 const kDefaultMaster = {
   name: "用户",
@@ -27,6 +28,7 @@ export interface IBotConfig {
 }
 
 class _BotConfig {
+  private _logger = Logger.create({ tag: "BotConfig" });
   private botIndex?: IBotIndex;
 
   private _index_path = ".bot.json";
@@ -44,12 +46,12 @@ class _BotConfig {
       // create db records
       const bot = await UserCRUD.addOrUpdate(kDefaultBot);
       if (!bot) {
-        console.error("❌ create bot failed");
+        this._logger.error("create bot failed");
         return undefined;
       }
       const master = await UserCRUD.addOrUpdate(kDefaultMaster);
       if (!master) {
-        console.error("❌ create master failed");
+        this._logger.error("create master failed");
         return undefined;
       }
       const defaultRoomName = `${master.name}和${bot.name}的私聊`;
@@ -59,7 +61,7 @@ class _BotConfig {
         description: defaultRoomName,
       });
       if (!room) {
-        console.error("❌ create room failed");
+        this._logger.error("create room failed");
         return undefined;
       }
       this.botIndex = {
@@ -70,17 +72,17 @@ class _BotConfig {
     }
     const bot = await UserCRUD.get(this.botIndex!.botId);
     if (!bot) {
-      console.error("❌ find bot failed");
+      this._logger.error("find bot failed");
       return undefined;
     }
     const master = await UserCRUD.get(this.botIndex!.masterId);
     if (!master) {
-      console.error("❌ find master failed");
+      this._logger.error("find master failed");
       return undefined;
     }
     const room = await RoomCRUD.get(getRoomID([bot, master]));
     if (!room) {
-      console.error("❌ find room failed");
+      this._logger.error("find room failed");
       return undefined;
     }
     return { bot, master, room };

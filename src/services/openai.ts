@@ -8,6 +8,7 @@ import { kEnvs } from "../utils/env";
 import { kProxyAgent } from "./http";
 import { withDefault } from "../utils/base";
 import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions";
+import { Logger } from "../utils/log";
 
 export interface ChatOptions {
   user: string;
@@ -19,6 +20,7 @@ export interface ChatOptions {
 }
 
 class OpenAIClient {
+  private _logger = Logger.create({ tag: "OpenAI" });
   private _client = new OpenAI({
     httpAgent: kProxyAgent,
     apiKey: kEnvs.OPENAI_API_KEY!,
@@ -44,9 +46,8 @@ class OpenAIClient {
       requestId,
       model = kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
     } = options;
-    console.log(
-      `
-🔥🔥🔥 onAskAI start
+    this._logger.log(
+      `🔥 onAskAI
 🤖️ System: ${system ?? "None"}
 😊 User: ${user}
 `.trim()
@@ -71,16 +72,11 @@ class OpenAIClient {
         { signal }
       )
       .catch((e) => {
-        console.error("❌ openai chat failed", e);
+        this._logger.error("openai chat failed", e);
         return null;
       });
     const message = chatCompletion?.choices?.[0]?.message;
-    console.log(
-      `
-  ✅✅✅ onAskAI end
-  🤖️ Answer: ${message?.content ?? "None"}
-  `.trim()
-    );
+    this._logger.success(`🤖️ Answer: ${message?.content ?? "None"}`.trim());
     return message;
   }
 
@@ -98,9 +94,8 @@ class OpenAIClient {
       onStream,
       model = kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
     } = options;
-    console.log(
-      `
-🔥🔥🔥 onAskAI start
+    this._logger.log(
+      `🔥 onAskAI
 🤖️ System: ${system ?? "None"}
 😊 User: ${user}
 `.trim()
@@ -117,7 +112,7 @@ class OpenAIClient {
         response_format: jsonMode ? { type: "json_object" } : undefined,
       })
       .catch((e) => {
-        console.error("❌ openai chat failed", e);
+        this._logger.error("❌ openai chat failed", e);
         return null;
       });
     if (!stream) {
@@ -140,12 +135,7 @@ class OpenAIClient {
         content += text;
       }
     }
-    console.log(
-      `
-  ✅✅✅ onAskAI end
-  🤖️ Answer: ${content ?? "None"}
-  `.trim()
-    );
+    this._logger.success(`🤖️ Answer: ${content ?? "None"}`.trim());
     return withDefault(content, undefined);
   }
 }

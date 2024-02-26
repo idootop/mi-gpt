@@ -64,13 +64,13 @@ export class Speaker extends BaseSpeaker {
     if (!this.MiNA) {
       this.stop();
     }
-    console.log("✅ 服务已启动...");
+    this.logger.success("服务已启动...");
     this.activeKeepAliveMode();
     while (this.status === "running") {
       const nextMsg = await this.fetchNextMessage();
       if (nextMsg) {
         this.responding = false;
-        console.log("🔥 " + nextMsg.text);
+        this.logger.log("🔥 " + nextMsg.text);
         // 异步处理消息，不阻塞正常消息拉取
         this.onMessage(nextMsg);
       }

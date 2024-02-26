@@ -1,6 +1,6 @@
 import { Memory, Prisma, Room, User } from "@prisma/client";
-import { getSkipWithCursor, k404, kPrisma } from "./index";
 import { removeEmpty } from "../../utils/base";
+import { getSkipWithCursor, k404, kDBLogger, kPrisma } from "./index";
 
 class _MemoryCRUD {
   async count(options?: { cursorId?: number; room?: Room; owner?: User }) {
@@ -14,7 +14,7 @@ class _MemoryCRUD {
         },
       })
       .catch((e) => {
-        console.error("❌ get memory count failed", e);
+        kDBLogger.error("get memory count failed", e);
         return -1;
       });
   }
@@ -33,7 +33,7 @@ class _MemoryCRUD {
       },
     } = options ?? {};
     return kPrisma.memory.findFirst({ where: { id }, include }).catch((e) => {
-      console.error("❌ get memory failed", id, e);
+      kDBLogger.error("get memory failed", id, e);
       return undefined;
     });
   }
@@ -72,7 +72,7 @@ class _MemoryCRUD {
         ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
-        console.error("❌ get memories failed", options, e);
+        kDBLogger.error("get memories failed", options, e);
         return [];
       });
     return order === "desc" ? memories.reverse() : memories;
@@ -98,7 +98,7 @@ class _MemoryCRUD {
         update: data,
       })
       .catch((e) => {
-        console.error("❌ add memory to db failed", memory, e);
+        kDBLogger.error("add memory to db failed", memory, e);
         return undefined;
       });
   }

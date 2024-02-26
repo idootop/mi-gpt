@@ -1,6 +1,6 @@
 import { Room, ShortTermMemory, User } from "@prisma/client";
 import { removeEmpty } from "../../utils/base";
-import { getSkipWithCursor, k404, kPrisma } from "./index";
+import { getSkipWithCursor, k404, kDBLogger, kPrisma } from "./index";
 
 class _ShortTermMemoryCRUD {
   async count(options?: { cursorId?: number; room?: Room; owner?: User }) {
@@ -14,14 +14,14 @@ class _ShortTermMemoryCRUD {
         },
       })
       .catch((e) => {
-        console.error("❌ get shortTermMemory count failed", e);
+        kDBLogger.error("get shortTermMemory count failed", e);
         return -1;
       });
   }
 
   async get(id: number) {
     return kPrisma.shortTermMemory.findFirst({ where: { id } }).catch((e) => {
-      console.error("❌ get short term memory failed", id, e);
+      kDBLogger.error("get short term memory failed", id, e);
       return undefined;
     });
   }
@@ -53,7 +53,7 @@ class _ShortTermMemoryCRUD {
         ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
-        console.error("❌ get short term memories failed", options, e);
+        kDBLogger.error("get short term memories failed", options, e);
         return [];
       });
     return order === "desc" ? memories.reverse() : memories;
@@ -82,11 +82,7 @@ class _ShortTermMemoryCRUD {
         update: data,
       })
       .catch((e) => {
-        console.error(
-          "❌ add shortTermMemory to db failed",
-          shortTermMemory,
-          e
-        );
+        kDBLogger.error("add shortTermMemory to db failed", shortTermMemory, e);
         return undefined;
       });
   }

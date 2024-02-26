@@ -6,6 +6,7 @@ import { testDB } from "./db";
 import { testSpeaker } from "./speaker";
 import { testOpenAI } from "./openai";
 import { testMyBot } from "./bot";
+import { testLog } from "./log";
 
 dotenv.config();
 
@@ -14,7 +15,8 @@ async function main() {
   // testDB();
   // testSpeaker();
   // testOpenAI();
-  testMyBot();
+  // testMyBot();
+  testLog();
 }
 
 runWithDB(main);

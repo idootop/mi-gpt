@@ -1,12 +1,12 @@
-import { assert } from "console";
 import {
+  MiIOT,
+  MiNA,
   MiServiceConfig,
   getMiIOT,
   getMiNA,
-  MiNA,
-  MiIOT,
 } from "mi-service-lite";
 import { sleep } from "../../utils/base";
+import { Logger } from "../../utils/log";
 import { Http } from "../http";
 import { StreamResponse } from "./stream";
 
@@ -26,6 +26,7 @@ export type BaseSpeakerConfig = MiServiceConfig & {
 };
 
 export class BaseSpeaker {
+  logger = Logger.create({ tag: "Speaker" });
   MiNA?: MiNA;
   MiIOT?: MiIOT;
 
@@ -42,7 +43,7 @@ export class BaseSpeaker {
   async initMiServices() {
     this.MiNA = await getMiNA(this.config);
     this.MiIOT = await getMiIOT(this.config);
-    assert(!!this.MiNA && !!this.MiIOT, "❌ init Mi Services failed");
+    this.logger.assert(!!this.MiNA && !!this.MiIOT, "init Mi Services failed");
   }
 
   wakeUp() {
@@ -169,7 +170,7 @@ export class BaseSpeaker {
         await this.unWakeUp();
       }
       await this.MiNA!.play(args);
-      console.log("✅ " + ttsText ?? audio);
+      this.logger.success(ttsText ?? audio);
       // 等待回答播放完毕
       while (true) {
         const res = await this.MiNA!.getStatus();

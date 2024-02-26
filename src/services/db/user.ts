@@ -1,10 +1,10 @@
 import { Prisma, User } from "@prisma/client";
-import { getSkipWithCursor, k404, kPrisma } from "./index";
+import { getSkipWithCursor, k404, kDBLogger, kPrisma } from "./index";
 
 class _UserCRUD {
   async count() {
     return kPrisma.user.count().catch((e) => {
-      console.error("❌ get user count failed", e);
+      kDBLogger.error("get user count failed", e);
       return -1;
     });
   }
@@ -17,7 +17,7 @@ class _UserCRUD {
   ) {
     const { include = { rooms: false } } = options ?? {};
     return kPrisma.user.findFirst({ where: { id }, include }).catch((e) => {
-      console.error("❌ get user failed", id, e);
+      kDBLogger.error("get user failed", id, e);
       return undefined;
     });
   }
@@ -47,7 +47,7 @@ class _UserCRUD {
         ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
-        console.error("❌ get users failed", options, e);
+        kDBLogger.error("get users failed", options, e);
         return [];
       });
     return order === "desc" ? users.reverse() : users;
@@ -68,7 +68,7 @@ class _UserCRUD {
         update: user,
       })
       .catch((e) => {
-        console.error("❌ add user to db failed", user, e);
+        kDBLogger.error("add user to db failed", user, e);
         return undefined;
       });
   }

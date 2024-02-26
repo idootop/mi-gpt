@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, CreateAxiosDefaults } from "axios";
 import { HttpsProxyAgent } from "https-proxy-agent";
 import { isNotEmpty } from "../utils/is";
+import { Logger } from "../utils/log";
 
 export const kProxyAgent = new HttpsProxyAgent(
   process.env.HTTP_PROXY ?? "http://127.0.0.1:7890"
@@ -29,6 +30,7 @@ type RequestConfig = AxiosRequestConfig<any> & {
   cookies?: Record<string, string | number | boolean | undefined>;
 };
 
+const _logger = Logger.create({ tag: "Http" });
 _http.interceptors.response.use(
   (res) => {
     const config: any = res.config;
@@ -45,8 +47,8 @@ _http.interceptors.response.use(
       code: error.code ?? "UNKNOWN CODE",
       message: error.message ?? "UNKNOWN ERROR",
     };
-    console.error(
-      "❌ Network request failed:",
+    _logger.error(
+      "Network request failed:",
       apiError.code,
       apiError.message,
       error

@@ -1,6 +1,6 @@
 import { LongTermMemory, Room, User } from "@prisma/client";
 import { removeEmpty } from "../../utils/base";
-import { getSkipWithCursor, k404, kPrisma } from "./index";
+import { getSkipWithCursor, k404, kDBLogger, kPrisma } from "./index";
 
 class _LongTermMemoryCRUD {
   async count(options?: { cursorId?: number; room?: Room; owner?: User }) {
@@ -14,14 +14,14 @@ class _LongTermMemoryCRUD {
         },
       })
       .catch((e) => {
-        console.error("❌ get longTermMemory count failed", e);
+        kDBLogger.error("get longTermMemory count failed", e);
         return -1;
       });
   }
 
   async get(id: number) {
     return kPrisma.longTermMemory.findFirst({ where: { id } }).catch((e) => {
-      console.error("❌ get long term memory failed", id, e);
+      kDBLogger.error("get long term memory failed", id, e);
       return undefined;
     });
   }
@@ -53,7 +53,7 @@ class _LongTermMemoryCRUD {
         ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
-        console.error("❌ get long term memories failed", options, e);
+        kDBLogger.error("get long term memories failed", options, e);
         return [];
       });
     return order === "desc" ? memories.reverse() : memories;
@@ -82,7 +82,7 @@ class _LongTermMemoryCRUD {
         update: data,
       })
       .catch((e) => {
-        console.error("❌ add longTermMemory to db failed", longTermMemory, e);
+        kDBLogger.error("add longTermMemory to db failed", longTermMemory, e);
         return undefined;
       });
   }

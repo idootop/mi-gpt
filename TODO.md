@@ -2,3 +2,6 @@
 - ✅ Stream response
 - ✅ Deactivate Xiaoai
 - ✅ Update long/short memories
+- ✅ Logger
+- Docker
+- Npm export

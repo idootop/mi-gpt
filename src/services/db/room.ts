@@ -1,5 +1,5 @@
 import { Prisma, Room, User } from "@prisma/client";
-import { k404, kPrisma, getSkipWithCursor } from "./index";
+import { k404, kPrisma, getSkipWithCursor, kDBLogger } from "./index";
 
 export function getRoomID(users: User[]) {
   return users
@@ -22,7 +22,7 @@ class _RoomCRUD {
         },
       })
       .catch((e) => {
-        console.error("❌ get room count failed", e);
+        kDBLogger.error("get room count failed", e);
         return -1;
       });
   }
@@ -35,7 +35,7 @@ class _RoomCRUD {
   ) {
     const { include = { members: true } } = options ?? {};
     return kPrisma.room.findFirst({ where: { id } }).catch((e) => {
-      console.error("❌ get room failed", id, e);
+      kDBLogger.error("get room failed", id, e);
       return undefined;
     });
   }
@@ -68,7 +68,7 @@ class _RoomCRUD {
         ...getSkipWithCursor(skip, cursorId),
       })
       .catch((e) => {
-        console.error("❌ get rooms failed", options, e);
+        kDBLogger.error("get rooms failed", options, e);
         return [];
       });
     return order === "desc" ? rooms.reverse() : rooms;
@@ -89,7 +89,7 @@ class _RoomCRUD {
         update: room,
       })
       .catch((e) => {
-        console.error("❌ add room to db failed", room, e);
+        kDBLogger.error("add room to db failed", room, e);
         return undefined;
       });
   }
