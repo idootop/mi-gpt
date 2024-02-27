@@ -27,14 +27,19 @@ export function getSkipWithCursor(skip: number, cursorId: any) {
   };
 }
 
-export async function initDB(dbPath: string) {
+export async function initDB() {
+  const isExternal = exists("node_modules/mi-gpt/prisma");
+  const dbPath = isExternal
+    ? "node_modules/mi-gpt/prisma/app.db"
+    : "prisma/app.db";
   if (!exists(dbPath)) {
-    const isExternal = exists("node_modules/mi-gpt/prisma");
     const withSchema = isExternal
       ? "--schema node_modules/mi-gpt/prisma/schema.prisma"
       : "";
     await deleteFile(".bot.json");
-    await Shell.run(`npx prisma migrate dev --name init ${withSchema}`);
+    await Shell.run(`npx prisma migrate dev --name init ${withSchema}`, {
+      silent: true,
+    });
   }
   const success = exists(dbPath);
   kDBLogger.assert(success, "初始化数据库失败！");

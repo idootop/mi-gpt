@@ -80,8 +80,9 @@ export class MyBot {
     return this.speaker.stop();
   }
 
-  run() {
+  async run() {
     this.speaker.askAI = (msg) => this.ask(msg);
+    await this.manager.init();
     return this.speaker.run();
   }
 

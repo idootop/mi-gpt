@@ -35,7 +35,7 @@ export class MiGPT {
   }
 
   async start() {
-    await initDB(".mi-gpt.db");
+    await initDB();
     const main = () => {
       console.log(kBannerASCII);
       return this.ai.run();

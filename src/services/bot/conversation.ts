@@ -19,6 +19,10 @@ export class ConversationManager {
     this.config = config;
   }
 
+  async init() {
+    return this.get();
+  }
+
   async get(): Promise<Partial<IBotConfig & { memory: MemoryManager }>> {
     const config = await this.update();
     if (!config) {
