@@ -20,19 +20,21 @@
   ],
   "scripts": {
     "build": "tsup",
-    "db:gen": "npx prisma migrate dev --name hello",
+    "db:gen": "npx prisma migrate dev --name init",
     "db:reset": "rm .bot.json && npx prisma migrate reset",
-    "prepublish": "yarn db:gen && npm run build"
+    "prepublish": "npm run db:gen && npm run build"
   },
   "dependencies": {
     "@prisma/client": "^5.8.1",
     "axios": "^1.6.5",
+    "fs-extra": "^11.2.0",
     "https-proxy-agent": "^7.0.4",
     "mi-service-lite": "^2.0.0",
     "openai": "^4.28.0",
     "prisma": "^5.8.1"
   },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.4.9",
     "dotenv": "^16.3.2",
     "ts-node": "^10.9.2",

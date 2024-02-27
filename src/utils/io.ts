@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import * as path from "path";
+import fs from "fs-extra";
+import path from "path";
 
 import { jsonDecode, jsonEncode } from "./base";
 
@@ -7,14 +7,7 @@ export const kRoot = process.cwd();
 
 export const exists = (filePath: string) => fs.existsSync(filePath);
 
-export const deleteFile = (filePath: string) => {
-  try {
-    fs.rmSync(filePath);
-    return true;
-  } catch {
-    return false;
-  }
-};
+export const getFullPath = (filePath: string) => path.resolve(filePath);
 
 export const getFiles = (dir: string) => {
   return new Promise<string[]>((resolve) => {
@@ -89,3 +82,87 @@ export const readJSONSync = (filePath: string) =>
 
 export const writeJSON = (filePath: string, content: any) =>
   writeFile(filePath, jsonEncode(content) ?? "", "utf8");
+
+export const deleteFile = (filePath: string) => {
+  try {
+    fs.rmSync(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const copyFile = (
+  from: string,
+  to: string,
+  mode?: number | undefined
+) => {
+  if (!fs.existsSync(from)) {
+    return false;
+  }
+  const dirname = path.dirname(to);
+  if (!fs.existsSync(dirname)) {
+    fs.mkdirSync(dirname, { recursive: true });
+  }
+  return new Promise<boolean>((resolve) => {
+    const callback = (err: any) => {
+      resolve(err ? false : true);
+    };
+    if (mode) {
+      fs.copyFile(from, to, mode, callback);
+    } else {
+      fs.copyFile(from, to, callback);
+    }
+  });
+};
+
+export const copyFileSync = (
+  from: string,
+  to: string,
+  mode?: number | undefined
+) => {
+  if (!fs.existsSync(from)) {
+    return false;
+  }
+  const dirname = path.dirname(to);
+  if (!fs.existsSync(dirname)) {
+    fs.mkdirSync(dirname, { recursive: true });
+  }
+  try {
+    fs.copyFileSync(from, to, mode);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const moveFile = (from: string, to: string) => {
+  if (!fs.existsSync(from)) {
+    return false;
+  }
+  const dirname = path.dirname(to);
+  if (!fs.existsSync(dirname)) {
+    fs.mkdirSync(dirname, { recursive: true });
+  }
+  return new Promise<boolean>((resolve) => {
+    fs.rename(from, to, (err) => {
+      resolve(err ? false : true);
+    });
+  });
+};
+
+export const moveFileSync = (from: string, to: string) => {
+  if (!fs.existsSync(from)) {
+    return false;
+  }
+  const dirname = path.dirname(to);
+  if (!fs.existsSync(dirname)) {
+    fs.mkdirSync(dirname, { recursive: true });
+  }
+  try {
+    fs.renameSync(from, to);
+    return true;
+  } catch {
+    return false;
+  }
+};

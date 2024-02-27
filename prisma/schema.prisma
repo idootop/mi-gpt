@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./hello.db"
+  url      = "file:../.mi-gpt.db"
 }
 
 model User {

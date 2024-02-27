@@ -25,16 +25,22 @@ class OpenAIClient {
   traceOutput = true;
   private _logger = Logger.create({ tag: "Open AI" });
 
-  private _client = new OpenAI({
-    httpAgent: kProxyAgent,
-    apiKey: kEnvs.OPENAI_API_KEY!,
-  });
+  private _client?: OpenAI;
+  private _init() {
+    if (!this._client) {
+      this._client = new OpenAI({
+        httpAgent: kProxyAgent,
+        apiKey: kEnvs.OPENAI_API_KEY!,
+      });
+    }
+  }
 
   private _abortCallbacks: Record<string, VoidFunction> = {
     // requestId: abortStreamCallback
   };
 
   abort(requestId: string) {
+    this._init();
     if (this._abortCallbacks[requestId]) {
       this._abortCallbacks[requestId]();
       delete this._abortCallbacks[requestId];
@@ -42,6 +48,7 @@ class OpenAIClient {
   }
 
   async chat(options: ChatOptions) {
+    this._init();
     let {
       user,
       system,
@@ -65,20 +72,18 @@ class OpenAIClient {
       this._abortCallbacks[requestId] = () => controller.abort();
       signal = controller.signal;
     }
-    const chatCompletion = await this._client.chat.completions
-      .create(
-        {
-          model,
-          tools,
-          messages: [...systemMsg, { role: "user", content: user }],
-          response_format: jsonMode ? { type: "json_object" } : undefined,
-        },
-        { signal }
-      )
-      .catch((e) => {
-        this._logger.error("openai chat failed", e);
-        return null;
-      });
+    const chatCompletion = await this._client!.chat.completions.create(
+      {
+        model,
+        tools,
+        messages: [...systemMsg, { role: "user", content: user }],
+        response_format: jsonMode ? { type: "json_object" } : undefined,
+      },
+      { signal }
+    ).catch((e) => {
+      this._logger.error("openai chat failed", e);
+      return null;
+    });
     const message = chatCompletion?.choices?.[0]?.message;
     if (trace && this.traceOutput) {
       this._logger.log(`✅ Answer: ${message?.content ?? "None"}`.trim());
@@ -91,6 +96,7 @@ class OpenAIClient {
       onStream?: (text: string) => void;
     }
   ) {
+    this._init();
     let {
       user,
       system,
@@ -109,18 +115,16 @@ class OpenAIClient {
     const systemMsg: ChatCompletionMessageParam[] = system
       ? [{ role: "system", content: system }]
       : [];
-    const stream = await this._client.chat.completions
-      .create({
-        model,
-        tools,
-        stream: true,
-        messages: [...systemMsg, { role: "user", content: user }],
-        response_format: jsonMode ? { type: "json_object" } : undefined,
-      })
-      .catch((e) => {
-        this._logger.error("❌ openai chat failed", e);
-        return null;
-      });
+    const stream = await this._client!.chat.completions.create({
+      model,
+      tools,
+      stream: true,
+      messages: [...systemMsg, { role: "user", content: user }],
+      response_format: jsonMode ? { type: "json_object" } : undefined,
+    }).catch((e) => {
+      this._logger.error("❌ openai chat failed", e);
+      return null;
+    });
     if (!stream) {
       return;
     }

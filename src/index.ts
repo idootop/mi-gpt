@@ -1,6 +1,6 @@
 import { AISpeaker, AISpeakerConfig } from "./services/speaker/ai";
 import { MyBot, MyBotConfig } from "./services/bot";
-import { runWithDB } from "./services/db";
+import { initDB, runWithDB } from "./services/db";
 import { kBannerASCII } from "./utils/string";
 
 export type MiGPTConfig = Omit<MyBotConfig, "speaker"> & {
@@ -35,7 +35,7 @@ export class MiGPT {
   }
 
   async start() {
-    // todo init DB
+    await initDB(".mi-gpt.db");
     const main = () => {
       console.log(kBannerASCII);
       return this.ai.run();
