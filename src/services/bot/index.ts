@@ -101,11 +101,11 @@ export class MyBot {
       shortTermMemory,
       longTermMemory,
       botName: bot!.name,
-      botProfile: bot!.profile,
+      botProfile: bot!.profile.trim(),
       masterName: master!.name,
-      masterProfile: master!.profile,
+      masterProfile: master!.profile.trim(),
       roomName: room!.name,
-      roomIntroduction: room!.description,
+      roomIntroduction: room!.description.trim(),
       messages:
         lastMessages.length < 1
           ? "暂无历史消息"

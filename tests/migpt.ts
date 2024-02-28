@@ -38,7 +38,7 @@ const masterProfile = `
 `;
 
 export async function testMiGPT() {
-  const name = "豆包";
+  const name = "傻妞";
   const client = MiGPT.create({
     speaker: {
       name,

@@ -7,7 +7,7 @@ export async function testMyBot() {
 }
 
 async function testRunBot() {
-  const name = "豆包";
+  const name = "傻妞";
   const speaker = new AISpeaker({
     name,
     tts: "doubao",

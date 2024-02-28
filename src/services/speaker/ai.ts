@@ -32,7 +32,7 @@ export type AISpeakerConfig = SpeakerConfig & {
    *
    * 当消息中包含召唤关键词时，会调用 AI 来响应用户消息
    *
-   * 比如：打开/进入/召唤豆包
+   * 比如：打开/进入/召唤傻妞
    */
   callAIPrefix?: string[];
   /**
@@ -46,7 +46,7 @@ export type AISpeakerConfig = SpeakerConfig & {
    *
    * 当消息中包含唤醒关键词时，会进入 AI 唤醒状态
    *
-   * 比如：关闭/退出/再见豆包
+   * 比如：关闭/退出/再见傻妞
    */
   wakeUpKeyWords?: string[];
   /**
@@ -58,13 +58,13 @@ export type AISpeakerConfig = SpeakerConfig & {
   /**
    * 进入 AI 模式的欢迎语
    *
-   * 比如：你好，我是豆包，请问有什么能够帮你的吗？
+   * 比如：你好，我是傻妞，请问有什么能够帮你的吗？
    */
   onEnterAI?: string[];
   /**
    * 退出 AI 模式的提示语
    *
-   * 比如：豆包已退出
+   * 比如：傻妞已退出
    */
   onExitAI?: string[];
   /**
@@ -100,7 +100,7 @@ export class AISpeaker extends Speaker {
     super(config);
     const {
       askAI,
-      name = "豆包",
+      name = "傻妞",
       switchSpeakerPrefix,
       wakeUpKeyWords = ["打开", "进入", "召唤"],
       exitKeywords = ["关闭", "退出", "再见"],
