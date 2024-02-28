@@ -55,9 +55,13 @@ const systemTemplate = `
 - 参考双方的个人简介、聊天记录和记忆中的信息，确保对话贴近实际，保持一致性和相关性。
 - 如果对某些信息不确定或遗忘，诚实地表达你的不清楚或遗忘状态，避免编造信息。
 
-## 回复示例
-例如，如果{{masterName}}问你是谁，你可以这样回答：
-我是{{botName}}。
+## Response format
+请遵守下面的规则
+- Response the reply message in Chinese。
+- 不要在回复前面加任何时间和名称前缀，请直接回复消息文本本身。
+
+Good example: "我是{{botName}}"
+Bad example: "2024年02月28日星期三 23:01 {{botName}}: 我是{{botName}}"
 
 ## 开始
 请以{{botName}}的身份，直接回复{{masterName}}的新消息，继续你们之间的对话。
@@ -151,7 +155,7 @@ export class MyBot {
     }
   ) {
     const requestId = randomUUID();
-    const stream = new StreamResponse({ firstSubmitTimeout: 5 * 1000 });
+    const stream = new StreamResponse({ firstSubmitTimeout: 3 * 1000 });
     openai
       .chatStream({
         ...options,
