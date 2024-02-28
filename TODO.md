@@ -1,7 +1,0 @@
-- ✅ Auto mute XiaoAi reply (not perfect yet)
-- ✅ Stream response
-- ✅ Deactivate Xiaoai
-- ✅ Update long/short memories
-- ✅ Logger
-- Docker
-- Npm export

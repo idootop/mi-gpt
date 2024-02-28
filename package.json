@@ -1,65 +1,18 @@
 {
-  "name": "mi-gpt",
+  "name": "mi-gpt-example",
   "version": "1.0.0",
   "type": "module",
-  "description": "Seamlessly integrate your XiaoAI speaker and Mi Home devices with ChatGPT for an enhanced smart home experience.",
-  "license": "MIT",
-  "author": {
-    "name": "Del Wang",
-    "email": "hello@xbox.work",
-    "url": "https://github.com/idootop"
-  },
-  "keywords": [
-    "GPT",
-    "ChatGPT",
-    "mi",
-    "xiaomi",
-    "xiaoai",
-    "mi-home",
-    "home-assistant"
-  ],
   "scripts": {
-    "build": "tsup",
     "db:gen": "npx prisma migrate dev --name hello",
-    "db:reset": "rm .bot.json && npx prisma migrate reset",
-    "prepublish": "yarn db:gen && npm run build"
+    "db:reset": "rm .bot.json && npx prisma migrate reset"
   },
   "dependencies": {
-    "@prisma/client": "^5.8.1",
-    "axios": "^1.6.5",
-    "https-proxy-agent": "^7.0.4",
-    "mi-service-lite": "^2.0.0",
-    "openai": "^4.28.0",
-    "prisma": "^5.8.1"
+    "mi-gpt": "file:../mi-gpt"
   },
   "devDependencies": {
     "@types/node": "^20.4.9",
     "dotenv": "^16.3.2",
     "ts-node": "^10.9.2",
-    "tsup": "^8.0.1",
     "typescript": "^5.3.3"
-  },
-  "engines": {
-    "node": ">=16"
-  },
-  "sideEffects": false,
-  "files": [
-    "dist"
-  ],
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    "import": "./dist/index.js",
-    "require": "./dist/index.cjs",
-    "default": "./dist/index.js"
-  },
-  "homepage": "https://github.com/idootop/mi-gpt",
-  "bugs": {
-    "url": "https://github.com/idootop/mi-gpt/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/idootop/mi-gpt.git"
   }
 }
