@@ -1,8 +1,9 @@
 import { AISpeaker, AISpeakerConfig } from "./services/speaker/ai";
 import { MyBot, MyBotConfig } from "./services/bot";
-import { initDB, runWithDB } from "./services/db";
+import { getDBInfo, initDB, runWithDB } from "./services/db";
 import { kBannerASCII } from "./utils/string";
 import { Logger } from "./utils/log";
+import { deleteFile } from "./utils/io";
 
 export type MiGPTConfig = Omit<MyBotConfig, "speaker"> & {
   speaker: AISpeakerConfig;
@@ -10,8 +11,13 @@ export type MiGPTConfig = Omit<MyBotConfig, "speaker"> & {
 
 export class MiGPT {
   static instance: MiGPT | null;
-  static reset() {
+  static async reset() {
     MiGPT.instance = null;
+    const { dbPath } = getDBInfo();
+    await deleteFile(dbPath);
+    await deleteFile(".mi.json");
+    await deleteFile(".bot.json");
+    MiGPT.logger.log("MiGPT 已重置，请使用 MiGPT.create() 重新创建实例。");
   }
   static logger = Logger.create({ tag: "MiGPT" });
   static create(config: MiGPTConfig) {

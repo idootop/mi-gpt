@@ -27,15 +27,19 @@ export function getSkipWithCursor(skip: number, cursorId: any) {
   };
 }
 
-export async function initDB() {
+export function getDBInfo() {
   const isExternal = exists("node_modules/mi-gpt/prisma");
   const dbPath = isExternal
     ? "node_modules/mi-gpt/prisma/app.db"
     : "prisma/app.db";
+  const schemaPath = isExternal ? "node_modules/mi-gpt" : "";
+  const withSchema = `--schema ${schemaPath}/prisma/schema.prisma`;
+  return { dbPath, isExternal, withSchema };
+}
+
+export async function initDB() {
+  const { dbPath, withSchema } = getDBInfo();
   if (!exists(dbPath)) {
-    const withSchema = isExternal
-      ? "--schema node_modules/mi-gpt/prisma/schema.prisma"
-      : "";
     await deleteFile(".bot.json");
     await Shell.run(`npx prisma migrate dev --name init ${withSchema}`, {
       silent: true,
