@@ -32,7 +32,7 @@ export function getDBInfo() {
   const dbPath = isExternal
     ? "node_modules/mi-gpt/prisma/app.db"
     : "prisma/app.db";
-  const schemaPath = isExternal ? "node_modules/mi-gpt" : "";
+  const schemaPath = isExternal ? "node_modules/mi-gpt" : ".";
   const withSchema = `--schema ${schemaPath}/prisma/schema.prisma`;
   return { dbPath, isExternal, withSchema };
 }
