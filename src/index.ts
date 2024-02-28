@@ -2,6 +2,7 @@ import { AISpeaker, AISpeakerConfig } from "./services/speaker/ai";
 import { MyBot, MyBotConfig } from "./services/bot";
 import { initDB, runWithDB } from "./services/db";
 import { kBannerASCII } from "./utils/string";
+import { Logger } from "./utils/log";
 
 export type MiGPTConfig = Omit<MyBotConfig, "speaker"> & {
   speaker: AISpeakerConfig;
@@ -12,10 +13,15 @@ export class MiGPT {
   static reset() {
     MiGPT.instance = null;
   }
+  static logger = Logger.create({ tag: "MiGPT" });
   static create(config: MiGPTConfig) {
+    const hasAccount = config?.speaker?.userId && config?.speaker?.password;
+    MiGPT.logger.assert(hasAccount, "Missing userId or password.");
     if (MiGPT.instance) {
-      console.log("🚨 注意：MiGPT 是单例，暂不支持多设备、多账号！");
-      console.log("如果需要切换设备或账号，请先使用 MiGPT.reset() 重置实例。");
+      MiGPT.logger.log("🚨 注意：MiGPT 是单例，暂不支持多设备、多账号！");
+      MiGPT.logger.log(
+        "如果需要切换设备或账号，请先使用 MiGPT.reset() 重置实例。"
+      );
     } else {
       MiGPT.instance = new MiGPT({ ...config, fromCreate: true });
     }
@@ -25,7 +31,10 @@ export class MiGPT {
   ai: MyBot;
   speaker: AISpeaker;
   constructor(config: MiGPTConfig & { fromCreate?: boolean }) {
-    console.assert(config.fromCreate, "请使用 MiGPT.create() 获取客户端实例！");
+    MiGPT.logger.assert(
+      config.fromCreate,
+      "请使用 MiGPT.create() 获取客户端实例！"
+    );
     const { speaker, ...myBotConfig } = config;
     this.speaker = new AISpeaker(speaker);
     this.ai = new MyBot({

@@ -8,7 +8,7 @@ export default defineConfig(() => ({
   format: ["esm", "cjs"],
   sourcemap: false,
   treeshake: true,
-  minify: true,
+  minify: false,
   clean: true,
   shims: true,
   dts: true, // Generate declaration file
