@@ -10,9 +10,18 @@
         "--no-warnings",
         "--experimental-specifier-resolution=node",
         "--loader",
-        "./tests/esm-loader.js"
+        "./scripts/esm-loader.js"
       ],
       "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "name": "Runner",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/scripts/runner.js"],
+      "cwd": "${workspaceRoot}",
+      "envFile": "${workspaceFolder}/.env",
       "internalConsoleOptions": "openOnSessionStart"
     }
   ]

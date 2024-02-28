@@ -42,7 +42,7 @@ export class BaseSpeaker {
     this.config = config;
     const {
       interval = 100,
-      tts = "doubao",
+      tts = "xiaoai",
       audio_beep = process.env.AUDIO_BEEP,
     } = config;
     this.audio_beep = audio_beep;

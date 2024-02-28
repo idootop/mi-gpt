@@ -3,5 +3,5 @@
 - ✅ Deactivate Xiaoai
 - ✅ Update long/short memories
 - ✅ Logger
-- Docker
-- Npm export
+- ✅ Npm export
+- ✅ Docker
