@@ -62,7 +62,7 @@ export class BaseSpeaker {
 
   async unWakeUp() {
     // 通过 TTS 不发音文本，使小爱退出唤醒状态
-    await this.MiNA!.pause()
+    await this.MiNA!.pause();
     await this.MiIOT!.doAction(5, 1, kAreYouOK);
   }
 
@@ -85,6 +85,11 @@ export class BaseSpeaker {
       keepAlive = false,
       tts = this.tts,
     } = options ?? {};
+
+    const doubaoTTS = process.env.TTS_DOUBAO;
+    if (!doubaoTTS) {
+      tts = "xiaoai"; // 没有提供豆包语音接口时，只能使用小爱自带 TTS
+    }
 
     const ttsNotXiaoai = (!!stream || !!text) && !audio && tts !== "xiaoai";
     playSFX = ttsNotXiaoai && playSFX;
