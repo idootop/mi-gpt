@@ -1,6 +1,6 @@
 {
   "name": "mi-gpt",
-  "version": "1.3.0",
+  "version": "1.0.0",
   "type": "module",
   "description": "Seamlessly integrate your XiaoAI speaker and Mi Home devices with ChatGPT for an enhanced smart home experience.",
   "license": "MIT",
@@ -19,11 +19,10 @@
     "home-assistant"
   ],
   "scripts": {
-    "build": "tsup",
-    "db:gen": "npx prisma migrate dev --name init",
-    "db:reset": "rm .bot.json && npx prisma migrate reset",
-    "prepublish": "npm run db:gen && npm run build",
-    "start": "node ./scripts/runner.js"
+    "build": "yarn prisma generate && tsup",
+    "start": "node ./scripts/runner.js",
+    "db:gen": "yarn prisma migrate dev --name init",
+    "db:reset": "rm -f .mi.json .bot.json prisma/app.db prisma/app.db-journal"
   },
   "dependencies": {
     "@prisma/client": "^5.8.1",

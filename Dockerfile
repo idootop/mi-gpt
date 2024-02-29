@@ -40,6 +40,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 # Copy the rest of the source files into the image.
 COPY . .
+# Run the build script.
+RUN yarn run build
 
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
@@ -49,9 +51,6 @@ FROM base as final
 # Use production node environment by default.
 ENV NODE_ENV production
 
-# Run the application as a non-root user.
-USER node
-
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
 
@@ -59,6 +58,10 @@ COPY package.json .
 # the built application from the build stage into the image.
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/scripts ./scripts
+COPY --from=build /usr/src/app/prisma ./prisma
+COPY --from=build /usr/src/app/node_modules/@prisma/client/ ./node_modules/@prisma/client/
+COPY --from=build /usr/src/app/node_modules/.prisma/client/ ./node_modules/.prisma/client/
 
 # Run the application.
 CMD yarn start

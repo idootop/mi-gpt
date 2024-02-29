@@ -30,10 +30,28 @@ pnpm install mi-gpt
 import { MiGPT } from "mi-gpt";
 
 async function main() {
-  // coming soon
+  const client = MiGPT.create({
+    speaker: {
+      userId: process.env.MI_USER,
+      password: process.env.MI_PASS,
+      did: process.env.MI_DID,
+    },
+  });
+  await client.start();
 }
 
 main();
+```
+
+## 📦 Docker
+
+Use the following command to start `MiGPT` within a Docker container.
+
+```shell
+# Ensure you have your `.env` file and `.migpt.js` configuration file ready for deployment. 
+docker run -d  --env-file $(pwd)/.env \
+    -v $(pwd)/.migpt.js:/usr/src/app/.migpt.js \
+    idootop/mi-gpt:1.0.0
 ```
 
 ## 🌈 Embrace the future

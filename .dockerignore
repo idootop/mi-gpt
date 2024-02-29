@@ -31,6 +31,7 @@
 **/build
 **/dist
 LICENSE
+TODO.md
 README.md
 **/.bot.json
 **/.mi.json
