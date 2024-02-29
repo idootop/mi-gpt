@@ -12,7 +12,7 @@
 
 - **LLM 回答**。让小爱音箱使用 [ChatGPT](https://chat.openai.com) 等大模型回答消息，更懂你。
 - **角色扮演**。为你的小爱音箱赋予人格，秒变你的魅力女友 or 知心闺蜜。
-- **IoT Agent**。自动帮你控制智能家居，比如你说心情不好，会自动帮你播放轻松舒缓的音乐，调节灯光变柔和等（TODO）
+- **IoT Agent**。自动控制米家设备，比如你说心情不好时，会自动帮你播放轻松舒缓的音乐，调节灯光变柔和等（TODO）
 - **流式响应**。秒回消息，爱你，不会让你等太久。
 - **自定义 TTS**。厌倦了小爱同学的语音？帮你解锁[「豆包」](https://doubao.com)同款音色。
 
@@ -41,13 +41,11 @@ docker run -d  --env-file $(pwd)/.env \
 
 如果你是一名前端 (Node) 开发者，也可以通过安装 NPM 安装 `mi-gpt` 包的方式，使用代码启动 `MiGPT`。
 
-首先，安装依赖
-
 ```shell
-npm install mi-gpt
+npm install mi-gpt # 安装依赖
 ```
 
-然后，创建并启动 `MiGPT` 实例
+然后，创建并启动 `MiGPT` 实例。初始化参数说明，请看下面的[配置参数](#%EF%B8%8F-配置参数)。
 
 ```typescript
 import { MiGPT } from "mi-gpt";
@@ -65,8 +63,6 @@ async function main() {
 
 main();
 ```
-
-初始化参数说明，请看下面的配置参数。
 
 ### ⚙️ 配置参数
 
