@@ -30,9 +30,9 @@ export type AISpeakerConfig = SpeakerConfig & {
   /**
    * 召唤关键词
    *
-   * 当消息中包含召唤关键词时，会调用 AI 来响应用户消息
+   * 当消息以召唤关键词开头时，会调用 AI 来响应用户消息
    *
-   * 比如：打开/进入/召唤傻妞
+   * 比如：请，你，问问傻妞
    */
   callAIPrefix?: string[];
   /**
@@ -46,13 +46,15 @@ export type AISpeakerConfig = SpeakerConfig & {
    *
    * 当消息中包含唤醒关键词时，会进入 AI 唤醒状态
    *
-   * 比如：关闭/退出/再见傻妞
+   * 比如：打开/进入/召唤傻妞
    */
   wakeUpKeyWords?: string[];
   /**
    * 退出关键词
    *
    * 当消息中包含退出关键词时，会退出 AI 唤醒状态
+   * 
+   * 比如：关闭/退出/再见傻妞
    */
   exitKeywords?: string[];
   /**
