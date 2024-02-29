@@ -48,12 +48,12 @@ export type AISpeakerConfig = SpeakerConfig & {
    *
    * 比如：打开/进入/召唤傻妞
    */
-  wakeUpKeyWords?: string[];
+  wakeUpKeywords?: string[];
   /**
    * 退出关键词
    *
    * 当消息中包含退出关键词时，会退出 AI 唤醒状态
-   * 
+   *
    * 比如：关闭/退出/再见傻妞
    */
   exitKeywords?: string[];
@@ -91,7 +91,7 @@ export class AISpeaker extends Speaker {
   onEnterAI: string[];
   onExitAI: string[];
   callAIPrefix: string[];
-  wakeUpKeyWords: string[];
+  wakeUpKeywords: string[];
   exitKeywords: string[];
   onAIAsking: string[];
   onAIError: string[];
@@ -104,7 +104,7 @@ export class AISpeaker extends Speaker {
       askAI,
       name = "傻妞",
       switchSpeakerPrefix,
-      wakeUpKeyWords = ["打开", "进入", "召唤"],
+      wakeUpKeywords = ["打开", "进入", "召唤"],
       exitKeywords = ["关闭", "退出", "再见"],
       onAIAsking = ["让我先想想", "请稍等"],
       onAIError = ["啊哦，出错了，请稍后再试吧！"],
@@ -119,7 +119,7 @@ export class AISpeaker extends Speaker {
     this.audio_error = audio_error;
     this.switchSpeakerPrefix =
       switchSpeakerPrefix ?? getDefaultSwitchSpeakerPrefix();
-    this.wakeUpKeyWords = wakeUpKeyWords.map((e) => e + this.name);
+    this.wakeUpKeywords = wakeUpKeywords.map((e) => e + this.name);
     this.exitKeywords = exitKeywords.map((e) => e + this.name);
     this.onEnterAI = config.onEnterAI ?? [
       `你好，我是${this.name}，很高兴为你服务！`,
@@ -155,7 +155,7 @@ export class AISpeaker extends Speaker {
   get commands() {
     return [
       {
-        match: (msg) => this.wakeUpKeyWords.some((e) => msg.text.includes(e)),
+        match: (msg) => this.wakeUpKeywords.some((e) => msg.text.includes(e)),
         run: async (msg) => {
           await this.enterKeepAlive();
         },
