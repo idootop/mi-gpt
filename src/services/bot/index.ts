@@ -163,7 +163,7 @@ export class MyBot {
         trace: true,
         onStream: (text) => {
           if (stream.status === "canceled") {
-            return openai.abort(requestId);
+            return openai.cancel(requestId);
           }
           stream.addResponse(text);
         },

@@ -24,7 +24,7 @@ async function testAbortStreamChat() {
     user: "hello!",
     onStream: (text) => {
       console.log(text);
-      openai.abort(requestId);
+      openai.cancel(requestId);
     },
   });
   console.log("xxx", res);

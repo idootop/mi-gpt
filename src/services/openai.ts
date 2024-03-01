@@ -39,7 +39,7 @@ class OpenAIClient {
     // requestId: abortStreamCallback
   };
 
-  abort(requestId: string) {
+  cancel(requestId: string) {
     this._init();
     if (this._abortCallbacks[requestId]) {
       this._abortCallbacks[requestId]();
@@ -84,6 +84,9 @@ class OpenAIClient {
       this._logger.error("openai chat failed", e);
       return null;
     });
+    if (requestId) {
+      delete this._abortCallbacks[requestId];
+    }
     const message = chatCompletion?.choices?.[0]?.message;
     if (trace && this.traceOutput) {
       this._logger.log(`✅ Answer: ${message?.content ?? "None"}`.trim());
@@ -144,6 +147,9 @@ class OpenAIClient {
         onStream?.(text);
         content += text;
       }
+    }
+    if (requestId) {
+      delete this._abortCallbacks[requestId];
     }
     if (trace && this.traceOutput) {
       this._logger.log(`✅ Answer: ${content ?? "None"}`.trim());

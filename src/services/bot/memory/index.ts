@@ -63,8 +63,8 @@ export class MemoryManager {
   private _onMemory(ctx: MessageContext, currentMemory: Memory) {
     if (this._currentMemory) {
       // 取消之前的更新记忆任务
-      openai.abort(`update-short-memory-${this._currentMemory.id}`);
-      openai.abort(`update-long-memory-${this._currentMemory.id}`);
+      openai.cancel(`update-short-memory-${this._currentMemory.id}`);
+      openai.cancel(`update-long-memory-${this._currentMemory.id}`);
     }
     this._currentMemory = currentMemory;
     // 异步更新长短期记忆
