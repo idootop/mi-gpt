@@ -4,5 +4,5 @@
 - ✅ Update long/short memories
 - ✅ Logger
 - ✅ Npm export
-- ✅ Docker
-- 更新人设：你是[xxx]你[爱/喜欢][xxx]
+- ✅ 更新人设：你是[xxx]你[xxx]
+- Docker

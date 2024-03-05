@@ -6,7 +6,7 @@ import { Logger } from "./utils/log";
 import { deleteFile } from "./utils/io";
 
 export type MiGPTConfig = Omit<MyBotConfig, "speaker"> & {
-  speaker: AISpeakerConfig;
+  speaker: Omit<AISpeakerConfig, "name">;
 };
 
 export class MiGPT {
@@ -29,9 +29,6 @@ export class MiGPT {
         "如果需要切换设备或账号，请先使用 MiGPT.reset() 重置实例。"
       );
     } else {
-      if (config.bot?.name && !config.speaker.name) {
-        config.speaker.name = config.bot?.name;
-      }
       MiGPT.instance = new MiGPT({ ...config, fromCreate: true });
     }
     return MiGPT.instance;

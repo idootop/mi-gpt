@@ -927,10 +927,10 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-mi-service-lite@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/mi-service-lite/-/mi-service-lite-2.1.0.tgz#a05d85340f18d3ee5278afc180294273235533c5"
-  integrity sha512-yy7q/7sR36PiE+0kIXgGDQ8ZUCrnLpMUxqtpmdIQgKBsyCaxBx0QNEcscwY+2ejx3WLwbB+ObMy6yR9fznx6hg==
+mi-service-lite@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/mi-service-lite/-/mi-service-lite-2.2.0.tgz#30bcebaa8faeb83d1606be0c2ef552a4621dc722"
+  integrity sha512-rcepSHGA4yUOjI9Tim/1kgu6BzMGeblMl+Nm5aevlRoXw7vv/x8fGx3jiwMV+LX6aDyY7NABEBbjwdPc98wlGA==
   dependencies:
     axios "^1.6.5"
     pako "^2.1.0"

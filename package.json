@@ -2,7 +2,7 @@
   "name": "mi-gpt",
   "version": "1.0.0",
   "type": "module",
-  "description": "Seamlessly integrate your XiaoAI speaker and Mi Home devices with ChatGPT for an enhanced smart home experience.",
+  "description": "将小爱音箱接入 ChatGPT 和豆包，改造成你的专属语音助手。",
   "license": "MIT",
   "author": {
     "name": "Del Wang",
@@ -29,7 +29,7 @@
     "axios": "^1.6.5",
     "fs-extra": "^11.2.0",
     "https-proxy-agent": "^7.0.4",
-    "mi-service-lite": "^2.1.0",
+    "mi-service-lite": "^2.2.0",
     "openai": "^4.28.0",
     "prisma": "^5.8.1"
   },

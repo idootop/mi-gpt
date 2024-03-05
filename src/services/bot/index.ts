@@ -78,6 +78,56 @@ export class MyBot {
   constructor(config: MyBotConfig) {
     this.speaker = config.speaker;
     this.manager = new ConversationManager(config);
+    // 更新 bot 人设命令
+    // 比如：你是蔡徐坤，喜欢唱跳rap。
+    this.speaker.addCommand({
+      match: (msg) =>
+        /.*你是(?<name>[^你]*)你(?<profile>.*)/.exec(msg.text) != null,
+      run: async (msg) => {
+        const res = /.*你是(?<name>[^你]*)你(?<profile>.*)/.exec(msg.text)!;
+        const name = res[1];
+        const profile = res[2];
+        const config = await this.manager.update({
+          bot: { name, profile },
+        });
+        if (config) {
+          this.speaker.name = config?.bot.name;
+          await this.speaker.response({
+            text: `我是${name}，很高兴认识你！`,
+            keepAlive: this.speaker.keepAlive,
+          });
+        } else {
+          await this.speaker.response({
+            text: `召唤${name}失败，请稍后再试吧！`,
+            keepAlive: this.speaker.keepAlive,
+          });
+        }
+      },
+    });
+    this.speaker.addCommand({
+      match: (msg) =>
+        /.*我是(?<name>[^我]*)我(?<profile>.*)/.exec(msg.text) != null,
+      run: async (msg) => {
+        const res = /.*我是(?<name>[^我]*)我(?<profile>.*)/.exec(msg.text)!;
+        const name = res[1];
+        const profile = res[2];
+        const config = await this.manager.update({
+          bot: { name, profile },
+        });
+        if (config) {
+          this.speaker.name = config?.bot.name;
+          await this.speaker.response({
+            text: `好的主人，我记住了！`,
+            keepAlive: this.speaker.keepAlive,
+          });
+        } else {
+          await this.speaker.response({
+            text: `哎呀出错了，请稍后再试吧！`,
+            keepAlive: this.speaker.keepAlive,
+          });
+        }
+      },
+    });
   }
 
   stop() {
@@ -86,7 +136,10 @@ export class MyBot {
 
   async run() {
     this.speaker.askAI = (msg) => this.ask(msg);
-    await this.manager.init();
+    const { bot } = await this.manager.init();
+    if (bot) {
+      this.speaker.name = bot.name;
+    }
     return this.speaker.run();
   }
 

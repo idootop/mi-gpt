@@ -110,7 +110,7 @@ export class Speaker extends BaseSpeaker {
   }
 
   addCommand(command: SpeakerCommand) {
-    this.commands.push(command);
+    this._commands.push(command);
   }
 
   async onMessage(msg: QueryMessage) {
