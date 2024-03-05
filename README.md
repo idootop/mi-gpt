@@ -15,7 +15,7 @@
 - **💬 流式响应**。爱情来得太快就像龙卷风，而你的小爱音箱也是，对你的爱意秒回，爱你不会让你等太久。
 - **🧠 长短期记忆**。小爱音箱现在能记住你们之间的每一次对话，越聊越默契，就像是你身边的老朋友。
 - **🔊 自定义 TTS**。厌倦了小爱同学的语音？帮你解锁[「豆包」](https://doubao.com)同款音色，就像真人在回你的消息。
-- **🤖️ 智能家居 Agent**。心情不好？小爱立刻懂你，自动帮你播放喜欢的音乐，调节灯光，逗你开心。*TODO*
+- **🤖️ 智能家居 Agent**。心情不好？小爱立刻懂你，自动帮你播放喜欢的音乐，调节灯光，逗你开心。_TODO_
 
 ## ⚡️ 使用教程
 
@@ -26,6 +26,8 @@
 `MiGPT` 有两种启动方式: [Docker](#-docker) 和 [NPM](#%EF%B8%8F-npm)。
 
 #### 📦 Docker
+
+[![Docker Image Version](https://img.shields.io/docker/v/idootop/mi-gpt?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/mi-gpt)
 
 对于电脑小白或者不想自己配置代码运行环境（Node）的同学，可以使用 Docker 启动方式。
 
@@ -38,6 +40,8 @@ docker run -d  --env-file $(pwd)/.env \
 ```
 
 #### ⭐️ NPM
+
+[![npm version](https://badge.fury.io/js/mi-gpt.svg)](https://www.npmjs.com/package/mi-gpt)
 
 如果你是一名前端 (Node) 开发者，也可以通过 NPM 安装 `mi-gpt` 包的方式，使用代码启动 `MiGPT`。
 

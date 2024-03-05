@@ -29,7 +29,7 @@
     "axios": "^1.6.5",
     "fs-extra": "^11.2.0",
     "https-proxy-agent": "^7.0.4",
-    "mi-service-lite": "^2.2.0",
+    "mi-service-lite": "^2.3.0",
     "openai": "^4.28.0",
     "prisma": "^5.8.1"
   },

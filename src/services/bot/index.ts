@@ -93,7 +93,7 @@ export class MyBot {
         if (config) {
           this.speaker.name = config?.bot.name;
           await this.speaker.response({
-            text: `我是${name}，很高兴认识你！`,
+            text: `你好，我是${name}，很高兴认识你！`,
             keepAlive: this.speaker.keepAlive,
           });
         } else {
