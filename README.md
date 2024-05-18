@@ -1,6 +1,6 @@
 # MiGPT：智能家居，从未如此贴心 ❤️
 
-[![NPM Version](https://badgen.net/npm/v/mi-gpt)](https://www.npmjs.com/package/mi-gpt) [![Docker Image Version](https://img.shields.io/docker/v/idootop/mi-gpt?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/mi-gpt)
+[![npm version](https://badge.fury.io/js/mi-gpt.svg)](https://www.npmjs.com/package/mi-gpt) [![Docker Image Version](https://img.shields.io/docker/v/idootop/mi-gpt?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/mi-gpt)
 
 在这个数字化的世界里，家已不仅仅是一个居住的地方，而是我们数字生活的延伸。
 
@@ -35,8 +35,8 @@
 
 ```shell
 docker run -d  --env-file $(pwd)/.env \
-    -v $(pwd)/.migpt.js:/usr/src/app/.migpt.js \
-    idootop/mi-gpt:1.0.0
+    -v $(pwd)/.migpt.js:/app/.migpt.js \
+    idootop/mi-gpt:latest
 ```
 
 #### ⭐️ NPM
@@ -135,13 +135,9 @@ main();
 
 其他未声明的配置参数与使用方法，请自行查阅源代码。
 
-**Q：我还有其他问题想问，怎么联系你？**
+**Q：我还有其他问题**
 
 请提交 [issue](https://github.com/idootop/mi-gpt/issues)
-
-**Q：这个项目太棒了，为你点赞 👍**
-
-Enjoy it！
 
 ## 🚨 免责声明
 

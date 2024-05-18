@@ -1,6 +1,6 @@
 {
   "name": "mi-gpt",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "将小爱音箱接入 ChatGPT 和豆包，改造成你的专属语音助手。",
   "license": "MIT",
@@ -10,18 +10,16 @@
     "url": "https://github.com/idootop"
   },
   "keywords": [
-    "GPT",
-    "ChatGPT",
     "mi",
     "xiaomi",
-    "xiaoai",
     "mi-home",
+    "ChatGPT",
     "home-assistant"
   ],
   "scripts": {
-    "build": "yarn prisma generate && tsup",
     "start": "node ./scripts/runner.js",
-    "db:gen": "yarn prisma migrate dev --name init",
+    "build": "pnpm prisma generate && tsup",
+    "db:gen": "pnpm prisma migrate dev --name init",
     "db:reset": "rm -f .mi.json .bot.json prisma/app.db prisma/app.db-journal"
   },
   "dependencies": {
