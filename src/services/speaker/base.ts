@@ -19,10 +19,32 @@ type Speaker = {
   speaker: string;
 };
 
+type ActionCommand = [number, number];
+
 export type BaseSpeakerConfig = MiServiceConfig & {
-  // 语音合成服务商
+  /**
+   * 语音合成服务商
+   */
   tts?: TTSProvider;
-  // 检测间隔（单位毫秒，默认 100 毫秒）
+  /**
+   * 小米音箱 TTS command
+   *
+   * 比如：小爱音箱 Pro（lx06） -> [5, 1]
+   *
+   * 具体指令可在此网站查询：https://home.miot-spec.com
+   */
+  ttsCommand?: ActionCommand;
+  /**
+   * 小米音箱唤醒 command
+   *
+   * 比如：小爱音箱 Pro（lx06） -> [5, 3]
+   *
+   * 具体指令可在此网站查询：https://home.miot-spec.com
+   */
+  wakeUpCommand?: ActionCommand;
+  /**
+   * 检测间隔（单位毫秒，默认 100 毫秒）
+   */
   interval?: number;
   /**
    * TTS 开始/结束提示音
@@ -37,17 +59,23 @@ export class BaseSpeaker {
 
   interval: number;
   tts: TTSProvider;
+  ttsCommand: ActionCommand;
+  wakeUpCommand: ActionCommand;
   config: MiServiceConfig;
   constructor(config: BaseSpeakerConfig) {
     this.config = config;
     const {
       interval = 100,
       tts = "xiaoai",
+      ttsCommand = [5, 1],
+      wakeUpCommand = [5, 3],
       audio_beep = process.env.AUDIO_BEEP,
     } = config;
     this.audio_beep = audio_beep;
     this.interval = interval;
     this.tts = tts;
+    this.ttsCommand = ttsCommand;
+    this.wakeUpCommand = wakeUpCommand;
   }
 
   async initMiServices() {
@@ -57,13 +85,13 @@ export class BaseSpeaker {
   }
 
   wakeUp() {
-    return this.MiIOT!.doAction(5, 3);
+    return this.MiIOT!.doAction(...this.wakeUpCommand);
   }
 
   async unWakeUp() {
     // 通过 TTS 不发音文本，使小爱退出唤醒状态
     await this.MiNA!.pause();
-    await this.MiIOT!.doAction(5, 1, kAreYouOK);
+    await this.MiIOT!.doAction(...this.ttsCommand, kAreYouOK);
   }
 
   audio_beep?: string;
@@ -186,7 +214,11 @@ export class BaseSpeaker {
       if (ttsNotXiaoai) {
         await this.unWakeUp();
       }
-      await this.MiNA!.play(args);
+      if (args?.tts) {
+        await this.MiIOT!.doAction(...this.ttsCommand, args.tts);
+      } else {
+        await this.MiNA!.play(args);
+      }
       this.logger.log("🔊 " + (ttsText ?? audio));
       // 等待回答播放完毕
       while (true) {

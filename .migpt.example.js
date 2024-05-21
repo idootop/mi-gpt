@@ -17,6 +17,15 @@ export default {
     userId: process.env.MI_USER,
     password: process.env.MI_PASS,
     did: process.env.MI_DID,
+    /**
+     * 小米音箱 TTS 指令
+     *
+     * 比如：小爱音箱 Pro（lx06） -> [5, 1]
+     *
+     * 不同设备的具体指令可在此网站查询：https://home.miot-spec.com
+     */
+    ttsCommand: [5, 1],
+    wakeUpCommand: [5, 3],
   },
   bot: {
     name: botName,
