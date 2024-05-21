@@ -80,7 +80,8 @@ main();
 | `MI_DID`             | 小爱音箱 ID 或名称    | `"小爱音箱 Pro"`                     |
 | **OpenAI**           |                       |                                      |
 | `OPENAI_MODEL`       | 使用的 OpenAI 模型    | `gpt-4o`                             |
-| `OPENAI_API_KEY`     | OpenAI 的 API 密钥    | `sk-xxxxxxxxxxxxxxx`                 |
+| `OPENAI_API_KEY`     | OpenAI API 密钥       | `sk-xxxxxxxxxxxxxxx`                 |
+| `OPENAI_BASE_URL`    | OpenAI API BaseURL    | `https://api.openai.com/v1`          |
 | **提示音效（可选）** |                       |                                      |
 | `AUDIO_SILENT`       | 静音音频链接          | `"https://example.com/slient.wav"`   |
 | `AUDIO_BEEP`         | 默认提示音链接        | `"https://example.com/beep.wav"`     |
