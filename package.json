@@ -1,6 +1,6 @@
 {
   "name": "mi-gpt",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "description": "将小爱音箱接入 ChatGPT 和豆包，改造成你的专属语音助手。",
   "license": "MIT",

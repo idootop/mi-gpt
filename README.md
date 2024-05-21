@@ -1,3 +1,5 @@
+![](./assets/demo.png)
+
 # MiGPT：智能家居，从未如此贴心 ❤️
 
 [![npm version](https://badge.fury.io/js/mi-gpt.svg)](https://www.npmjs.com/package/mi-gpt) [![Docker Image Version](https://img.shields.io/docker/v/idootop/mi-gpt?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/mi-gpt)
