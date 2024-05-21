@@ -19,7 +19,7 @@
 
 ## 🚀 启动项目
 
-`MiGPT` 有两种启动方式: [Docker](#-docker) 和 [Node.js](#-Node.js)。
+`MiGPT` 有两种启动方式: [Docker](#docker) 和 [Node.js](#nodejs)。
 
 ### Docker
 
@@ -27,7 +27,7 @@
 
 对于电脑小白或者不想自己配置代码运行环境（Node）的同学，可以使用 Docker 启动方式。
 
-请先按照[「配置参数」](#配置参数)章节，配置好你的 `.env` 和 `.migpt.js` 文件。然后使用以下命令启动 docker：
+请先按照[「配置参数」](#%EF%B8%8F-配置参数)章节，配置好你的 `.env` 和 `.migpt.js` 文件。然后使用以下命令启动 docker：
 
 ```shell
 docker run -d  --env-file $(pwd)/.env \
@@ -45,7 +45,7 @@ docker run -d  --env-file $(pwd)/.env \
 npm install mi-gpt # 安装依赖
 ```
 
-然后，创建并启动 `MiGPT` 实例。初始化参数请看下面的[「配置参数」](#配置参数)章节。
+然后，创建并启动 `MiGPT` 实例。初始化参数请看下面的[「配置参数」](#%EF%B8%8F-配置参数)章节。
 
 ```typescript
 import { MiGPT } from "mi-gpt";
