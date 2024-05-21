@@ -1,4 +1,4 @@
-![](./assets/demo.png)
+![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/demo.png)
 
 # MiGPT：智能家居，从未如此贴心 ❤️
 
