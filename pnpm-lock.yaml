@@ -24,7 +24,7 @@ importers:
         specifier: ^2.3.0
         version: 2.3.0
       openai:
-        specifier: ^4.28.0
+        specifier: ^4.47.1
         version: 4.47.1
       prisma:
         specifier: ^5.8.1

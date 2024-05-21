@@ -17,21 +17,17 @@
 - **🔊 自定义 TTS**。厌倦了小爱同学的语音？帮你解锁[「豆包」](https://doubao.com)同款音色，就像真人在回你的消息。
 - **🤖️ 智能家居 Agent**。心情不好？小爱立刻懂你，自动帮你播放喜欢的音乐，调节灯光，逗你开心。_TODO_
 
-## ⚡️ 使用教程
+## 🚀 启动项目
 
-无论你是电脑小白还是编程高手，都可以轻松拥有自己的专属 `MiGPT`。
+`MiGPT` 有两种启动方式: [Docker](#-docker) 和 [Node.js](#-Node.js)。
 
-### 🚀 启动项目
-
-`MiGPT` 有两种启动方式: [Docker](#-docker) 和 [NPM](#%EF%B8%8F-npm)。
-
-#### 📦 Docker
+### Docker
 
 [![Docker Image Version](https://img.shields.io/docker/v/idootop/mi-gpt?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/mi-gpt)
 
 对于电脑小白或者不想自己配置代码运行环境（Node）的同学，可以使用 Docker 启动方式。
 
-请先按照[「配置参数」](#%EF%B8%8F-配置参数)章节，配置好你的 `.env` 和 `.migpt.js` 文件。然后使用以下命令启动 docker：
+请先按照[「配置参数」](#配置参数)章节，配置好你的 `.env` 和 `.migpt.js` 文件。然后使用以下命令启动 docker：
 
 ```shell
 docker run -d  --env-file $(pwd)/.env \
@@ -39,17 +35,17 @@ docker run -d  --env-file $(pwd)/.env \
     idootop/mi-gpt:latest
 ```
 
-#### ⭐️ NPM
+### Node.js
 
 [![npm version](https://badge.fury.io/js/mi-gpt.svg)](https://www.npmjs.com/package/mi-gpt)
 
-如果你是一名前端 (Node) 开发者，也可以通过 NPM 安装 `mi-gpt` 包的方式，使用代码启动 `MiGPT`。
+如果你是一名前端 (Node) 开发者，也可以通过 NPM 安装 `mi-gpt` 启动 `MiGPT`。
 
 ```shell
 npm install mi-gpt # 安装依赖
 ```
 
-然后，创建并启动 `MiGPT` 实例。初始化参数请看下面的[「配置参数」](#%EF%B8%8F-配置参数)章节。
+然后，创建并启动 `MiGPT` 实例。初始化参数请看下面的[「配置参数」](#配置参数)章节。
 
 ```typescript
 import { MiGPT } from "mi-gpt";
@@ -68,9 +64,9 @@ async function main() {
 main();
 ```
 
-### ⚙️ 配置参数
+## ⚙️ 配置参数
 
-#### 📖 环境变量
+### 环境变量
 
 重命名本项目根目录下的 `.env.example` 文件为 `.env`。
 
@@ -83,9 +79,9 @@ main();
 | `MI_PASS`            | 账户密码              | `"123456"`                           |
 | `MI_DID`             | 小爱音箱 ID 或名称    | `"小爱音箱 Pro"`                     |
 | **OpenAI**           |                       |                                      |
-| `OPENAI_MODEL`       | 使用的 OpenAI 模型    | `gpt-3.5-turbo-0125`                 |
+| `OPENAI_MODEL`       | 使用的 OpenAI 模型    | `gpt-4o`                             |
 | `OPENAI_API_KEY`     | OpenAI 的 API 密钥    | `sk-xxxxxxxxxxxxxxx`                 |
-| **响应音效（可选）** |                       |                                      |
+| **提示音效（可选）** |                       |                                      |
 | `AUDIO_SILENT`       | 静音音频链接          | `"https://example.com/slient.wav"`   |
 | `AUDIO_BEEP`         | 默认提示音链接        | `"https://example.com/beep.wav"`     |
 | `AUDIO_ACTIVE`       | 唤醒提示音链接        | `"https://example.com/active.wav"`   |
@@ -94,9 +90,9 @@ main();
 | `TTS_DOUBAO`         | 豆包 TTS 接口         | `"https://example.com/tts.wav"`      |
 | `SPEAKERS_DOUBAO`    | 豆包 TTS 音色列表接口 | `"https://example.com/tts-speakers"` |
 
-#### 🚗 .migpt.js
+### .migpt.js
 
-重命名本项目根目录下的 `.migpt.js.example` 文件为 `.migpt.js`。
+重命名本项目根目录下的 `.migpt.example.js` 文件为 `.migpt.js`。
 
 然后，将里面的配置参数修改成你自己的，参数含义如下：
 
@@ -141,12 +137,10 @@ main();
 
 ## 🚨 免责声明
 
-本项目旨在分享学习大型语言模型（LLM）智能对话及智能家居自动化相关知识，严禁用于任何商业目的或违反所在地区的法律法规。使用者须知悉，本项目代码可能存在未知的缺陷或风险，因使用本项目引起的任何形式的损失或损害（包括但不限于设备故障、账户被禁等），使用者需自行承担全部责任。
+本项目旨在分享学习大型语言模型（LLM）智能对话及智能家居自动化相关知识，严禁用于任何商业目的或违反所在地区的法律法规。使用者须知悉，本项目代码可能存在未知的缺陷或风险，因使用本项目引起的任何形式的损失或损害（包括但不限于设备故障、账户封禁等），使用者需自行承担全部责任。
 
 ## ❤️ 鸣谢
 
-- https://www.mi.com/
-- https://openai.com/
 - https://github.com/yihong0618/xiaogpt
 - https://github.com/inu1255/mi-service
 - https://github.com/Yonsm/MiService

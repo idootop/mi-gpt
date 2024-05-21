@@ -56,7 +56,7 @@ class OpenAIClient {
       jsonMode,
       requestId,
       trace = false,
-      model = kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
+      model = kEnvs.OPENAI_MODEL ?? "gpt-4o",
     } = options;
     if (trace && this.traceInput) {
       this._logger.log(
@@ -108,7 +108,7 @@ class OpenAIClient {
       requestId,
       onStream,
       trace = false,
-      model = kEnvs.OPENAI_MODEL ?? "gpt-3.5-turbo-0125",
+      model = kEnvs.OPENAI_MODEL ?? "gpt-4o",
     } = options;
     if (trace && this.traceInput) {
       this._logger.log(
