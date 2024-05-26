@@ -70,11 +70,11 @@ class _BotConfig {
   private _logger = Logger.create({ tag: "BotConfig" });
   private botIndex?: IBotIndex;
 
-  private _index_path = ".bot.json";
+  private _indexPath = ".bot.json";
 
   private async _getIndex(): Promise<IBotIndex | undefined> {
     if (!this.botIndex) {
-      this.botIndex = await readJSON(this._index_path);
+      this.botIndex = await readJSON(this._indexPath);
     }
     return this.botIndex;
   }
@@ -107,7 +107,7 @@ class _BotConfig {
         botId: bot.id,
         masterId: master.id,
       };
-      await writeJSON(this._index_path, this.botIndex);
+      await writeJSON(this._indexPath, this.botIndex);
     }
     const bot = await UserCRUD.get(this.botIndex!.botId);
     if (!bot) {

@@ -42,7 +42,7 @@ export type SpeakerConfig = BaseSpeakerConfig & {
   /**
    * 静音音频链接
    */
-  audio_silent?: string;
+  audioSilent?: string;
 };
 
 export class Speaker extends BaseSpeaker {
@@ -55,9 +55,9 @@ export class Speaker extends BaseSpeaker {
     const {
       heartbeat = 1000,
       exitKeepAliveAfter = 30,
-      audio_silent = process.env.AUDIO_SILENT,
+      audioSilent = process.env.audioSilent,
     } = config;
-    this.audio_silent = audio_silent;
+    this.audioSilent = audioSilent;
     this._commands = config.commands ?? [];
     this.heartbeat = heartbeat;
     this.exitKeepAliveAfter = exitKeepAliveAfter;
@@ -88,7 +88,7 @@ export class Speaker extends BaseSpeaker {
     }
   }
 
-  audio_silent?: string;
+  audioSilent?: string;
   async activeKeepAliveMode() {
     while (this.status === "running") {
       if (this.keepAlive) {
@@ -96,7 +96,7 @@ export class Speaker extends BaseSpeaker {
         if (!this.responding) {
           // 没有回复时，一直播放静音音频使小爱闭嘴
           await this.MiNA?.play(
-            this.audio_silent ? { url: this.audio_silent } : { tts: kAreYouOK }
+            this.audioSilent ? { url: this.audioSilent } : { tts: kAreYouOK }
           );
         }
       }

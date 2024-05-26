@@ -49,7 +49,7 @@ export type BaseSpeakerConfig = MiServiceConfig & {
   /**
    * TTS 开始/结束提示音
    */
-  audio_beep?: string;
+  audioBeep?: string;
 };
 
 export class BaseSpeaker {
@@ -69,9 +69,9 @@ export class BaseSpeaker {
       tts = "xiaoai",
       ttsCommand = [5, 1],
       wakeUpCommand = [5, 3],
-      audio_beep = process.env.AUDIO_BEEP,
+      audioBeep = process.env.audioBeep,
     } = config;
-    this.audio_beep = audio_beep;
+    this.audioBeep = audioBeep;
     this.interval = interval;
     this.tts = tts;
     this.ttsCommand = ttsCommand;
@@ -94,7 +94,7 @@ export class BaseSpeaker {
     await this.MiIOT!.doAction(...this.ttsCommand, kAreYouOK);
   }
 
-  audio_beep?: string;
+  audioBeep?: string;
   responding = false;
   async response(options: {
     tts?: TTSProvider;
@@ -138,7 +138,7 @@ export class BaseSpeaker {
           if (_response.length < 1) {
             // 播放开始提示音
             if (playSFX) {
-              await this.MiNA!.play({ url: this.audio_beep });
+              await this.MiNA!.play({ url: this.audioBeep });
             }
             // 在播放 TTS 语音之前，先取消小爱音箱的唤醒状态，防止将 TTS 语音识别成用户指令
             if (ttsNotXiaoai) {
@@ -162,7 +162,7 @@ export class BaseSpeaker {
           if (_response.length > 0) {
             // 播放结束提示音
             if (playSFX) {
-              await this.MiNA!.play({ url: this.audio_beep });
+              await this.MiNA!.play({ url: this.audioBeep });
             }
           }
           // 保持唤醒状态
@@ -208,7 +208,7 @@ export class BaseSpeaker {
     const play = async (args?: { tts?: string; url?: string }) => {
       // 播放开始提示音
       if (playSFX) {
-        await this.MiNA!.play({ url: this.audio_beep });
+        await this.MiNA!.play({ url: this.audioBeep });
       }
       // 在播放 TTS 语音之前，先取消小爱音箱的唤醒状态，防止将 TTS 语音识别成用户指令
       if (ttsNotXiaoai) {
@@ -237,7 +237,7 @@ export class BaseSpeaker {
       }
       // 播放结束提示音
       if (playSFX) {
-        await this.MiNA!.play({ url: this.audio_beep });
+        await this.MiNA!.play({ url: this.audioBeep });
       }
       // 保持唤醒状态
       if (keepAlive) {
