@@ -16,7 +16,7 @@
 
 这些独立的智能体，也可以彼此感知，彼此配合，构成一个更强大的协作网络。
 
-小爱音箱就像是，你的智能家居专属管家，全心全意为你服务，释放智能家居真正的潜力。
+而小爱音箱就像是，你的智能家居专属管家，全心全意为你服务，释放智能家居真正的潜力。
 
 ## ✨ 项目亮点
 
@@ -143,11 +143,13 @@ main();
 
 **Q：控制台有打印 AI 回复，但是设备没有播放**
 
-不同型号的小爱音箱 TTS 指令不同 https://github.com/idootop/mi-gpt/issues/5 ，可以到 https://home.miot-spec.com 查询具体的 TTS 指令，然后修改配置文件中的指令参数。
+不同型号的小爱音箱 TTS 指令不同: [https://github.com/idootop/mi-gpt/issues/5](https://github.com/idootop/mi-gpt/issues/5#issuecomment-2122881495)
 
-![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/search.png)
+可以到 https://home.miot-spec.com 查询具体的 TTS 指令，然后修改配置文件中的指令参数。
 
-![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/command.png)
+![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/search.jpg)
+
+![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/command.jpg)
 
 **Q：怎样使用豆包的音色**
 
