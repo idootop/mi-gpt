@@ -60,7 +60,7 @@ export type AISpeakerConfig = SpeakerConfig & {
   /**
    * 进入 AI 模式的欢迎语
    *
-   * 比如：你好，我是傻妞，请问有什么能够帮你的吗？
+   * 比如：你好，我是傻妞，很高兴认识你
    */
   onEnterAI?: string[];
   /**
@@ -88,11 +88,11 @@ export class AISpeaker extends Speaker {
   askAI: AISpeakerConfig["askAI"];
   name: string;
   switchSpeakerPrefix: string[];
-  onEnterAI: () => string[];
-  onExitAI: () => string[];
-  callAIPrefix: () => string[];
-  wakeUpKeywords: () => string[];
-  exitKeywords: () => string[];
+  onEnterAI: string[];
+  onExitAI: string[];
+  callAIPrefix: string[];
+  wakeUpKeywords: string[];
+  exitKeywords: string[];
   onAIAsking: string[];
   onAIError: string[];
   audio_active?: string;
@@ -104,8 +104,11 @@ export class AISpeaker extends Speaker {
       askAI,
       name = "傻妞",
       switchSpeakerPrefix,
+      callAIPrefix = ["请", "你", "傻妞"],
       wakeUpKeywords = ["打开", "进入", "召唤"],
       exitKeywords = ["关闭", "退出", "再见"],
+      onEnterAI = ["你好，我是傻妞，很高兴认识你"],
+      onExitAI = ["傻妞已退出"],
       onAIAsking = ["让我先想想", "请稍等"],
       onAIError = ["啊哦，出错了，请稍后再试吧！"],
       audio_active = process.env.AUDIO_ACTIVE,
@@ -119,18 +122,16 @@ export class AISpeaker extends Speaker {
     this.audio_error = audio_error;
     this.switchSpeakerPrefix =
       switchSpeakerPrefix ?? getDefaultSwitchSpeakerPrefix();
-    this.wakeUpKeywords = () => wakeUpKeywords.map((e) => e + this.name);
-    this.exitKeywords = () => exitKeywords.map((e) => e + this.name);
-    this.onEnterAI = () =>
-      config.onEnterAI ?? [`你好，我是${this.name}，很高兴为你服务！`];
-    this.onExitAI = () => config.onExitAI ?? [`${this.name}已关闭！`];
-    this.callAIPrefix = () =>
-      config.callAIPrefix ?? ["请", "你", this.name, "问问" + this.name];
+    this.wakeUpKeywords = wakeUpKeywords;
+    this.exitKeywords = exitKeywords;
+    this.onEnterAI = onEnterAI;
+    this.onExitAI = onExitAI;
+    this.callAIPrefix = callAIPrefix;
   }
 
   async enterKeepAlive() {
     // 回应
-    await this.response({ text: pickOne(this.onEnterAI())!, keepAlive: true });
+    await this.response({ text: pickOne(this.onEnterAI)!, keepAlive: true });
     // 唤醒
     await super.enterKeepAlive();
   }
@@ -140,7 +141,7 @@ export class AISpeaker extends Speaker {
     await super.exitKeepAlive();
     // 回应
     await this.response({
-      text: pickOne(this.onExitAI())!,
+      text: pickOne(this.onExitAI)!,
       keepAlive: false,
       playSFX: false,
     });
@@ -150,13 +151,13 @@ export class AISpeaker extends Speaker {
   get commands() {
     return [
       {
-        match: (msg) => this.wakeUpKeywords().some((e) => msg.text.includes(e)),
+        match: (msg) => this.wakeUpKeywords.some((e) => msg.text.includes(e)),
         run: async (msg) => {
           await this.enterKeepAlive();
         },
       },
       {
-        match: (msg) => this.exitKeywords().some((e) => msg.text.includes(e)),
+        match: (msg) => this.exitKeywords.some((e) => msg.text.includes(e)),
         run: async (msg) => {
           await this.exitKeepAlive();
         },
@@ -183,7 +184,7 @@ export class AISpeaker extends Speaker {
       {
         match: (msg) =>
           this.keepAlive ||
-          this.callAIPrefix().some((e) => msg.text.startsWith(e)),
+          this.callAIPrefix.some((e) => msg.text.startsWith(e)),
         run: (msg) => this.askAIForAnswer(msg),
       },
     ] as SpeakerCommand[];
