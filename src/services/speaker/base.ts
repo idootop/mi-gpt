@@ -5,7 +5,7 @@ import {
   getMiIOT,
   getMiNA,
 } from "mi-service-lite";
-import { sleep } from "../../utils/base";
+import { clamp, sleep } from "../../utils/base";
 import { Logger } from "../../utils/log";
 import { Http } from "../http";
 import { StreamResponse } from "./stream";
@@ -43,9 +43,9 @@ export type BaseSpeakerConfig = MiServiceConfig & {
    */
   wakeUpCommand?: ActionCommand;
   /**
-   * 检测间隔（单位毫秒，默认 500 毫秒）
+   * 播放状态检测间隔（单位毫秒，最低 500 毫秒，默认 1 秒）
    */
-  interval?: number;
+  checkInterval?: number;
   /**
    * TTS 开始/结束提示音
    */
@@ -57,7 +57,7 @@ export class BaseSpeaker {
   MiNA?: MiNA;
   MiIOT?: MiIOT;
 
-  interval: number;
+  checkInterval: number;
   tts: TTSProvider;
   ttsCommand: ActionCommand;
   wakeUpCommand: ActionCommand;
@@ -65,14 +65,14 @@ export class BaseSpeaker {
   constructor(config: BaseSpeakerConfig) {
     this.config = config;
     const {
-      interval = 500,
+      checkInterval = 1000,
       tts = "xiaoai",
       ttsCommand = [5, 1],
       wakeUpCommand = [5, 3],
       audioBeep = process.env.audioBeep,
     } = config;
     this.audioBeep = audioBeep;
-    this.interval = interval;
+    this.checkInterval = clamp(checkInterval, 500, Infinity);
     this.tts = tts;
     this.ttsCommand = ttsCommand;
     this.wakeUpCommand = wakeUpCommand;
@@ -172,7 +172,7 @@ export class BaseSpeaker {
           // 播放完毕
           break;
         }
-        await sleep(this.interval);
+        await sleep(this.checkInterval);
       }
     } else {
       res = await this._response(options);
@@ -220,6 +220,8 @@ export class BaseSpeaker {
         await this.MiNA!.play(args);
       }
       this.logger.log("🔊 " + (ttsText ?? audio));
+      // 等待 3 秒，确保本地设备状态已更新
+      await sleep(3000);
       // 等待回答播放完毕
       while (true) {
         const res = await this.MiNA!.getStatus();
@@ -230,10 +232,10 @@ export class BaseSpeaker {
           // 响应被中断
           return "break";
         }
-        if (res?.status && res.status !== "playing") {
+        if (res && res?.status !== "playing") {
           break;
         }
-        await sleep(this.interval);
+        await sleep(this.checkInterval);
       }
       // 播放结束提示音
       if (playSFX) {

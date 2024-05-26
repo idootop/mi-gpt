@@ -1,4 +1,4 @@
-import { firstOf, lastOf, sleep } from "../../utils/base";
+import { clamp, firstOf, lastOf, sleep } from "../../utils/base";
 import { kAreYouOK } from "../../utils/string";
 import { BaseSpeaker, BaseSpeakerConfig } from "./base";
 import { StreamResponse } from "./stream";
@@ -28,7 +28,7 @@ export interface SpeakerCommand {
 
 export type SpeakerConfig = BaseSpeakerConfig & {
   /**
-   * 拉取消息心跳间隔（单位毫秒，默认1秒）
+   * 拉取消息心跳间隔（单位毫秒，最低 500 毫秒，默认 1 秒）
    */
   heartbeat?: number;
   /**
@@ -59,7 +59,7 @@ export class Speaker extends BaseSpeaker {
     } = config;
     this.audioSilent = audioSilent;
     this._commands = config.commands ?? [];
-    this.heartbeat = heartbeat;
+    this.heartbeat = clamp(heartbeat, 500, Infinity);
     this.exitKeepAliveAfter = exitKeepAliveAfter;
   }
 
@@ -95,12 +95,14 @@ export class Speaker extends BaseSpeaker {
         // 唤醒中
         if (!this.responding) {
           // 没有回复时，一直播放静音音频使小爱闭嘴
-          await this.MiNA?.play(
-            this.audioSilent ? { url: this.audioSilent } : { tts: kAreYouOK }
-          );
+          if (this.audioSilent) {
+            await this.MiNA?.play({ url: this.audioSilent });
+          } else {
+            await this.MiIOT!.doAction(...this.ttsCommand, kAreYouOK);
+          }
         }
       }
-      await sleep(this.interval);
+      await sleep(this.checkInterval);
     }
   }
 
