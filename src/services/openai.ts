@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import OpenAI, { AzureOpenAI } from "openai";
 import {
   ChatCompletionMessageParam,
   ChatCompletionTool,
@@ -28,10 +28,9 @@ class OpenAIClient {
   private _client?: OpenAI;
   private _init() {
     if (!this._client) {
-      this._client = new OpenAI({
-        httpAgent: kProxyAgent,
-        apiKey: kEnvs.OPENAI_API_KEY!,
-      });
+      this._client = kEnvs.AZURE_OPENAI_API_KEY
+        ? new AzureOpenAI({ httpAgent: kProxyAgent })
+        : new OpenAI({ httpAgent: kProxyAgent });
     }
   }
 
