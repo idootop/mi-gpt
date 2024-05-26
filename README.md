@@ -147,9 +147,13 @@ main();
 
 可以到 https://home.miot-spec.com 查询具体的 TTS 指令，然后修改配置文件中的指令参数。
 
-![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/search.jpg)
+<details>
+<summary>👉 查看教程</summary>
 
+![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/search.jpg)
 ![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/command.jpg)
+
+</details>
 
 **Q：怎样使用豆包的音色**
 
