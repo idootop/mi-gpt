@@ -67,6 +67,6 @@ export class LongTermMemoryAgent {
         shortTermMemory: lastOf(newMemories)!.text,
       }),
     });
-    return jsonDecode(res?.content)?.longTermMemories;
+    return jsonDecode(res?.content)?.longTermMemories?.toString();
   }
 }

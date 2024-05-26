@@ -78,6 +78,6 @@ export class ShortTermMemoryAgent {
           .join("\n"),
       }),
     });
-    return jsonDecode(res?.content)?.shortTermMemories;
+    return jsonDecode(res?.content)?.shortTermMemories?.toString();
   }
 }
