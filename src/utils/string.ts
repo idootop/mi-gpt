@@ -15,7 +15,7 @@ export const kBannerASCII = `
 | $$ \\/  | $$| $$|  $$$$$$/| $$         | $$   
 |__/     |__/|__/ \\______/ |__/         |__/                         
                                                                                                                  
-      MiGPT v1.0.0  by: del-wang.eth
+         MiGPT v1.0.0  by: del.wang
 
 `.replace("1.0.0", kVersion);
 
