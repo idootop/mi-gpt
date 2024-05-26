@@ -10,6 +10,14 @@
 
 `MiGPT` 不仅仅是关于设备自动化，而是关于：**打造一个懂你、有温度、与你共同进化的家**。
 
+未来，你的每个智能家居设备，从灯泡、插座，到扫地机器人、电视等，
+
+都可以作为一个个独立的智能体 (Agent)，更智能、更贴心的响应你的指令。
+
+这些独立的智能体，也可以彼此感知，彼此配合，构成一个更强大的协作网络。
+
+小爱音箱就像是，你的智能家居专属管家，全心全意为你服务，释放智能家居真正的潜力。
+
 ## ✨ 项目亮点
 
 - **🎓 LLM 回答**。想象一下，你的小爱音箱变身聊天高手，可以使用 [ChatGPT](https://chat.openai.com) 等大模型来回答你，比你懂更多。
@@ -74,24 +82,25 @@ main();
 
 然后，将里面的环境变量修改成你自己的，参数含义如下：
 
-| 环境变量名称         | 描述                  | 示例                                 |
-| -------------------- | --------------------- | ------------------------------------ |
-| **小米服务**         |                       |                                      |
-| `MI_USER`            | 小米账户              | `"12345678901"`                      |
-| `MI_PASS`            | 账户密码              | `"123456"`                           |
-| `MI_DID`             | 小爱音箱 ID 或名称    | `"小爱音箱 Pro"`                     |
-| **OpenAI**           |                       |                                      |
-| `OPENAI_MODEL`       | 使用的 OpenAI 模型    | `gpt-4o`                             |
-| `OPENAI_API_KEY`     | OpenAI API 密钥       | `sk-xxxxxxxxxxxxxxx`                 |
-| `OPENAI_BASE_URL`    | OpenAI API BaseURL    | `https://api.openai.com/v1`          |
-| **提示音效（可选）** |                       |                                      |
-| `AUDIO_SILENT`       | 静音音频链接          | `"https://example.com/slient.wav"`   |
-| `AUDIO_BEEP`         | 默认提示音链接        | `"https://example.com/beep.wav"`     |
-| `AUDIO_ACTIVE`       | 唤醒提示音链接        | `"https://example.com/active.wav"`   |
-| `AUDIO_ERROR`        | 出错提示音链接        | `"https://example.com/error.wav"`    |
-| **豆包 TTS（可选）** |                       |                                      |
-| `TTS_DOUBAO`         | 豆包 TTS 接口         | `"https://example.com/tts.wav"`      |
-| `SPEAKERS_DOUBAO`    | 豆包 TTS 音色列表接口 | `"https://example.com/tts-speakers"` |
+| 环境变量名称           | 描述                                                                                        | 示例                                 |
+| ---------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------ |
+| **小米服务**           |                                                                                             |                                      |
+| `MI_USER`              | 小米账户                                                                                    | `"12345678901"`                      |
+| `MI_PASS`              | 账户密码                                                                                    | `"123456"`                           |
+| `MI_DID`               | 小爱音箱 ID 或名称                                                                          | `"小爱音箱 Pro"`                     |
+| **OpenAI**             |                                                                                             |                                      |
+| `OPENAI_API_KEY`       | OpenAI API 密钥                                                                             | `abc123`                             |
+| `OPENAI_MODEL`         | 使用的 OpenAI 模型                                                                          | `gpt-4o`                             |
+| `AZURE_OPENAI_API_KEY` | 可选，[Microsoft Azure OpenAI](https://www.npmjs.com/package/openai#microsoft-azure-openai) | `abc123`                             |
+| `OPENAI_BASE_URL`      | 可选，OpenAI API BaseURL                                                                    | `https://api.openai.com/v1`          |
+| **提示音效（可选）**   |                                                                                             |                                      |
+| `AUDIO_SILENT`         | 静音音频链接                                                                                | `"https://example.com/slient.wav"`   |
+| `AUDIO_BEEP`           | 默认提示音链接                                                                              | `"https://example.com/beep.wav"`     |
+| `AUDIO_ACTIVE`         | 唤醒提示音链接                                                                              | `"https://example.com/active.wav"`   |
+| `AUDIO_ERROR`          | 出错提示音链接                                                                              | `"https://example.com/error.wav"`    |
+| **豆包 TTS（可选）**   |                                                                                             |                                      |
+| `TTS_DOUBAO`           | 豆包 TTS 接口                                                                               | `"https://example.com/tts.wav"`      |
+| `SPEAKERS_DOUBAO`      | 豆包 TTS 音色列表接口                                                                       | `"https://example.com/tts-speakers"` |
 
 ### .migpt.js
 
@@ -128,17 +137,25 @@ main();
 
 ## 💬 常见问题
 
-**Q：怎样使用豆包的语音？**
+**Q：启动项目后控制台有打印新消息，但是没有 AI 回复**
 
-很遗憾，豆包语音需要豆包 TTS 接口支持，本项目暂不对外提供此服务。
+消息默认不会调用 AI 进行回复，请检查消息是否以召唤关键词开头，或包含唤醒词。
 
-**Q：我想更换小爱同学的语音，在哪里配置？**
+**Q：控制台有打印 AI 回复，但是设备没有播放**
 
-其他未声明的配置参数与使用方法，请自行查阅源代码。
+不同型号的小爱音箱 TTS 指令不同 https://github.com/idootop/mi-gpt/issues/5 ，可以到 https://home.miot-spec.com 查询具体的 TTS 指令，然后修改配置文件中的指令参数。
+
+![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/search.png)
+
+![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/command.png)
+
+**Q：怎样使用豆包的音色**
+
+很遗憾，豆包上的音色需要豆包 TTS 接口支持，本项目暂不对外提供此服务。
 
 **Q：我还有其他问题**
 
-请提交 [issue](https://github.com/idootop/mi-gpt/issues)
+请在此处提交 [issue](https://github.com/idootop/mi-gpt/issues)，有时间我会查看并解答。
 
 ## 🚨 免责声明
 
