@@ -72,11 +72,11 @@ export type AISpeakerConfig = SpeakerConfig & {
   /**
    * AI 回答开始提示音
    */
-  audio_active?: string;
+  audioActive?: string;
   /**
    * AI 回答异常提示音
    */
-  audio_error?: string;
+  audioError?: string;
 };
 
 type AnswerStep = (
@@ -95,8 +95,8 @@ export class AISpeaker extends Speaker {
   exitKeywords: string[];
   onAIAsking: string[];
   onAIError: string[];
-  audio_active?: string;
-  audio_error?: string;
+  audioActive?: string;
+  audioError?: string;
 
   constructor(config: AISpeakerConfig) {
     super(config);
@@ -111,15 +111,15 @@ export class AISpeaker extends Speaker {
       onExitAI = ["傻妞已退出"],
       onAIAsking = ["让我先想想", "请稍等"],
       onAIError = ["啊哦，出错了，请稍后再试吧！"],
-      audio_active = process.env.AUDIO_ACTIVE,
-      audio_error = process.env.AUDIO_ERROR,
+      audioActive = process.env.AUDIO_ACTIVE,
+      audioError = process.env.AUDIO_ERROR,
     } = config;
     this.askAI = askAI;
     this.name = name;
     this.onAIError = onAIError;
     this.onAIAsking = onAIAsking;
-    this.audio_active = audio_active;
-    this.audio_error = audio_error;
+    this.audioActive = audioActive;
+    this.audioError = audioError;
     this.switchSpeakerPrefix =
       switchSpeakerPrefix ?? getDefaultSwitchSpeakerPrefix();
     this.wakeUpKeywords = wakeUpKeywords;
@@ -194,7 +194,7 @@ export class AISpeaker extends Speaker {
     async (msg, data) => {
       // 思考中
       await this.response({
-        audio: this.audio_active,
+        audio: this.audioActive,
         text: pickOne(this.onAIAsking)!,
       });
     },
@@ -207,7 +207,7 @@ export class AISpeaker extends Speaker {
       if (!data.answer) {
         // 回答异常
         await this.response({
-          audio: this.audio_error,
+          audio: this.audioError,
           text: pickOne(this.onAIError)!,
           keepAlive: this.keepAlive,
         });
