@@ -16,6 +16,12 @@ export type AISpeakerConfig = SpeakerConfig & {
    */
   onAIAsking?: string[];
   /**
+   * AI 结束回答时的提示语
+   *
+   * 比如：我说完了，还有替他问题吗？
+   */
+  onAIReplied?: string[];
+  /**
    * AI 回答异常时的提示语
    *
    * 比如：出错了，请稍后再试吧！
@@ -34,7 +40,7 @@ export type AISpeakerConfig = SpeakerConfig & {
    *
    * 比如：请，你，问问傻妞
    */
-  callAIPrefix?: string[];
+  callAIKeywords?: string[];
   /**
    * 切换音色前缀
    *
@@ -90,10 +96,11 @@ export class AISpeaker extends Speaker {
   switchSpeakerPrefix: string[];
   onEnterAI: string[];
   onExitAI: string[];
-  callAIPrefix: string[];
+  callAIKeywords: string[];
   wakeUpKeywords: string[];
   exitKeywords: string[];
   onAIAsking: string[];
+  onAIReplied: string[];
   onAIError: string[];
   audioActive?: string;
   audioError?: string;
@@ -104,29 +111,32 @@ export class AISpeaker extends Speaker {
       askAI,
       name = "傻妞",
       switchSpeakerPrefix,
-      callAIPrefix = ["请", "你", "傻妞"],
+      callAIKeywords = ["请", "你", "傻妞"],
       wakeUpKeywords = ["打开", "进入", "召唤"],
       exitKeywords = ["关闭", "退出", "再见"],
       onEnterAI = ["你好，我是傻妞，很高兴认识你"],
       onExitAI = ["傻妞已退出"],
       onAIAsking = ["让我先想想", "请稍等"],
+      onAIReplied = ["我说完了", "还有其他问题吗"],
       onAIError = ["啊哦，出错了，请稍后再试吧！"],
       audioActive = process.env.AUDIO_ACTIVE,
       audioError = process.env.AUDIO_ERROR,
     } = config;
     this.askAI = askAI;
     this.name = name;
-    this.onAIError = onAIError;
-    this.onAIAsking = onAIAsking;
-    this.audioActive = audioActive;
-    this.audioError = audioError;
-    this.switchSpeakerPrefix =
-      switchSpeakerPrefix ?? getDefaultSwitchSpeakerPrefix();
+    this.callAIKeywords = callAIKeywords;
+
     this.wakeUpKeywords = wakeUpKeywords;
     this.exitKeywords = exitKeywords;
     this.onEnterAI = onEnterAI;
     this.onExitAI = onExitAI;
-    this.callAIPrefix = callAIPrefix;
+    this.onAIError = onAIError;
+    this.onAIAsking = onAIAsking;
+    this.onAIReplied = onAIReplied;
+    this.audioActive = audioActive;
+    this.audioError = audioError;
+    this.switchSpeakerPrefix =
+      switchSpeakerPrefix ?? getDefaultSwitchSpeakerPrefix();
   }
 
   async enterKeepAlive() {
@@ -184,7 +194,7 @@ export class AISpeaker extends Speaker {
       {
         match: (msg) =>
           this.keepAlive ||
-          this.callAIPrefix.some((e) => msg.text.startsWith(e)),
+          this.callAIKeywords.some((e) => msg.text.startsWith(e)),
         run: (msg) => this.askAIForAnswer(msg),
       },
     ] as SpeakerCommand[];
@@ -204,13 +214,33 @@ export class AISpeaker extends Speaker {
       return { data: { answer } };
     },
     async (msg, data) => {
+      // 开始回复
+      if (data.answer) {
+        const res = await this.response({ ...data.answer });
+        return { data: { ...data, res } };
+      }
+    },
+    async (msg, data) => {
+      if (data.answer && data.res !== "break") {
+        // 回复完毕
+        await this.response({
+          text: pickOne(this.onAIReplied)!,
+        });
+      }
+    },
+    async (msg, data) => {
       if (!data.answer) {
         // 回答异常
         await this.response({
           audio: this.audioError,
           text: pickOne(this.onAIError)!,
-          keepAlive: this.keepAlive,
         });
+      }
+    },
+    async (msg, data) => {
+      if (this.keepAlive) {
+        // 重新唤醒
+        await this.wakeUp();
       }
     },
   ];
@@ -231,7 +261,6 @@ export class AISpeaker extends Speaker {
         break;
       }
     }
-    return data.answer;
   }
 }
 
