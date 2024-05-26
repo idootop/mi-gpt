@@ -43,7 +43,7 @@ export type BaseSpeakerConfig = MiServiceConfig & {
    */
   wakeUpCommand?: ActionCommand;
   /**
-   * 检测间隔（单位毫秒，默认 100 毫秒）
+   * 检测间隔（单位毫秒，默认 500 毫秒）
    */
   interval?: number;
   /**
@@ -65,7 +65,7 @@ export class BaseSpeaker {
   constructor(config: BaseSpeakerConfig) {
     this.config = config;
     const {
-      interval = 100,
+      interval = 500,
       tts = "xiaoai",
       ttsCommand = [5, 1],
       wakeUpCommand = [5, 3],
