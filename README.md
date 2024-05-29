@@ -82,25 +82,25 @@ main();
 
 然后，将里面的环境变量修改成你自己的，参数含义如下：
 
-| 环境变量名称           | 描述                                                                                        | 示例                                 |
-| ---------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------ |
-| **小米服务**           |                                                                                             |                                      |
-| `MI_USER`              | 小米账户                                                                                    | `"12345678901"`                      |
-| `MI_PASS`              | 账户密码                                                                                    | `"123456"`                           |
-| `MI_DID`               | 小爱音箱 ID 或名称                                                                          | `"小爱音箱 Pro"`                     |
-| **OpenAI**             |                                                                                             |                                      |
-| `OPENAI_API_KEY`       | OpenAI API 密钥                                                                             | `abc123`                             |
-| `OPENAI_MODEL`         | 使用的 OpenAI 模型                                                                          | `gpt-4o`                             |
-| `AZURE_OPENAI_API_KEY` | 可选，[Microsoft Azure OpenAI](https://www.npmjs.com/package/openai#microsoft-azure-openai) | `abc123`                             |
-| `OPENAI_BASE_URL`      | 可选，OpenAI API BaseURL                                                                    | `https://api.openai.com/v1`          |
-| **提示音效（可选）**   |                                                                                             |                                      |
-| `AUDIO_SILENT`         | 静音音频链接                                                                                | `"https://example.com/slient.wav"`   |
-| `AUDIO_BEEP`           | 默认提示音链接                                                                              | `"https://example.com/beep.wav"`     |
-| `AUDIO_ACTIVE`         | 唤醒提示音链接                                                                              | `"https://example.com/active.wav"`   |
-| `AUDIO_ERROR`          | 出错提示音链接                                                                              | `"https://example.com/error.wav"`    |
-| **豆包 TTS（可选）**   |                                                                                             |                                      |
-| `TTS_DOUBAO`           | 豆包 TTS 接口                                                                               | `"https://example.com/tts.wav"`      |
-| `SPEAKERS_DOUBAO`      | 豆包 TTS 音色列表接口                                                                       | `"https://example.com/tts-speakers"` |
+| 环境变量名称           | 描述                                                                                        | 示例                                                         |
+| ---------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| **小米服务**           |                                                                                             |                                                              |
+| `MI_USER`              | 小米账户                                                                                    | `"12345678901"` （登录小米账号后查看「个人信息」-「小米ID」) |
+| `MI_PASS`              | 账户密码                                                                                    | `"123456"`                                                   |
+| `MI_DID`               | 小爱音箱 ID 或名称                                                                          | `"小爱音箱 Pro"`                                             |
+| **OpenAI**             |                                                                                             |                                                              |
+| `OPENAI_API_KEY`       | OpenAI API 密钥                                                                             | `abc123`                                                     |
+| `OPENAI_MODEL`         | 使用的 OpenAI 模型                                                                          | `gpt-4o`                                                     |
+| `AZURE_OPENAI_API_KEY` | 可选，[Microsoft Azure OpenAI](https://www.npmjs.com/package/openai#microsoft-azure-openai) | `abc123`                                                     |
+| `OPENAI_BASE_URL`      | 可选，OpenAI API BaseURL                                                                    | `https://api.openai.com/v1`                                  |
+| **提示音效（可选）**   |                                                                                             |                                                              |
+| `AUDIO_SILENT`         | 静音音频链接                                                                                | `"https://example.com/slient.wav"`                           |
+| `AUDIO_BEEP`           | 默认提示音链接                                                                              | `"https://example.com/beep.wav"`                             |
+| `AUDIO_ACTIVE`         | 唤醒提示音链接                                                                              | `"https://example.com/active.wav"`                           |
+| `AUDIO_ERROR`          | 出错提示音链接                                                                              | `"https://example.com/error.wav"`                            |
+| **豆包 TTS（可选）**   |                                                                                             |                                                              |
+| `TTS_DOUBAO`           | 豆包 TTS 接口                                                                               | `"https://example.com/tts.wav"`                              |
+| `SPEAKERS_DOUBAO`      | 豆包 TTS 音色列表接口                                                                       | `"https://example.com/tts-speakers"`                         |
 
 ### .migpt.js
 
@@ -146,7 +146,7 @@ main();
 
 不同型号的小爱音箱 TTS 指令不同: [https://github.com/idootop/mi-gpt/issues/5](https://github.com/idootop/mi-gpt/issues/5#issuecomment-2122881495)
 
-可以到 https://home.miot-spec.com 查询具体的 TTS 指令，然后修改配置文件中的指令参数。
+可以到 <https://home.miot-spec.com> 查询具体的 TTS 指令，然后修改配置文件中的指令参数。
 
 <details>
 <summary>👉 查看教程</summary>
@@ -170,6 +170,6 @@ main();
 
 ## ❤️ 鸣谢
 
-- https://github.com/yihong0618/xiaogpt
-- https://github.com/inu1255/mi-service
-- https://github.com/Yonsm/MiService
+- <https://github.com/yihong0618/xiaogpt>
+- <https://github.com/inu1255/mi-service>
+- <https://github.com/Yonsm/MiService>
