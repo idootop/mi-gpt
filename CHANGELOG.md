@@ -1,3 +1,8 @@
+# v2.0.1
+
+- 新增 ARMv7 Docker 镜像
+- 新增 debug 开关，用于调试 [issue#14](https://github.com/idootop/mi-gpt/issues/14)
+
 # v2.0.0
 
 ## 🚨 Breaking changes
