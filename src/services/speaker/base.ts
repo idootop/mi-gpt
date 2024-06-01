@@ -5,7 +5,7 @@ import {
   getMiIOT,
   getMiNA,
 } from "mi-service-lite";
-import { clamp, sleep } from "../../utils/base";
+import { clamp, jsonEncode, sleep } from "../../utils/base";
 import { Logger } from "../../utils/log";
 import { Http } from "../http";
 import { StreamResponse } from "./stream";
@@ -22,6 +22,7 @@ type Speaker = {
 type ActionCommand = [number, number];
 
 export type BaseSpeakerConfig = MiServiceConfig & {
+  debug?: boolean;
   /**
    * 语音合成服务商
    */
@@ -56,7 +57,7 @@ export class BaseSpeaker {
   logger = Logger.create({ tag: "Speaker" });
   MiNA?: MiNA;
   MiIOT?: MiIOT;
-
+  debug = false;
   checkInterval: number;
   tts: TTSProvider;
   ttsCommand: ActionCommand;
@@ -65,12 +66,14 @@ export class BaseSpeaker {
   constructor(config: BaseSpeakerConfig) {
     this.config = config;
     const {
+      debug = false,
       checkInterval = 1000,
       tts = "xiaoai",
       ttsCommand = [5, 1],
       wakeUpCommand = [5, 3],
       audioBeep = process.env.audioBeep,
     } = config;
+    this.debug = debug;
     this.audioBeep = audioBeep;
     this.checkInterval = clamp(checkInterval, 500, Infinity);
     this.tts = tts;
@@ -207,7 +210,7 @@ export class BaseSpeaker {
     // 播放回复
     const play = async (args?: { tts?: string; url?: string }) => {
       // 播放开始提示音
-      if (playSFX) {
+      if (playSFX && this.audioBeep) {
         await this.MiNA!.play({ url: this.audioBeep });
       }
       // 在播放 TTS 语音之前，先取消小爱音箱的唤醒状态，防止将 TTS 语音识别成用户指令
@@ -225,6 +228,9 @@ export class BaseSpeaker {
       // 等待回答播放完毕
       while (true) {
         const res = await this.MiNA!.getStatus();
+        if (this.debug) {
+          this.logger.debug(jsonEncode(res));
+        }
         if (
           !this.responding || // 有新消息
           (res?.status === "playing" && res?.media_type) // 小爱自己开始播放音乐
@@ -232,13 +238,13 @@ export class BaseSpeaker {
           // 响应被中断
           return "break";
         }
-        if (res && res?.status !== "playing") {
+        if (res && res.status !== "playing") {
           break;
         }
         await sleep(this.checkInterval);
       }
       // 播放结束提示音
-      if (playSFX) {
+      if (playSFX && this.audioBeep) {
         await this.MiNA!.play({ url: this.audioBeep });
       }
       // 保持唤醒状态

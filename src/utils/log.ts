@@ -42,6 +42,13 @@ class _LoggerManager {
     }
   }
 
+  debug(tag: string, args: any[]) {
+    const logs = this._getLogs(tag + " 🐛", ...args);
+    if (logs.length > 0) {
+      console.log(...logs);
+    }
+  }
+
   success(tag: string, args: any[]) {
     const logs = this._getLogs(tag + " ✅", ...args);
     if (logs.length > 0) {
@@ -87,6 +94,12 @@ class _Logger {
   log(...args: any[]) {
     if (!this.disable) {
       LoggerManager.log(this.tag, args);
+    }
+  }
+
+  debug(...args: any[]) {
+    if (!this.disable) {
+      LoggerManager.debug(this.tag, args);
     }
   }
 

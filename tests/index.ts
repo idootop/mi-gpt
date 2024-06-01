@@ -13,11 +13,11 @@ dotenv.config();
 async function main() {
   // println(kBannerASCII);
   // testDB();
-  // testSpeaker();
+  testSpeaker();
   // testOpenAI();
   // testMyBot();
   // testLog();
-  testMiGPT();
+  // testMiGPT();
 }
 
 main();
