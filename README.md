@@ -20,7 +20,7 @@
 
 ## ✨ 项目亮点
 
-- **🎓 LLM 回答**。想象一下，你的小爱音箱变身聊天高手，可以使用 [ChatGPT](https://chat.openai.com) 等大模型来回答你，比你懂更多。
+- **🎓 LLM 回答**。想象一下，你的小爱音箱变身聊天高手，可以使用 [ChatGPT](https://chat.openai.com) 等大模型来回答你的问题。
 - **🎭 角色扮演**。一秒调教小爱，无论是成为你的完美伴侣，还是那个能听你倾诉心事的贴心闺蜜，都不在话下。
 - **💬 流式响应**。爱情来得太快就像龙卷风，而你的小爱音箱也是，对你的爱意秒回，爱你不会让你等太久。
 - **🧠 长短期记忆**。小爱音箱现在能记住你们之间的每一次对话，越聊越默契，就像是你身边的老朋友。
@@ -138,18 +138,24 @@ main();
 
 ## 💬 常见问题
 
+**Q：除了 OpenAI 还支持哪些模型，如何设置？**
+
+理论上兼容 [OpenAI SDK](https://www.npmjs.com/package/openai) 的模型都支持，只需修改环境变量即可接入到 MiGPT。比如：[通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1)、[零一万物](https://platform.01.ai/docs#making-an-api-request)、[Moonshot](https://platform.moonshot.cn/docs/api/chat)、[DeepSeek](https://platform.deepseek.com/api-docs/) 等，以 Moonshot 为例：
+
+```shell
+OPENAI_BASE_URL=https://api.moonshot.cn/v1
+OPENAI_MODEL=moonshot-v1-8k
+OPENAI_API_KEY=$MOONSHOT_API_KEY
+```
+
 **Q：登录小米账号失败，提示 401**
 
-有两种可能：
-
-1. **账号密码不正确**：小米账号并非指你登录用的手机号或邮箱，而是你的小米 ID，可以登录小米账号后，在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。
+1. **账号密码不正确**：小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。
 2. **网络异常**：如果你的账号密码确认配置正确，出现 401 登录异常大概率是因为网络异常，或当前 IP 小米账号登录被风控。请尝试切换代理或等待一段时间（2-24 小时）后再试。[issue#10](https://github.com/idootop/mi-gpt/issues/10)
 
-**Q：问小爱音箱问题，但是 AI 没有回复，控制台有打印收到的新消息**
+**Q：问小爱音箱问题 AI 没有回复，控制台有打印收到的新消息**
 
-小爱音箱收到提问，默认不会调用 AI 进行回复。
-
-只有以唤醒词（`callAIKeywords`），比如：“请”、“你”等开头的消息，或在唤醒模式下才会调用 AI 进行回复。
+小爱音箱收到提问，默认不会调用 AI 进行回复。只有以唤醒词（`callAIKeywords`），比如：“请”、“你”等开头的消息，或在唤醒模式下才会调用 AI 进行回复。
 
 **Q：小爱音箱没有播放 AI 的回复，控制台有打印 AI 的回复**
 
