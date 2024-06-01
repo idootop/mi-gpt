@@ -25,5 +25,7 @@ COPY --from=build /app/scripts ./scripts
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/node_modules ./node_modules
 
+RUN rm -rf ./prisma/engines
+
 # Run the application.
 CMD npm run start

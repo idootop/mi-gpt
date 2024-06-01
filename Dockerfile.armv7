@@ -1,0 +1,40 @@
+# syntax=docker/dockerfile:1
+
+# base
+FROM arm32v7/node:18 as base
+
+WORKDIR /app
+
+COPY prisma/engines ./prisma/engines
+
+RUN chmod +x ./prisma/engines/query-engine
+RUN chmod +x ./prisma/engines/libquery_engine.so.node
+RUN chmod +x ./prisma/engines/schema-engine
+
+ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+ENV PRISMA_QUERY_ENGINE_BINARY=./prisma/engines/query-engine
+ENV PRISMA_QUERY_ENGINE_LIBRARY=./prisma/engines/libquery_engine.so.node
+ENV PRISMA_SCHEMA_ENGINE_BINARY=./prisma/engines/schema-engine
+
+# build
+FROM base as build
+
+RUN --mount=type=cache,target=/root/.npm \
+    npm install -g pnpm@9.1.1
+
+COPY . .
+
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install && pnpm build && npx prisma -v
+
+# run
+FROM base
+
+COPY package.json .
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/scripts ./scripts
+COPY --from=build /app/prisma ./prisma
+COPY --from=build /app/node_modules ./node_modules
+
+# Run the application.
+CMD npm run start
