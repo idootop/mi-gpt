@@ -21,7 +21,6 @@ export default {
     name: "陆小千",
     profile: masterProfile,
   },
-
   speaker: {
     // 小米账号
     userId: process.env.MI_USER,
