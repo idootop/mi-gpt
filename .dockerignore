@@ -1,14 +1,16 @@
 # 排除全部文件
 **/*
 
-# 只保留相关构建文件
+# 只保留构建相关的文件
 !src
-!prisma
 !app.js
 !package.json
 !pnpm-lock.yaml
 !tsconfig.json
 !tsup.config.ts
+!prisma/engines
+!prisma/migrations
+!prisma/schema.prisma
 
 
 

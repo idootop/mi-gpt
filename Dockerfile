@@ -10,20 +10,24 @@ FROM env-$TARGETARCH as base
 WORKDIR /app
 ARG TARGETARCH
 
-FROM base as build
+FROM base as runtime
 COPY . .
 RUN [ ! "$TARGETARCH" = "arm" ] && rm -rf ./prisma/engines || true
 RUN --mount=type=cache,target=/root/.npm \
     npm install -g pnpm@9.1.1
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
-    pnpm install && pnpm build
+    pnpm install --production && pnpm prisma generate
+
+FROM runtime as dist
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install && pnpm tsup
 
 FROM base as release
 
 COPY app.js .
 COPY package.json .
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/node_modules ./node_modules
+COPY --from=dist /app/dist ./dist
+COPY --from=dist /app/prisma ./prisma
+COPY --from=runtime /app/node_modules ./node_modules
 
 CMD npm run start
