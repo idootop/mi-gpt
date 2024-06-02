@@ -1,3 +1,9 @@
+# v2.1.0
+
+- 优化 Docker 镜像体积
+- 新增 `playingCommand` 选项
+- 修复小爱音箱回复戛然而止的问题（[issue#14](https://github.com/idootop/mi-gpt/issues/14)）
+
 # v2.0.1
 
 - 新增 ARMv7 Docker 镜像
