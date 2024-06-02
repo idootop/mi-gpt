@@ -7,7 +7,6 @@ import {
 } from "mi-service-lite";
 import { clamp, jsonEncode, sleep } from "../../utils/base";
 import { Logger } from "../../utils/log";
-import { Http } from "../http";
 import { StreamResponse } from "./stream";
 import { kAreYouOK } from "../../utils/string";
 
@@ -279,9 +278,9 @@ export class BaseSpeaker {
   private _doubaoSpeakers?: Speaker[];
   private _defaultSpeaker = "zh_female_maomao_conversation_wvae_bigtts";
   async switchDefaultSpeaker(speaker: string) {
-    if (!this._doubaoSpeakers) {
-      const doubaoSpeakers = process.env.SPEAKERS_DOUBAO;
-      const res = await Http.get(doubaoSpeakers ?? "/");
+    const speakersAPI = process.env.SPEAKERS_DOUBAO;
+    if (!this._doubaoSpeakers && speakersAPI) {
+      const res = await (await fetch(speakersAPI)).json();
       if (Array.isArray(res)) {
         this._doubaoSpeakers = res;
       }

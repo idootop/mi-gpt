@@ -2,24 +2,20 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Test.ts",
+      "name": "Test",
       "type": "node",
       "request": "launch",
       "args": ["${workspaceFolder}/tests/index.ts"],
-      "runtimeArgs": [
-        "--no-warnings",
-        "--experimental-specifier-resolution=node",
-        "--loader",
-        "./scripts/esm-loader.js"
-      ],
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
       "cwd": "${workspaceRoot}",
+      "envFile": "${workspaceFolder}/.env",
       "internalConsoleOptions": "openOnSessionStart"
     },
     {
       "name": "Runner",
       "type": "node",
       "request": "launch",
-      "args": ["${workspaceFolder}/scripts/runner.js"],
+      "args": ["${workspaceFolder}/app.js"],
       "cwd": "${workspaceRoot}",
       "envFile": "${workspaceFolder}/.env",
       "internalConsoleOptions": "openOnSessionStart"

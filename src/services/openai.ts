@@ -5,10 +5,10 @@ import {
 } from "openai/resources";
 
 import { kEnvs } from "../utils/env";
-import { kProxyAgent } from "./http";
 import { withDefault } from "../utils/base";
 import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions";
 import { Logger } from "../utils/log";
+import { kProxyAgent } from "./proxy";
 
 export interface ChatOptions {
   user: string;

@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import { println } from "../src/utils/base";
 import { kBannerASCII } from "../src/utils/string";
 import { testDB } from "./db";
@@ -7,8 +6,6 @@ import { testOpenAI } from "./openai";
 import { testMyBot } from "./bot";
 import { testLog } from "./log";
 import { testMiGPT } from "./migpt";
-
-dotenv.config();
 
 async function main() {
   // println(kBannerASCII);
