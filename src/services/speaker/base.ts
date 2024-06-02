@@ -19,6 +19,7 @@ type Speaker = {
 };
 
 type ActionCommand = [number, number];
+type PropertyCommand = [number, number, number];
 
 export type BaseSpeakerConfig = MiServiceConfig & {
   debug?: boolean;
@@ -27,7 +28,7 @@ export type BaseSpeakerConfig = MiServiceConfig & {
    */
   tts?: TTSProvider;
   /**
-   * 小米音箱 TTS command
+   * 小爱音箱 TTS 指令
    *
    * 比如：小爱音箱 Pro（lx06） -> [5, 1]
    *
@@ -35,13 +36,21 @@ export type BaseSpeakerConfig = MiServiceConfig & {
    */
   ttsCommand?: ActionCommand;
   /**
-   * 小米音箱唤醒 command
+   * 小爱音箱唤醒指令
    *
    * 比如：小爱音箱 Pro（lx06） -> [5, 3]
    *
    * 具体指令可在此网站查询：https://home.miot-spec.com
    */
   wakeUpCommand?: ActionCommand;
+  /**
+   * 查询小爱音响是否在播放中指令
+   *
+   * 比如：小爱音箱 Play（lx05） -> [3, 1, 1]
+   *
+   * 具体指令可在此网站查询：https://home.miot-spec.com
+   */
+  playingCommand?: PropertyCommand;
   /**
    * 播放状态检测间隔（单位毫秒，最低 500 毫秒，默认 1 秒）
    */
@@ -61,6 +70,7 @@ export class BaseSpeaker {
   tts: TTSProvider;
   ttsCommand: ActionCommand;
   wakeUpCommand: ActionCommand;
+  playingCommand?: PropertyCommand;
   config: MiServiceConfig;
   constructor(config: BaseSpeakerConfig) {
     this.config = config;
@@ -68,6 +78,7 @@ export class BaseSpeaker {
       debug = false,
       checkInterval = 1000,
       tts = "xiaoai",
+      playingCommand,
       ttsCommand = [5, 1],
       wakeUpCommand = [5, 3],
       audioBeep = process.env.audioBeep,
@@ -78,6 +89,7 @@ export class BaseSpeaker {
     this.tts = tts;
     this.ttsCommand = ttsCommand;
     this.wakeUpCommand = wakeUpCommand;
+    this.playingCommand = playingCommand;
   }
 
   async initMiServices() {
@@ -226,18 +238,33 @@ export class BaseSpeaker {
       await sleep(3000);
       // 等待回答播放完毕
       while (true) {
-        const res = await this.MiNA!.getStatus();
-        if (this.debug) {
-          this.logger.debug(jsonEncode(res));
+        let playing: any = { status: "idle" };
+        if (this.playingCommand) {
+          const res = await this.MiIOT!.getProperty(
+            this.playingCommand[0],
+            this.playingCommand[1]
+          );
+          if (this.debug) {
+            this.logger.debug(jsonEncode({ playState: res ?? "undefined" }));
+          }
+          if (res === this.playingCommand[2]) {
+            playing = { status: "playing" };
+          }
+        } else {
+          const res = await this.MiNA!.getStatus();
+          if (this.debug) {
+            this.logger.debug(jsonEncode({ playState: res ?? "undefined" }));
+          }
+          playing = { ...playing, ...res };
         }
         if (
           !this.responding || // 有新消息
-          (res?.status === "playing" && res?.media_type) // 小爱自己开始播放音乐
+          (playing.status === "playing" && playing.media_type) // 小爱自己开始播放音乐
         ) {
           // 响应被中断
           return "break";
         }
-        if (res && res.status !== "playing") {
+        if (playing.status !== "playing") {
           break;
         }
         await sleep(this.checkInterval);

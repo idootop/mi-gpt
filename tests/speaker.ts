@@ -11,12 +11,23 @@ export async function testSpeaker() {
     debug: true,
   });
   await speaker.initMiServices();
+  await testAISpeakerStatus(speaker);
   // await testSpeakerResponse(speaker);
   await testSpeakerStreamResponse(speaker);
   // await testSpeakerGetMessages(speaker);
   // await testSwitchSpeaker(speaker);
   // await testSpeakerUnWakeUp(speaker);
   // await testAISpeaker(speaker);
+}
+
+async function testAISpeakerStatus(speaker: AISpeaker) {
+  const playingCommand = [5, 3, 1];
+  const res1 = await speaker.MiIOT!.getProperty(
+    playingCommand[0],
+    playingCommand[1]
+  );
+  const res2 = await speaker.MiNA!.getStatus();
+  console.log("finished");
 }
 
 async function testAISpeaker(speaker: AISpeaker) {

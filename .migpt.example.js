@@ -22,16 +22,12 @@ export default {
     profile: masterProfile,
   },
   speaker: {
-    // 小米账号
-    userId: process.env.MI_USER,
+    // 小米 ID
+    userId: "944123456", // 注意：不是手机号或邮箱，请在「个人信息」-「小米 ID」查看
     // 账号密码
-    password: process.env.MI_PASS,
-    // 小爱音箱 ID 或名称
-    did: process.env.MI_DID,
-    // TTS 指令
-    ttsCommand: [5, 1],
-    // 设备唤醒指令
-    wakeUpCommand: [5, 3],
+    password: "123456",
+    // 小爱音箱 ID 或在米家中设置的名称
+    did: "小爱音箱Pro",
     // 当消息以下面的关键词开头时，会调用 AI 来回复消息
     callAIKeywords: ["请", "你", "傻妞"],
     // 当消息以下面的关键词开头时，会进入 AI 唤醒状态
@@ -50,5 +46,11 @@ export default {
     onAIError: ["啊哦，出错了，请稍后再试吧！"],
     // 无响应一段时间后，多久自动退出唤醒模式（默认 30 秒）
     exitKeepAliveAfter: 30,
+    // TTS 指令，请到 https://home.miot-spec.com 查询具体指令
+    ttsCommand: [5, 1],
+    // 设备唤醒指令，请到 https://home.miot-spec.com 查询具体指令
+    wakeUpCommand: [5, 3],
+    // 查询是否在播放中指令，请到 https://home.miot-spec.com 查询具体指令
+    // playingCommand: [3, 1, 1],
   },
 };
