@@ -6,7 +6,8 @@
     "target": "esnext",
     "module": "esnext",
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
   "include": ["src", "tests"],
   "exclude": ["node_modules", "dist"]

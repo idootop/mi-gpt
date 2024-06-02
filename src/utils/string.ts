@@ -1,6 +1,6 @@
-import { readJSONSync } from "./io";
+import { version } from "../../package.json";
 
-export const kVersion = readJSONSync("package.json").version;
+export const kVersion = version;
 
 export const kAreYouOK = "¿ʞо ∩оʎ ǝɹɐ"; // are you ok?
 
