@@ -3,16 +3,14 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "db:gen": "npx prisma migrate dev --name hello",
-    "db:reset": "rm .bot.json && npx prisma migrate reset"
+    "start": "tsx index.ts"
   },
   "dependencies": {
-    "mi-gpt": "file:../mi-gpt"
+    "mi-gpt": "^2.1.1"
   },
   "devDependencies": {
     "@types/node": "^20.4.9",
-    "dotenv": "^16.3.2",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.11.0",
     "typescript": "^5.3.3"
   }
 }

@@ -5,4 +5,5 @@ dist
 .env
 .bot.json
 .mi.json
+.migpt.js
 *.db*

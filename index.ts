@@ -1,7 +1,4 @@
-import dotenv from "dotenv";
 import { MiGPT } from "mi-gpt";
-
-dotenv.config();
 
 const botName = "傻妞";
 const botProfile = `
