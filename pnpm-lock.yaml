@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@prisma/client':
-        specifier: ^5.8.1
+        specifier: ^5.14.0
         version: 5.14.0(prisma@5.14.0)
       fs-extra:
         specifier: ^11.2.0
@@ -21,10 +21,10 @@ importers:
         specifier: ^2.3.0
         version: 2.3.0
       openai:
-        specifier: ^4.47.1
-        version: 4.47.1
+        specifier: ^4.47.3
+        version: 4.47.3
       prisma:
-        specifier: ^5.8.1
+        specifier: ^5.14.0
         version: 5.14.0
     devDependencies:
       '@types/fs-extra':
@@ -869,8 +869,8 @@ packages:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
 
-  openai@4.47.1:
-    resolution: {integrity: sha512-WWSxhC/69ZhYWxH/OBsLEirIjUcfpQ5+ihkXKp06hmeYXgBBIUCa9IptMzYx6NdkiOCsSGYCnTIsxaic3AjRCQ==}
+  openai@4.47.3:
+    resolution: {integrity: sha512-470d4ibH5kizXflCzgur22GpM4nOjrg7WQ9jTOa3dNKEn248oBy4+pjOyfcFR4V4YUn/YlDNjp6h83PbviCCKQ==}
     hasBin: true
 
   pako@2.1.0:
@@ -1795,7 +1795,7 @@ snapshots:
     dependencies:
       mimic-fn: 2.1.0
 
-  openai@4.47.1:
+  openai@4.47.3:
     dependencies:
       '@types/node': 18.19.33
       '@types/node-fetch': 2.6.11

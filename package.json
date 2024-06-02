@@ -3,6 +3,9 @@
   "version": "2.1.0",
   "type": "module",
   "description": "将小爱音箱接入 ChatGPT 和豆包，改造成你的专属语音助手。",
+  "homepage": "https://github.com/idootop/mi-gpt",
+  "bugs": "https://github.com/idootop/mi-gpt/issues",
+  "repository": "idootop/mi-gpt",
   "license": "MIT",
   "author": {
     "name": "Del Wang",
@@ -20,15 +23,16 @@
     "start": "node ./app.js",
     "build": "npx -y prisma generate && tsup",
     "db:gen": "npx -y prisma migrate dev --name init",
-    "db:reset": "rm -f .mi.json .bot.json prisma/app.db prisma/app.db-journal"
+    "db:reset": "rm -f .mi.json .bot.json prisma/app.db prisma/app.db-journal",
+    "postinstall": "npx prisma migrate dev --name hello"
   },
   "dependencies": {
-    "@prisma/client": "^5.8.1",
+    "@prisma/client": "^5.14.0",
     "fs-extra": "^11.2.0",
     "https-proxy-agent": "^7.0.4",
     "mi-service-lite": "^2.3.0",
-    "openai": "^4.47.1",
-    "prisma": "^5.8.1"
+    "openai": "^4.47.3",
+    "prisma": "^5.14.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
@@ -53,13 +57,5 @@
     "import": "./dist/index.js",
     "require": "./dist/index.cjs",
     "default": "./dist/index.js"
-  },
-  "homepage": "https://github.com/idootop/mi-gpt",
-  "bugs": {
-    "url": "https://github.com/idootop/mi-gpt/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/idootop/mi-gpt.git"
   }
 }
