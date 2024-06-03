@@ -110,6 +110,14 @@ export class BaseSpeaker {
 
   audioBeep?: string;
   responding = false;
+  /**
+   * 检测是否有新消息
+   *
+   * 有新消息产生时，旧的回复会终止
+   */
+  checkIfHasNewMsg() {
+    return { hasNewMsg: () => false, noNewMsg: () => true };
+  }
   async response(options: {
     tts?: TTSProvider;
     text?: string;
@@ -118,6 +126,7 @@ export class BaseSpeaker {
     speaker?: string;
     keepAlive?: boolean;
     playSFX?: boolean;
+    hasNewMsg?: () => boolean;
   }) {
     let {
       text,
@@ -127,6 +136,7 @@ export class BaseSpeaker {
       keepAlive = false,
       tts = this.tts,
     } = options ?? {};
+    options.hasNewMsg ??= this.checkIfHasNewMsg().hasNewMsg;
 
     const doubaoTTS = process.env.TTS_DOUBAO;
     if (!doubaoTTS) {
@@ -203,6 +213,7 @@ export class BaseSpeaker {
     speaker?: string;
     keepAlive?: boolean;
     playSFX?: boolean;
+    hasNewMsg?: () => boolean;
   }) {
     let {
       text,
@@ -213,6 +224,14 @@ export class BaseSpeaker {
       tts = this.tts,
       speaker = this._defaultSpeaker,
     } = options ?? {};
+
+    const hasNewMsg = () => {
+      const flag = options.hasNewMsg?.();
+      if (this.debug) {
+        this.logger.debug("checkIfHasNewMsg:" + flag);
+      }
+      return flag;
+    };
 
     const ttsText = text?.replace(/\n\s*\n/g, "\n")?.trim();
     const ttsNotXiaoai = !stream && !!text && !audio && tts !== "xiaoai";
@@ -258,6 +277,7 @@ export class BaseSpeaker {
           playing = { ...playing, ...res };
         }
         if (
+          hasNewMsg() ||
           !this.responding || // 有新消息
           (playing.status === "playing" && playing.media_type) // 小爱自己开始播放音乐
         ) {

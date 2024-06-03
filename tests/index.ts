@@ -10,11 +10,11 @@ import { testMiGPT } from "./migpt";
 async function main() {
   // println(kBannerASCII);
   // testDB();
-  testSpeaker();
+  // testSpeaker();
   // testOpenAI();
   // testMyBot();
   // testLog();
-  // testMiGPT();
+  testMiGPT();
 }
 
 main();

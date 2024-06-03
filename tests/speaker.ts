@@ -11,7 +11,7 @@ export async function testSpeaker() {
     debug: true,
   });
   await speaker.initMiServices();
-  await testAISpeakerStatus(speaker);
+  // await testAISpeakerStatus(speaker);
   // await testSpeakerResponse(speaker);
   await testSpeakerStreamResponse(speaker);
   // await testSpeakerGetMessages(speaker);
