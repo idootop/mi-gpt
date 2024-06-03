@@ -135,6 +135,10 @@ main();
 
 ## 💬 常见问题
 
+**Q：支持哪些型号的小爱音箱？**
+
+大部分型号的小爱音箱都支持，推荐小爱音箱 Pro（完美运行）。部分机型的 MioT 接口开放能力并不完整，比如小米音箱 Play 增强版（L05C），将会导致 `MiGPT` 部分功能异常，相关 [issue](https://github.com/idootop/mi-gpt/issues/14)。
+
 **Q：除了 OpenAI 还支持哪些模型，如何设置？**
 
 理论上兼容 [OpenAI SDK](https://www.npmjs.com/package/openai) 的模型都支持，只需修改环境变量即可接入到 MiGPT。
@@ -152,13 +156,11 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 1. **账号密码不正确**：小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。
 2. **网络异常**：如果你的账号密码确认配置正确，出现 401 登录异常大概率是因为网络异常，或当前 IP 小米账号登录被风控。请尝试切换代理或等待一段时间（2-24 小时）后再试。[issue#10](https://github.com/idootop/mi-gpt/issues/10)
 
-**Q：问小爱音箱问题 AI 没有回复，控制台有打印收到的新消息**
+**Q：小爱音箱收到消息后，没有调用 AI 进行回复**
 
-小爱音箱收到提问，默认不会调用 AI 进行回复。
+`MiGPT` 收到消息默认不会调用 AI 进行回复，只会回复以唤醒词（`callAIKeywords`）开头的消息，比如：“请问 xxx”、“你 xxx” 等，你也可以自定义唤醒词列表。
 
-只有以唤醒词（`callAIKeywords`）开头的消息才会回复，比如：“请问 xxx”、“你 xxx” 等。
-
-**Q：小爱音箱没有播放 AI 的回复，控制台有打印 AI 的回复**
+**Q：小爱音箱没有播放 AI 的回答，但控制台有打印 AI 的回复**
 
 不同型号的小爱音箱 TTS 指令不同: [https://github.com/idootop/mi-gpt/issues/5](https://github.com/idootop/mi-gpt/issues/5#issuecomment-2122881495)
 
@@ -172,9 +174,9 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 
 </details>
 
-**Q：回答过长的情况下，小爱音箱只读了最后一句，前面的句子没有读（完整）**
+**Q：小爱音箱没有读完整个句子，总是戛然而止**
 
-部分小爱音箱型号不支持通过 Mina 获取设备播放状态，只能通过 MiOT 指令查询。
+部分型号的小爱音箱不支持通过 Mina 获取设备播放状态，只能通过 MiOT 指令查询。
 
 请到 <https://home.miot-spec.com> 查询具体指令，并修改配置文件中的 `playingCommand` 参数。
 
@@ -184,6 +186,9 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 ![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/playing.png)
 
 </details>
+
+如果修改参数后问题仍然存在，说明你的设备不支持通过开放接口查询播放状态（比如：小米音箱 Play 增强版），**此问题无解**。
+建议更换其他型号的小爱音箱（推荐小爱音箱 Pro），相关 [issue](https://github.com/idootop/mi-gpt/issues/14)。
 
 **Q：怎样使用豆包的音色**
 
