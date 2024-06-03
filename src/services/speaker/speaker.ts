@@ -55,7 +55,7 @@ export class Speaker extends BaseSpeaker {
     const {
       heartbeat = 1000,
       exitKeepAliveAfter = 30,
-      audioSilent = process.env.audioSilent,
+      audioSilent = process.env.AUDIO_SILENT,
     } = config;
     this.audioSilent = audioSilent;
     this._commands = config.commands ?? [];

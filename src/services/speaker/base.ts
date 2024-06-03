@@ -81,7 +81,7 @@ export class BaseSpeaker {
       playingCommand,
       ttsCommand = [5, 1],
       wakeUpCommand = [5, 3],
-      audioBeep = process.env.audioBeep,
+      audioBeep = process.env.AUDIO_BEEP,
     } = config;
     this.debug = debug;
     this.audioBeep = audioBeep;

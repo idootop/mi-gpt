@@ -63,9 +63,9 @@ import { MiGPT } from "mi-gpt";
 async function main() {
   const client = MiGPT.create({
     speaker: {
-      userId: process.env.MI_USER,
-      password: process.env.MI_PASS,
-      did: process.env.MI_DID,
+      userId: "944123456", // 注意：不是手机号或邮箱，请在「个人信息」-「小米 ID」查看
+      password: "123456", // 账号密码
+      did: "小爱音箱Pro", // 小爱音箱 ID 或在米家中设置的名称
     },
   });
   await client.start();
