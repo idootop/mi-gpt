@@ -24,6 +24,14 @@ type PropertyCommand = [number, number, number];
 export type BaseSpeakerConfig = MiServiceConfig & {
   debug?: boolean;
   /**
+   * 是否启用流式响应
+   *
+   * 部分小爱音箱型号不支持查询播放状态，需要关闭流式响应
+   *
+   * 关闭后会在 LLM 回答完毕后再 TTS 完整文本，且无法使用唤醒模式等功能
+   */
+  streamResponse?: boolean;
+  /**
    * 语音合成服务商
    */
   tts?: TTSProvider;
@@ -56,27 +64,36 @@ export type BaseSpeakerConfig = MiServiceConfig & {
    */
   checkInterval?: number;
   /**
+   *   下发 TTS 指令多长时间后开始检测播放状态（单位秒，默认 3 秒）
+   */
+  checkTTSStatusAfter?: number;
+  /**
    * TTS 开始/结束提示音
    */
   audioBeep?: string;
 };
 
 export class BaseSpeaker {
-  logger = Logger.create({ tag: "Speaker" });
   MiNA?: MiNA;
   MiIOT?: MiIOT;
+  config: MiServiceConfig;
+  logger = Logger.create({ tag: "Speaker" });
   debug = false;
+  streamResponse = true;
   checkInterval: number;
+  checkTTSStatusAfter: number;
   tts: TTSProvider;
   ttsCommand: ActionCommand;
   wakeUpCommand: ActionCommand;
   playingCommand?: PropertyCommand;
-  config: MiServiceConfig;
+
   constructor(config: BaseSpeakerConfig) {
     this.config = config;
     const {
       debug = false,
+      streamResponse = true,
       checkInterval = 1000,
+      checkTTSStatusAfter = 3,
       tts = "xiaoai",
       playingCommand,
       ttsCommand = [5, 1],
@@ -84,9 +101,12 @@ export class BaseSpeaker {
       audioBeep = process.env.AUDIO_BEEP,
     } = config;
     this.debug = debug;
+    this.streamResponse = streamResponse;
     this.audioBeep = audioBeep;
     this.checkInterval = clamp(checkInterval, 500, Infinity);
+    this.checkTTSStatusAfter = checkTTSStatusAfter;
     this.tts = tts;
+    // todo 考虑维护常见设备型号的指令列表，并自动从 spec 文件判断属性权限
     this.ttsCommand = ttsCommand;
     this.wakeUpCommand = wakeUpCommand;
     this.playingCommand = playingCommand;
@@ -158,8 +178,8 @@ export class BaseSpeaker {
       tts = "xiaoai"; // 没有提供豆包语音接口时，只能使用小爱自带 TTS
     }
 
-    const ttsNotXiaoai = (!!stream || !!text) && !audio && tts !== "xiaoai";
-    playSFX = ttsNotXiaoai && playSFX;
+    const ttsNotXiaoai = tts !== "xiaoai" && !audio;
+    playSFX = this.streamResponse && ttsNotXiaoai && playSFX;
 
     if (ttsNotXiaoai && !stream) {
       // 长文本 TTS 转化成 stream 分段模式
@@ -170,13 +190,17 @@ export class BaseSpeaker {
     this.responding = true;
     // 开始响应
     if (stream) {
-      let _response = "";
+      let replyText = "";
       while (true) {
-        const { nextSentence, noMore } = stream.getNextResponse();
+        let { nextSentence, noMore } = stream.getNextResponse();
+        if (!this.streamResponse) {
+          nextSentence = await stream.getFinalResult();
+          noMore = true;
+        }
         if (nextSentence) {
-          if (_response.length < 1) {
+          if (replyText.length < 1) {
             // 播放开始提示音
-            if (playSFX) {
+            if (playSFX && this.audioBeep) {
               await this.MiNA!.play({ url: this.audioBeep });
             }
             // 在播放 TTS 语音之前，先取消小爱音箱的唤醒状态，防止将 TTS 语音识别成用户指令
@@ -195,12 +219,12 @@ export class BaseSpeaker {
             stream.cancel();
             break;
           }
-          _response += nextSentence;
+          replyText += nextSentence;
         }
         if (noMore) {
-          if (_response.length > 0) {
+          if (replyText.length > 0) {
             // 播放结束提示音
-            if (playSFX) {
+            if (playSFX && this.audioBeep) {
               await this.MiNA!.play({ url: this.audioBeep });
             }
           }
@@ -213,6 +237,9 @@ export class BaseSpeaker {
         }
         await sleep(this.checkInterval);
       }
+      if (replyText.length < 1) {
+        return "error";
+      }
     } else {
       res = await this._response(options);
     }
@@ -223,7 +250,6 @@ export class BaseSpeaker {
   private async _response(options: {
     tts?: TTSProvider;
     text?: string;
-    stream?: StreamResponse;
     audio?: string;
     speaker?: string;
     keepAlive?: boolean;
@@ -233,7 +259,6 @@ export class BaseSpeaker {
     let {
       text,
       audio,
-      stream,
       playSFX = true,
       keepAlive = false,
       tts = this.tts,
@@ -249,11 +274,12 @@ export class BaseSpeaker {
     };
 
     const ttsText = text?.replace(/\n\s*\n/g, "\n")?.trim();
-    const ttsNotXiaoai = !stream && !!text && !audio && tts !== "xiaoai";
-    playSFX = ttsNotXiaoai && playSFX;
+    const ttsNotXiaoai = tts !== "xiaoai" && !audio;
+    playSFX = this.streamResponse && ttsNotXiaoai && playSFX;
 
     // 播放回复
     const play = async (args?: { tts?: string; url?: string }) => {
+      this.logger.log("🔊 " + (ttsText ?? audio));
       // 播放开始提示音
       if (playSFX && this.audioBeep) {
         await this.MiNA!.play({ url: this.audioBeep });
@@ -267,9 +293,13 @@ export class BaseSpeaker {
       } else {
         await this.MiNA!.play(args);
       }
-      this.logger.log("🔊 " + (ttsText ?? audio));
-      // 等待 3 秒，确保本地设备状态已更新
-      await sleep(3000);
+      if (!this.streamResponse) {
+        // 非流式响应，直接返回，不再等待设备播放完毕
+        // todo 考虑后续通过 MioT 通知事件，接收设备播放状态变更通知。
+        return;
+      }
+      // 等待一段时间，确保本地设备状态已更新
+      await sleep(this.checkTTSStatusAfter * 1000);
       // 等待回答播放完毕
       while (true) {
         let playing: any = { status: "idle" };
@@ -317,7 +347,7 @@ export class BaseSpeaker {
     // 开始响应
     let res;
     if (audio) {
-      // 音频回复
+      // 优先播放音频回复
       res = await play({ url: audio });
     } else if (ttsText) {
       // 文字回复

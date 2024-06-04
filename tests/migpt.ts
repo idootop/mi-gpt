@@ -19,6 +19,7 @@ export async function testMiGPT() {
       password: process.env.MI_PASS!,
       did: process.env.MI_DID,
       debug: true,
+      streamResponse: false,
     },
     bot: {
       name: "傻妞",

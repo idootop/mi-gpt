@@ -125,7 +125,6 @@ export class AISpeaker extends Speaker {
     this.askAI = askAI;
     this.name = name;
     this.callAIKeywords = callAIKeywords;
-
     this.wakeUpKeywords = wakeUpKeywords;
     this.exitKeywords = exitKeywords;
     this.onEnterAI = onEnterAI;
@@ -140,6 +139,10 @@ export class AISpeaker extends Speaker {
   }
 
   async enterKeepAlive() {
+    if (!this.streamResponse) {
+      await this.response({ text: "流式响应已关闭，无法进入唤醒模式" });
+      return;
+    }
     // 回应
     await this.response({ text: pickOne(this.onEnterAI)!, keepAlive: true });
     // 唤醒
@@ -221,7 +224,7 @@ export class AISpeaker extends Speaker {
       }
     },
     async (msg, data) => {
-      if (data.answer && data.res !== "break") {
+      if (data.answer && data.res == null && this.streamResponse) {
         // 回复完毕
         await this.response({
           text: pickOne(this.onAIReplied)!,
@@ -229,7 +232,7 @@ export class AISpeaker extends Speaker {
       }
     },
     async (msg, data) => {
-      if (!data.answer) {
+      if (data.res === "error") {
         // 回答异常
         await this.response({
           audio: this.audioError,

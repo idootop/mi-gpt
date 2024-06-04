@@ -80,7 +80,7 @@ class OpenAIClient {
       },
       { signal }
     ).catch((e) => {
-      this._logger.error("openai chat failed", e);
+      this._logger.error("LLM 响应异常", e);
       return null;
     });
     if (requestId) {
@@ -124,7 +124,7 @@ class OpenAIClient {
       messages: [...systemMsg, { role: "user", content: user }],
       response_format: jsonMode ? { type: "json_object" } : undefined,
     }).catch((e) => {
-      this._logger.error("❌ openai chat failed", e);
+      this._logger.error("LLM 响应异常", e);
       return null;
     });
     if (!stream) {

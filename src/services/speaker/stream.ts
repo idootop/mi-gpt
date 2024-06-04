@@ -58,7 +58,7 @@ export class StreamResponse {
   }
 
   private _nextChunkIdx = 0;
-  getNextResponse() {
+  getNextResponse(): { nextSentence?: string; noMore: boolean } {
     if (this._submitCount > 0) {
       // 在请求下一条消息前，提交当前收到的所有消息
       this._batchSubmitImmediately();

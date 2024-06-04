@@ -225,6 +225,9 @@ export class MyBot {
         if (answer) {
           stream.finish(answer);
           options.onFinished?.(answer);
+        } else {
+          stream.finish(answer);
+          stream.cancel();
         }
       });
     return stream;

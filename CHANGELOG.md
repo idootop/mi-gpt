@@ -1,10 +1,25 @@
+# v3.0.0
+
+## ✨ 新功能 & 优化
+
+- 新增 `streamResponse` 流式响应控制开关，确保小爱的回复是完整的句子（[issue#20](https://github.com/idootop/mi-gpt/issues/20)）
+- 添加其他 LLM 的配置教程（比如通义千问，moonshot 等）（[issue#11](https://github.com/idootop/mi-gpt/issues/11)）
+- 添加对支持小爱音箱型号的说明（[issue#14](https://github.com/idootop/mi-gpt/issues/14)）
+- 优化配置文件示例和使用教程（[issue#22](https://github.com/idootop/mi-gpt/issues/22)）
+
+
+## 🐛 修复
+
+- 修复 AI 响应异常时未播放提示语/音的问题
+- 修复提示音链接为空时自动播放音乐的问题
+
 # v2.1.2
 
-- 修复小爱回复无法被终止的问题
+- 修复小爱回复无法被终止的问题（[issue#5](https://github.com/idootop/mi-gpt/issues/5)）
 
 # v2.1.1
 
-- 修复 DB 初始化失败的问题
+- 修复 DB 初始化失败的问题（[issue#17](https://github.com/idootop/mi-gpt/issues/17)）
 - 优化版本号读取方式（import）
 
 # v2.1.0
@@ -15,8 +30,8 @@
 
 # v2.0.1
 
-- 新增 ARMv7 Docker 镜像
-- 新增 debug 开关，用于调试 [issue#14](https://github.com/idootop/mi-gpt/issues/14)
+- 新增 ARMv7 Docker 镜像（[issue#15](https://github.com/idootop/mi-gpt/issues/15)）
+- 新增 debug 开关，用于调试（[issue#14](https://github.com/idootop/mi-gpt/issues/14)）
 
 # v2.0.0
 
