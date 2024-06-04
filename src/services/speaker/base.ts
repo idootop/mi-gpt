@@ -95,7 +95,22 @@ export class BaseSpeaker {
   async initMiServices() {
     this.MiNA = await getMiNA(this.config);
     this.MiIOT = await getMiIOT(this.config);
-    this.logger.assert(!!this.MiNA && !!this.MiIOT, "init Mi Services failed");
+    this.logger.assert(!!this.MiNA && !!this.MiIOT, "初始化 Mi Services 失败");
+    if (this.debug) {
+      const d: any = this.MiIOT!.account?.device;
+      this.logger.debug(
+        "当前设备信息：",
+        jsonEncode(
+          {
+            name: d?.name,
+            desc: d?.desc,
+            model: d?.model,
+            rom: d?.extra?.fw_version,
+          },
+          { prettier: true }
+        )
+      );
+    }
   }
 
   wakeUp() {
