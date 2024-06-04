@@ -78,7 +78,7 @@ main();
 
 ### .migpt.js
 
-重命名本项目根目录下的 `.migpt.example.js` 文件为 `.migpt.js`。
+重命名本项目根目录下的 [.migpt.example.js](https://github.com/idootop/mi-gpt/blob/main/.migpt.example.js) 文件为 `.migpt.js`。
 
 然后，将里面的配置参数修改成你自己的，参数含义如下：
 
@@ -113,7 +113,7 @@ main();
 
 ### 环境变量
 
-重命名本项目根目录下的 `.env.example` 文件为 `.env`。
+重命名本项目根目录下的 [.env.example](https://github.com/idootop/mi-gpt/blob/main/.env.example) 文件为 `.env`。
 
 然后，将里面的环境变量修改成你自己的，参数含义如下：
 
