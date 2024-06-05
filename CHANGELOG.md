@@ -1,3 +1,7 @@
+# v3.0.1
+
+- 修复 README 配置参数表格样式
+
 # v3.0.0
 
 ## ✨ 新功能 & 优化
@@ -6,7 +10,6 @@
 - 添加其他 LLM 的配置教程（比如通义千问，moonshot 等）（[issue#11](https://github.com/idootop/mi-gpt/issues/11)）
 - 添加对支持小爱音箱型号的说明（[issue#14](https://github.com/idootop/mi-gpt/issues/14)）
 - 优化配置文件示例和使用教程（[issue#22](https://github.com/idootop/mi-gpt/issues/22)）
-
 
 ## 🐛 修复
 
