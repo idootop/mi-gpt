@@ -193,6 +193,7 @@ export class AISpeaker extends Speaker {
           });
         },
       },
+      // todo 考虑添加清除上下文指令
       ...this._commands,
       {
         match: (msg) =>
