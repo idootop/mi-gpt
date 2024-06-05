@@ -100,8 +100,6 @@ main();
 | `ttsCommand`                 | 小爱音箱 TTS 指令（[可在此查询](https://home.miot-spec.com)）                              | `[5, 1]`                                           |
 | `wakeUpCommand`              | 小爱音箱唤醒指令（[可在此查询](https://home.miot-spec.com)）                               | `[5, 3]`                                           |
 | **speaker 其他参数（可选）** |
-| `playingCommand`             | 小爱音箱是否在播放中指令（[可在此查询](https://home.miot-spec.com)）                       | `[3, 1, 1]`                                        |
-| `streamResponse`             | 是否启用流式响应（部分小爱音箱型号不支持查询播放状态，此时需要关闭流式响应）               | `true`                                             |
 | `callAIKeywords`             | 当消息以关键词开头时，会调用 AI 来响应用户消息                                             | `["请", "傻妞"]`                                   |
 | `wakeUpKeywords`             | 当消息以关键词开头时，会进入 AI 唤醒状态                                                   | `["召唤傻妞", "打开傻妞"]`                         |
 | `exitKeywords`               | 当消息以关键词开头时，会退出 AI 唤醒状态                                                   | `["退出傻妞", "关闭傻妞"]`                         |
@@ -110,6 +108,8 @@ main();
 | `onAIAsking`                 | AI 开始回答时的提示语                                                                      | `["让我先想想", "请稍等"]`                         |
 | `onAIReplied`                | AI 结束回答时的提示语                                                                      | `["我说完了", "还有其他问题吗"]`                   |
 | `onAIError`                  | AI 回答异常时的提示语                                                                      | `["出错了，请稍后再试吧！"]`                       |
+| `playingCommand`             | 查询小爱音箱是否在播放中指令（[可在此查询](https://home.miot-spec.com)）                       | `[3, 1, 1]`                                        |
+| `streamResponse`             | 是否启用流式响应（部分小爱音箱型号不支持查询播放状态，此时需要关闭流式响应）               | `true`                                             |
 | `exitKeepAliveAfter`         | 无响应一段时间后，多久自动退出唤醒模式（单位秒，默认 30 秒）                               | `30`                                               |
 
 ### 环境变量
