@@ -155,7 +155,7 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 **Q：提示登录小米账号失败，无法正常启动**
 
 1. **账号密码不正确**：小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。
-2. **网络异常**：如果你的账号密码确认配置正确，但依旧提示登录失败，大概率是因为网络异常或当前 IP 小米账号登录被风控（打开[小米账号主页](https://account.xiaomi.com)看看能否登录成功），可以尝试切换代理或等待一段时间（2-24 小时）后再试。[issue#10](https://github.com/idootop/mi-gpt/issues/10)
+2. **网络环境异常**：如果你是在海外服务器等，非中国大陆网络环境下登录小米账号，需要先同意小米的「个人数据跨境传输」协议，然后按照提示验证手机号或邮箱，等待大约 30 分钟之后即可正常登录。[👉 相关教程](https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622)
 
 **Q：小爱音箱收到消息后，没有调用 AI 进行回复**
 
@@ -190,7 +190,7 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 
 如果修改参数后问题仍然存在，说明你的设备不支持通过开放接口查询播放状态（比如：小米音箱 Play 增强版），**此问题无解**。建议更换其他型号的小爱音箱（推荐小爱音箱 Pro），相关 [issue](https://github.com/idootop/mi-gpt/issues/14)。
 
-或者你也可以关闭 `.migpt.js` 配置文件中的流式响应（streamResponse）选项，确保小爱能够回复完整的句子。不过需要注意的是，关闭流式响应后，唤醒模式等功能将失效。
+或者你也可以关闭配置文件中的流式响应（streamResponse）选项，确保小爱能够回复完整的句子。不过需要注意的是，关闭流式响应后，唤醒模式等功能将会失效。
 
 **Q：怎样使用豆包的音色**
 
