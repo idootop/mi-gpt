@@ -63,7 +63,7 @@ import { MiGPT } from "mi-gpt";
 async function main() {
   const client = MiGPT.create({
     speaker: {
-      userId: "944123456", // 注意：不是手机号或邮箱，请在「个人信息」-「小米 ID」查看
+      userId: "987654321", // 注意：不是手机号或邮箱，请在「个人信息」-「小米 ID」查看
       password: "123456", // 账号密码
       did: "小爱音箱Pro", // 小爱音箱 ID 或在米家中设置的名称
     },
@@ -94,7 +94,7 @@ main();
 | `name`                       | 会话群名称                                                                                 | `"魔幻手机"`                                       |
 | `description`                | 会话群简介                                                                                 | `"傻妞和陆小千的私聊"`                             |
 | **speaker**                  |                                                                                            |                                                    |
-| `userId`                     | [小米 ID](https://account.xiaomi.com/fe/service/account/profile)（注意：不是手机号或邮箱） | `"944123456"`                                      |
+| `userId`                     | [小米 ID](https://account.xiaomi.com/fe/service/account/profile)（注意：不是手机号或邮箱） | `"987654321"`                                      |
 | `password`                   | 账户密码                                                                                   | `"123456"`                                         |
 | `did`                        | 小爱音箱 ID 或名称                                                                         | `"小爱音箱 Pro"`                                   |
 | `ttsCommand`                 | 小爱音箱 TTS 指令（[可在此查询](https://home.miot-spec.com)）                              | `[5, 1]`                                           |

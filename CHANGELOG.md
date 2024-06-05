@@ -20,7 +20,7 @@
 # v2.1.1
 
 - 修复 DB 初始化失败的问题（[issue#17](https://github.com/idootop/mi-gpt/issues/17)）
-- 优化版本号读取方式（import）
+- 优化版本号读取方式（import 静态导入）
 
 # v2.1.0
 
