@@ -158,38 +158,13 @@ OPENAI_MODEL=moonshot-v1-8k
 OPENAI_API_KEY=$MOONSHOT_API_KEY
 ```
 
-**Q：启动 docker 提示 ERR_MODULE_NOT_FOUND，无法正常启动**
+**Q：什么是唤醒模式？**
 
-在 Windows 终端（比如：PowerShell、cmd）下，无法使用 `$(pwd)` 获取当前工作目录绝对路径，需要填写 `.env` 和 `.migpt.js` 文件的绝对路径。相关 [issue](https://github.com/idootop/mi-gpt/issues/26#issuecomment-2151381521)
+`唤醒模式` 类似于小爱技能，可能让你在跟小爱互动的时候，无需每句话都要以“小爱同学”开头唤醒。
 
-<details>
-<summary>👉 查看示例</summary>
+通过唤醒词进入后就会开始循环 `mute` 小爱的正常回复（但是可以正常和小爱对话），
 
-请将下面的 `/绝对路径/` 替换为你当前目录的绝对路径：
-
-```shell
-docker run -d --env-file /绝对路径/.env \
-    -v /绝对路径/.migpt.js:/app/.migpt.js \
-    idootop/mi-gpt:latest
-```
-
-Windows PowerShell 终端
-
-```shell
-docker run -d --env-file $pwd\.env `
-    -v $pwd\.migpt.js:/app/.migpt.js `
-    idootop/mi-gpt:latest
-```
-
-Windows cmd 终端
-
-```shell
-docker run -d --env-file %cd%\.env ^
-    -v %cd%\.migpt.js:/app/.migpt.js ^
-    idootop/mi-gpt:latest
-```
-
-</details>
+当超过一段时间没有新对话产生时，会自动退出唤醒状态（也可以通过退出关键词手动触发）。
 
 **Q：提示登录小米账号失败，无法正常启动**
 
@@ -230,6 +205,50 @@ docker run -d --env-file %cd%\.env ^
 如果修改参数后问题仍然存在，说明你的设备不支持通过开放接口查询播放状态（比如：小米音箱 Play 增强版），**此问题无解**。建议更换其他型号的小爱音箱（推荐小爱音箱 Pro），相关 [issue](https://github.com/idootop/mi-gpt/issues/14)。
 
 或者你也可以关闭配置文件中的流式响应（streamResponse）选项，确保小爱能够回复完整的句子。不过需要注意的是，关闭流式响应后，唤醒模式等功能将会失效。
+
+**Q: 为什么小爱音箱会在 AI 回复之前抢话？**
+
+与本项目的实现原理有关。本项目通过轮询小米接口获取最新的对话信息，当检测到小爱在回复的时候会通过播放静音音频等方式快速 mute 掉小爱原来的回复。
+
+但是从小爱开始回复，到上报状态给小米服务云端，再到本项目通过小米云端接口轮训到这个状态变更，会有大约 1 -2 秒的延迟时间，无解。
+
+这个问题，理论上需要通过刷机才能完美解决，可以参考下面相关的讨论：
+
+- https://github.com/yihong0618/xiaogpt/issues/515#issuecomment-2121602572
+- https://github.com/idootop/mi-gpt/issues/21#issuecomment-2147125219
+
+**Q：启动 docker 提示 ERR_MODULE_NOT_FOUND，无法正常启动**
+
+在 Windows 终端（比如：PowerShell、cmd）下，无法使用 `$(pwd)` 获取当前工作目录绝对路径，需要填写 `.env` 和 `.migpt.js` 文件的绝对路径。相关 [issue](https://github.com/idootop/mi-gpt/issues/26#issuecomment-2151381521)
+
+<details>
+<summary>👉 查看示例</summary>
+
+请将下面的 `/绝对路径/` 替换为你当前目录的绝对路径：
+
+```shell
+docker run -d --env-file /绝对路径/.env \
+    -v /绝对路径/.migpt.js:/app/.migpt.js \
+    idootop/mi-gpt:latest
+```
+
+Windows PowerShell 终端
+
+```shell
+docker run -d --env-file $pwd\.env `
+    -v $pwd\.migpt.js:/app/.migpt.js `
+    idootop/mi-gpt:latest
+```
+
+Windows cmd 终端
+
+```shell
+docker run -d --env-file %cd%\.env ^
+    -v %cd%\.migpt.js:/app/.migpt.js ^
+    idootop/mi-gpt:latest
+```
+
+</details>
 
 **Q：我 Clone 了这个仓库，但是本地启动失败**
 
