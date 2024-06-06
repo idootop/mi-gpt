@@ -231,6 +231,16 @@ docker run -d --env-file %cd%\.env ^
 
 或者你也可以关闭配置文件中的流式响应（streamResponse）选项，确保小爱能够回复完整的句子。不过需要注意的是，关闭流式响应后，唤醒模式等功能将会失效。
 
+**Q：我 Clone 了这个仓库，但是本地启动失败**
+
+如果你是通过 clone 本项目仓库的方式来运行，记得在 `start` 之前先 `build` 一下。
+
+```shell
+pnpm install && pnpm build && pnpm start
+```
+
+另外， `start` 命令默认没有注入 `.env` 文件里的环境变量。你可以在 VS Code 里按 F5 直接运行，会自动读取 `.env` ，或者将启动脚本改为 `node --env-file=.env app.js`。
+
 **Q：怎样使用豆包的音色**
 
 此功能需要豆包 TTS 接口支持，本项目暂不对外提供此服务。
