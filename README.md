@@ -166,6 +166,8 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 
 当超过一段时间没有新对话产生时，会自动退出唤醒状态（也可以通过退出关键词手动触发）。
 
+关于唤醒模式的更多细节，请查看这里：https://github.com/idootop/mi-gpt/issues/28
+
 **Q：提示登录小米账号失败，无法正常启动**
 
 1. **账号密码不正确**：小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。
