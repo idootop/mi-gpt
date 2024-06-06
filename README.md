@@ -78,7 +78,7 @@ main();
 
 注意：此模式下并不会主动读取 `.env` 和 `.migpt.json` 中的配置信息，你需要自己初始化 Node 环境变量，
 
-并将 `.migpt.json` 中的参数作为 `MiGPT.create` 的初始化参数传入，👉 [示例代码](https://github.com/idootop/mi-gpt/blob/example/index.ts)。
+并将 `.migpt.json` 中的参数作为 `MiGPT.create` 的初始化参数传入。👉 [示例代码](https://github.com/idootop/mi-gpt/blob/example/index.ts)
 
 ## ⚙️ 配置参数
 
@@ -162,10 +162,6 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 
 `唤醒模式` 类似于小爱技能，可能让你在跟小爱互动的时候，无需每句话都要以“小爱同学”开头唤醒。
 
-通过唤醒词进入后就会开始循环 `mute` 小爱的正常回复（但是可以正常和小爱对话），
-
-当超过一段时间没有新对话产生时，会自动退出唤醒状态（也可以通过退出关键词手动触发）。
-
 关于唤醒模式的更多细节，请查看这里：https://github.com/idootop/mi-gpt/issues/28
 
 **Q：提示登录小米账号失败，无法正常启动**
@@ -208,13 +204,13 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 
 或者你也可以关闭配置文件中的流式响应（streamResponse）选项，确保小爱能够回复完整的句子。不过需要注意的是，关闭流式响应后，唤醒模式等功能将会失效。
 
-**Q: 为什么小爱音箱会在 AI 回复之前抢话？**
+**Q: 为什么小爱音箱会在 AI 回答之前抢话？**
 
 与本项目的实现原理有关。本项目通过轮询小米接口获取最新的对话信息，当检测到小爱在回复的时候会通过播放静音音频等方式快速 mute 掉小爱原来的回复。
 
-但是从小爱开始回复，到上报状态给小米服务云端，再到本项目通过小米云端接口轮训到这个状态变更，会有大约 1 -2 秒的延迟时间，无解。
+但是从小爱开始回复，到上报状态给小米服务云端，再到本项目通过小米云端接口轮训到这个状态变更，中间会有大约 1 -2 秒的延迟时间，无解。
 
-这个问题，理论上需要通过刷机才能完美解决，可以参考下面相关的讨论：
+这个问题，理论上需要通过刷机才能完美解决，可以参考下面的相关讨论：
 
 - https://github.com/yihong0618/xiaogpt/issues/515#issuecomment-2121602572
 - https://github.com/idootop/mi-gpt/issues/21#issuecomment-2147125219
@@ -260,7 +256,11 @@ docker run -d --env-file %cd%\.env ^
 pnpm install && pnpm build && pnpm start
 ```
 
-另外， `start` 命令默认没有注入 `.env` 文件里的环境变量。你可以在 VS Code 里按 F5 直接运行，会自动读取 `.env` ，或者将启动脚本改为 `node --env-file=.env app.js`。
+另外， `start` 命令默认没有注入 `.env` 文件里的环境变量。你可以在 VS Code 里按 F5 直接运行，会自动读取 `.env` ，或者将启动脚本改为：
+
+```shell
+node --env-file=.env app.js
+```
 
 **Q：怎样使用豆包的音色**
 
