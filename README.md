@@ -57,7 +57,7 @@ docker run -d  --env-file $(pwd)/.env \
 npm install mi-gpt # 安装依赖
 ```
 
-然后，创建并启动 `MiGPT` 实例。初始化参数请看下面的[「配置参数」](#%EF%B8%8F-配置参数)章节。
+然后，创建并启动 `MiGPT` 实例。初始化参数的具体含义请看下面的[「配置参数」](#%EF%B8%8F-配置参数)章节。
 
 ```typescript
 import { MiGPT } from "mi-gpt";
@@ -75,6 +75,10 @@ async function main() {
 
 main();
 ```
+
+注意：此模式下并不会主动读取 `.env` 和 `.migpt.json` 中的配置信息，你需要自己初始化 Node 环境变量，
+
+并将 `.migpt.json` 中的参数作为 `MiGPT.create` 的初始化参数传入，👉 [示例代码](https://github.com/idootop/mi-gpt/blob/example/index.ts)。
 
 ## ⚙️ 配置参数
 
@@ -125,8 +129,8 @@ main();
 | **OpenAI**             |                                                                                             |                                      |
 | `OPENAI_API_KEY`       | OpenAI API 密钥                                                                             | `abc123`                             |
 | `OPENAI_MODEL`         | 使用的 OpenAI 模型                                                                          | `gpt-4o`                             |
-| `AZURE_OPENAI_API_KEY` | 可选，[Microsoft Azure OpenAI](https://www.npmjs.com/package/openai#microsoft-azure-openai) | `abc123`                             |
 | `OPENAI_BASE_URL`      | 可选，OpenAI API BaseURL                                                                    | `https://api.openai.com/v1`          |
+| `AZURE_OPENAI_API_KEY` | 可选，[Microsoft Azure OpenAI](https://www.npmjs.com/package/openai#microsoft-azure-openai) | `abc123`                             |
 | **提示音效（可选）**   |                                                                                             |                                      |
 | `AUDIO_SILENT`         | 静音音频链接                                                                                | `"https://example.com/slient.wav"`   |
 | `AUDIO_BEEP`           | 默认提示音链接                                                                              | `"https://example.com/beep.wav"`     |
