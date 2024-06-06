@@ -18,6 +18,10 @@
 
 而小爱音箱就像是你的智能家居专属管家，全心全意为你服务，释放智能家居的真正潜力。
 
+## 👀 项目预览
+
+<video src='https://github.com/idootop/mi-gpt/assets/35302658/dc336916-9087-418b-bc1b-04d5534dce8f'></video>
+
 ## ✨ 项目亮点
 
 - **🎓 LLM 回答**。想象一下，你的小爱音箱变身聊天高手，可以使用 [ChatGPT](https://chat.openai.com) 等大模型来回答你的问题。
