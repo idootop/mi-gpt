@@ -16,7 +16,7 @@
 
 这些独立的智能体，也可以彼此感知，彼此配合，构成一个更强大的协作网络。
 
-而小爱音箱就像是你的智能家居专属管家，全心全意为你服务，释放智能家居真正的潜力。
+而小爱音箱就像是你的智能家居专属管家，全心全意为你服务，释放智能家居的真正潜力。
 
 ## ✨ 项目亮点
 
@@ -44,6 +44,8 @@ docker run -d  --env-file $(pwd)/.env \
     -v $(pwd)/.migpt.js:/app/.migpt.js \
     idootop/mi-gpt:latest
 ```
+
+注意：在 Windows 终端下不支持使用 `$(pwd)` 获取当前工作路径，需要将配置文件路径替换为绝对路径。
 
 ### Node.js
 
@@ -108,7 +110,7 @@ main();
 | `onAIAsking`                 | AI 开始回答时的提示语                                                                      | `["让我先想想", "请稍等"]`                         |
 | `onAIReplied`                | AI 结束回答时的提示语                                                                      | `["我说完了", "还有其他问题吗"]`                   |
 | `onAIError`                  | AI 回答异常时的提示语                                                                      | `["出错了，请稍后再试吧！"]`                       |
-| `playingCommand`             | 查询小爱音箱是否在播放中指令（[可在此查询](https://home.miot-spec.com)）                       | `[3, 1, 1]`                                        |
+| `playingCommand`             | 查询小爱音箱是否在播放中指令（[可在此查询](https://home.miot-spec.com)）                   | `[3, 1, 1]`                                        |
 | `streamResponse`             | 是否启用流式响应（部分小爱音箱型号不支持查询播放状态，此时需要关闭流式响应）               | `true`                                             |
 | `exitKeepAliveAfter`         | 无响应一段时间后，多久自动退出唤醒模式（单位秒，默认 30 秒）                               | `30`                                               |
 
@@ -152,6 +154,39 @@ OPENAI_MODEL=moonshot-v1-8k
 OPENAI_API_KEY=$MOONSHOT_API_KEY
 ```
 
+**Q：启动 docker 提示 ERR_MODULE_NOT_FOUND，无法正常启动**
+
+在 Windows 终端（比如：PowerShell、cmd）下，无法使用 `$(pwd)` 获取当前工作目录绝对路径，需要填写 `.env` 和 `.migpt.js` 文件的绝对路径。相关 [issue](https://github.com/idootop/mi-gpt/issues/26#issuecomment-2151381521)
+
+<details>
+<summary>👉 查看示例</summary>
+
+请将下面的 `/绝对路径/` 替换为你当前目录的绝对路径：
+
+```shell
+docker run -d --env-file /绝对路径/.env \
+    -v /绝对路径/.migpt.js:/app/.migpt.js \
+    idootop/mi-gpt:latest
+```
+
+Windows PowerShell 终端
+
+```shell
+docker run -d --env-file $pwd\.env `
+    -v $pwd\.migpt.js:/app/.migpt.js `
+    idootop/mi-gpt:latest
+```
+
+Windows cmd 终端
+
+```shell
+docker run -d --env-file %cd%\.env ^
+    -v %cd%\.migpt.js:/app/.migpt.js ^
+    idootop/mi-gpt:latest
+```
+
+</details>
+
 **Q：提示登录小米账号失败，无法正常启动**
 
 1. **账号密码不正确**：小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。
@@ -159,11 +194,11 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 
 **Q：小爱音箱收到消息后，没有调用 AI 进行回复**
 
-`MiGPT` 收到消息默认不会调用 AI 进行回复，只会回复以唤醒词（`callAIKeywords`）开头的消息，比如：“请问 xxx”、“你 xxx” 等，你也可以自定义唤醒词列表。
+`MiGPT` 收到消息默认不会调用 AI 进行回复，只会回复以唤醒词开头的消息，比如：“请问 xxx”、“你 xxx” 等，你也可以自定义唤醒词（`callAIKeywords`）列表。
 
 **Q：小爱音箱没有播放 AI 的回答，但控制台有打印 AI 的回复**
 
-不同型号的小爱音箱 TTS 指令不同: [https://github.com/idootop/mi-gpt/issues/5](https://github.com/idootop/mi-gpt/issues/5#issuecomment-2122881495)
+不同型号的小爱音箱 TTS 指令不同: [issues#5](https://github.com/idootop/mi-gpt/issues/5#issuecomment-2122881495)
 
 请到 <https://home.miot-spec.com> 查询具体指令，并修改配置文件中的 `ttsCommand` 参数。
 
