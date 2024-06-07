@@ -4,6 +4,7 @@
 
 ## 🔥 Hotfix
 
+- 修复提示语和提示音链接都为空时，不播放提示音。https://github.com/idootop/mi-gpt/issues/30#issuecomment-2153786207
 - 修复因没有配置环境变量，而导致没有初始化成功 OpenAI 使程序崩溃。 https://github.com/idootop/mi-gpt/issues/30#issuecomment-2153753279
 - 修复唤醒模式下，重新匹配唤醒词时，应该走询问 AI 的流程。([issues#25](https://github.com/idootop/mi-gpt/issues/25))
 - 修复使用提示音链接时，小爱回答完毕后，仍然重复播放文字提示语的问题。
