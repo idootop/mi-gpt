@@ -21,6 +21,7 @@
   ],
   "scripts": {
     "start": "node ./app.js",
+    "dev": "node --env-file=.env ./app.js",
     "build": "npx -y prisma generate && tsup",
     "db:gen": "npx -y prisma migrate dev --name init",
     "db:reset": "rm -f .mi.json .bot.json prisma/app.db prisma/app.db-journal",
