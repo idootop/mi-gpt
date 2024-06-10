@@ -84,7 +84,7 @@ main();
 
 ## 📖 项目文档
 
-更多配置教程和使用说明，请参考下方文档。
+以下为更详细的使用教程，大多数问题都可在 [💬 常见问题](https://github.com/idootop/mi-gpt/blob/main/docs/faq.md) 中找到答案。
 
 - [⚙️ 参数设置](https://github.com/idootop/mi-gpt/blob/main/docs/settings.md)
 - [💬 常见问题](https://github.com/idootop/mi-gpt/blob/main/docs/faq.md)
@@ -92,8 +92,6 @@ main();
 - [💎 工作原理](https://github.com/idootop/mi-gpt/blob/main/docs/how-it-works.md)
 - [✨ 更新日志](https://github.com/idootop/mi-gpt/blob/main/docs/changelog.md)
 - [🚀 Roadmap](https://github.com/idootop/mi-gpt/blob/main/docs/roadmap.md)
-
-> 提示：大多数的问题都可以在「[💬 常见问题](https://github.com/idootop/mi-gpt/blob/main/docs/faq.md)」中找到答案。
 
 ## 🚨 免责声明
 

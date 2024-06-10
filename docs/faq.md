@@ -24,8 +24,8 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 
 ### Q：提示登录小米账号失败，无法正常启动
 
-1. ## 账号密码不正确：小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。
-2. ## 网络环境异常：如果你是在海外服务器等，非中国大陆网络环境下登录小米账号，需要先同意小米的「个人数据跨境传输」协议，然后按照提示验证手机号或邮箱，等待大约 30 分钟之后即可正常登录。[👉 相关教程](https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622)
+1. **账号密码不正确**：小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。
+2. **网络环境异常**：如果你是在海外服务器等，非中国大陆网络环境下登录小米账号，需要先同意小米的「个人数据跨境传输」协议，然后按照提示验证手机号或邮箱，等待大约 30 分钟之后即可正常登录。[👉 相关教程](https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622)
 
 ### Q：小爱音箱收到消息后，没有调用 AI 进行回复
 
