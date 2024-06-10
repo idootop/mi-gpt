@@ -34,7 +34,8 @@
 ## ❤️ 感谢
 
 - @shaoyi1991 补充的关于项目启动和国内配置 docker 镜像的说明。 https://github.com/idootop/mi-gpt/issues/28
-- @shog86 协助调试 Azure OpenAI 相关的配置参数 https://github.com/idootop/mi-gpt/pull/34
+- @shog86 协助调试 Azure OpenAI Service 相关的配置参数 https://github.com/idootop/mi-gpt/pull/34
+- @otkHsiao 反馈 Azure OpenAI Service 配置 deployment 的问题 https://github.com/idootop/mi-gpt/pull/34#issuecomment-2156068725
 - @siseboy 提供群晖 docker 使用教程 https://github.com/idootop/mi-gpt/issues/41
 - @moffefei 提供的 Windows 下 docker 启动命令的示例 https://github.com/idootop/mi-gpt/issues/45
 

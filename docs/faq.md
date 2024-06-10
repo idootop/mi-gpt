@@ -106,6 +106,19 @@ docker run -d --env-file %cd%\.env ^
 
 </details>
 
+### Q：是否支持 Azure OpenAI，如何配置？
+
+如果你想使用 [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/ai-services/openai-service)，可通过配置以下环境变量开启：
+
+```shell
+OPENAI_API_VERSION=2024-04-01-preview
+AZURE_OPENAI_API_KEY=你的密钥
+AZURE_OPENAI_ENDPOINT=https://你的资源名.openai.azure.com
+AZURE_OPENAI_DEPLOYMENT=你的模型部署名，比如：gpt-35-turbo-instruct
+```
+
+注意：Azure OpenAI Studio 部署页面显示的模型版本号，可能并非实际的 `OPENAI_API_VERSION` 值。请打开模型 Play Ground 页面，选择你想用的部署（模型），然后点击示例代码，查看里面的 `api_version` 并替换上面的 `OPENAI_API_VERSION` 的值。
+
 ### Q：怎样使用豆包的音色
 
 此功能需要豆包 TTS 接口支持，本项目暂不对外提供此服务。

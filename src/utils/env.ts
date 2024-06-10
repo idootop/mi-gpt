@@ -5,4 +5,5 @@ export const kEnvs: Partial<{
   OPENAI_MODEL: string;
   OPENAI_API_KEY: string;
   AZURE_OPENAI_API_KEY: string;
+  AZURE_OPENAI_DEPLOYMENT: string;
 }> = process.env as any;
