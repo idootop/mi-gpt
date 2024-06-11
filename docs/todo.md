@@ -13,9 +13,9 @@
 ## 💪 优化
 
 - 优化 unWakeUp 小爱的流程，增加指令间的执行间隔，降低 ROM 端无响应问题的出现概率。https://github.com/idootop/mi-gpt/issues/32
-- 优化 debug 日志输出，添加 wakeUp、unWakeUp、env 等关键流程和核心数据的打印。
+- ✅ 优化 debug 日志输出，添加 wakeUp、unWakeUp、env 等关键流程和核心数据的打印。
 
-## 📒 文档 FAQ
+## 📒 文档
 
 - ✅ 优化关于小米账号安全验证相关的提示语和使用说明。https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622
 - ✅ 优化关于 Azure OpenAI 配置的说明。https://github.com/idootop/mi-gpt/issues/7
@@ -34,7 +34,6 @@
 - ✅ 添加关于 OpenAI gpt4 模型不存在的相关说明
 - ✅ 添加关于唤醒小爱、唤醒词、唤醒模式的说明和注意事项。
 - ✅ 添加关于 playingCommand 的详细说明，默认不需要配置。
-- 添加常见小爱音箱型号的支持情况和参数列表。
 
 ## ❤️ 感谢
 
@@ -54,3 +53,7 @@
 - 支持火山引擎 TTS 和音色切换能力
 - 开放 System Prompt 自定义能力
 - 添加更详细的使用和配置视频教程
+
+## 💪 优化
+
+- 添加常见小爱音箱型号的支持情况和参数列表。

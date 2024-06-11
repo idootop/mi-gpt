@@ -126,7 +126,15 @@ export class BaseSpeaker {
     if (this.debug) {
       const d: any = this.MiIOT!.account?.device;
       this.logger.debug(
-        "当前设备信息：",
+        "配置参数：",
+        jsonEncode(this.config, { prettier: true })
+      );
+      this.logger.debug(
+        "环境变量：",
+        jsonEncode(process.env, { prettier: true })
+      );
+      this.logger.debug(
+        "设备信息：",
         jsonEncode(
           {
             name: d?.name,
@@ -141,10 +149,16 @@ export class BaseSpeaker {
   }
 
   wakeUp() {
+    if (this.debug) {
+      this.logger.debug("wakeUp");
+    }
     return this.MiIOT!.doAction(...this.wakeUpCommand);
   }
 
   async unWakeUp() {
+    if (this.debug) {
+      this.logger.debug("unWakeUp");
+    }
     // 通过 TTS 不发音文本，使小爱退出唤醒状态
     await this.MiNA!.pause();
     await this.MiIOT!.doAction(...this.ttsCommand, kAreYouOK);
@@ -208,6 +222,9 @@ export class BaseSpeaker {
           if (replyText.length < 1) {
             // 播放开始提示音
             if (playSFX && this.audioBeep) {
+              if (this.debug) {
+                this.logger.debug("开始播放提示音");
+              }
               await this.MiNA!.play({ url: this.audioBeep });
             }
             // 在播放 TTS 语音之前，先取消小爱音箱的唤醒状态，防止将 TTS 语音识别成用户指令
@@ -232,6 +249,9 @@ export class BaseSpeaker {
           if (replyText.length > 0) {
             // 播放结束提示音
             if (playSFX && this.audioBeep) {
+              if (this.debug) {
+                this.logger.debug("结束播放提示音");
+              }
               await this.MiNA!.play({ url: this.audioBeep });
             }
           }
@@ -289,6 +309,9 @@ export class BaseSpeaker {
       this.logger.log("🔊 " + (ttsText ?? audio));
       // 播放开始提示音
       if (playSFX && this.audioBeep) {
+        if (this.debug) {
+          this.logger.debug("开始播放提示音（inner）");
+        }
         await this.MiNA!.play({ url: this.audioBeep });
       }
       // 在播放 TTS 语音之前，先取消小爱音箱的唤醒状态，防止将 TTS 语音识别成用户指令
@@ -343,6 +366,9 @@ export class BaseSpeaker {
       }
       // 播放结束提示音
       if (playSFX && this.audioBeep) {
+        if (this.debug) {
+          this.logger.debug("结束播放提示音（inner）");
+        }
         await this.MiNA!.play({ url: this.audioBeep });
       }
       // 保持唤醒状态
