@@ -12,7 +12,7 @@
 
 ## 💪 优化
 
-- 优化 unWakeUp 小爱的流程，增加指令间的执行间隔，降低 ROM 端无响应问题的出现概率。https://github.com/idootop/mi-gpt/issues/32
+- ✅ 优化 unWakeUp 小爱流程，增加指令间的执行间隔，降低 ROM 端无响应问题的出现概率。https://github.com/idootop/mi-gpt/issues/32
 - ✅ 优化 debug 日志输出，添加 wakeUp、unWakeUp、env 等关键流程和核心数据的打印。
 
 ## 📒 文档

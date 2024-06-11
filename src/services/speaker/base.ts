@@ -161,7 +161,9 @@ export class BaseSpeaker {
     }
     // 通过 TTS 不发音文本，使小爱退出唤醒状态
     await this.MiNA!.pause();
+    await sleep(100);
     await this.MiIOT!.doAction(...this.ttsCommand, kAreYouOK);
+    await sleep(100);
   }
 
   audioBeep?: string;
@@ -405,7 +407,8 @@ export class BaseSpeaker {
   async switchDefaultSpeaker(speaker: string) {
     const speakersAPI = process.env.SPEAKERS_DOUBAO;
     if (!this._doubaoSpeakers && speakersAPI) {
-      const res = await (await fetch(speakersAPI)).json();
+      const resp = await fetch(speakersAPI).catch(() => null);
+      const res = await resp?.json().catch(() => null);
       if (Array.isArray(res)) {
         this._doubaoSpeakers = res;
       }
