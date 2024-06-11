@@ -53,6 +53,6 @@ export default {
     // 是否启用流式响应，部分小爱音箱型号不支持查询播放状态，此时需要关闭流式响应
     streamResponse: true,
     // 查询是否在播放中指令，请到 https://home.miot-spec.com 查询具体指令
-    // playingCommand: [3, 1, 1],
+    // playingCommand: [3, 1, 1], // 默认无需配置此参数，播放出现问题时再尝试开启
   },
 };
