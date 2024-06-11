@@ -144,7 +144,10 @@ export class AISpeaker extends Speaker {
       return;
     }
     // 回应
-    await this.response({ text: pickOne(this.onEnterAI)!, keepAlive: true });
+    const text = pickOne(this.onEnterAI);
+    if (text) {
+      await this.response({ text, keepAlive: true });
+    }
     // 唤醒
     await super.enterKeepAlive();
   }
@@ -153,11 +156,10 @@ export class AISpeaker extends Speaker {
     // 退出唤醒状态
     await super.exitKeepAlive();
     // 回应
-    await this.response({
-      text: pickOne(this.onExitAI)!,
-      keepAlive: false,
-      playSFX: false,
-    });
+    const text = pickOne(this.onExitAI);
+    if (text) {
+      await this.response({ text, keepAlive: false, playSFX: false });
+    }
     await this.unWakeUp();
   }
 
@@ -207,10 +209,10 @@ export class AISpeaker extends Speaker {
   private _askAIForAnswerSteps: AnswerStep[] = [
     async (msg, data) => {
       // 思考中
-      await this.response({
-        audio: this.audioActive,
-        text: pickOne(this.onAIAsking)!,
-      });
+      const text = pickOne(this.onAIAsking);
+      if (text) {
+        await this.response({ text, audio: this.audioActive });
+      }
     },
     async (msg, data) => {
       // 调用 AI 获取回复
@@ -232,18 +234,19 @@ export class AISpeaker extends Speaker {
         this.streamResponse
       ) {
         // 回复完毕
-        await this.response({
-          text: pickOne(this.onAIReplied)!,
-        });
+        const text = pickOne(this.onAIReplied);
+        if (text) {
+          await this.response({ text });
+        }
       }
     },
     async (msg, data) => {
       if (data.res === "error") {
         // 回答异常
-        await this.response({
-          audio: this.audioError,
-          text: pickOne(this.onAIError)!,
-        });
+        const text = pickOne(this.onAIError);
+        if (text) {
+          await this.response({ text, audio: this.audioError });
+        }
       }
     },
     async (msg, data) => {

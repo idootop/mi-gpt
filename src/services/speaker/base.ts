@@ -196,6 +196,10 @@ export class BaseSpeaker {
     } = options ?? {};
     options.hasNewMsg ??= this.checkIfHasNewMsg().hasNewMsg;
 
+    if (!text && !stream && !audio) {
+      return;
+    }
+
     const doubaoTTS = process.env.TTS_DOUBAO;
     if (!doubaoTTS) {
       tts = "xiaoai"; // 没有提供豆包语音接口时，只能使用小爱自带 TTS
