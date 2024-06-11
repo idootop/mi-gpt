@@ -18,10 +18,25 @@
 
 ### Q：提示“ERR_MODULE_NOT_FOUND”，无法正常启动
 
-在 Windows 终端（比如：PowerShell、cmd）下，无法使用 `$(pwd)` 获取当前工作目录绝对路径，需要填写 `.env` 和 `.migpt.js` 文件的绝对路径，相关 [issue](https://github.com/idootop/mi-gpt/issues/45)。示例：
+配置文件 `.migpt.js` 不存在或有错误。检查 docker 下是否存在 `/app/.migpt.js` 文件以及内容是否正确，相关 [issue](https://github.com/idootop/mi-gpt/issues/45)。
+
+注意：在 Windows 终端（比如：PowerShell、cmd）下启动 docker 时，无法使用 `$(pwd)` 获取当前工作目录绝对路径，需要填写 `.env` 和 `.migpt.js` 文件的绝对路径。示例：
 
 ```shell
 docker run --env-file D:/hello/mi-gpt/.env -v D:/hello/mi-gpt/.migpt.js:/app/.migpt.js idootop/mi-gpt:latest
+```
+
+### Q：提示“找不到设备：xxx”，初始化 Mi Services 失败
+
+填写的设备 did 不存在，请检查设备名称是否和米家中的一致。相关 [issue](https://github.com/idootop/mi-gpt/issues/30)。
+
+常见错误设备名称的示例：
+
+```js
+// 错别字：响 -> 箱
+❌ 小爱音响 -> ✅ 小爱音箱
+// 多余的空格
+❌ 小爱音箱 Pro -> ✅ 小爱音箱Pro
 ```
 
 ## 🔊 播放异常类问题
