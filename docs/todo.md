@@ -4,7 +4,7 @@
 
 ## 🔥 Hotfix
 
-- 修复 MIoT 和 Mina 接口查询到的设备名称不一致的问题。https://github.com/idootop/mi-gpt/issues/62
+- ✅ 修复 MIoT 和 Mina 接口查询到的设备名称不一致的问题。https://github.com/idootop/mi-gpt/issues/62
 - 提示语列表为空时，不播放提示语。
 - 提示语和提示音链接都为空时，不播放提示音。https://github.com/idootop/mi-gpt/issues/30#issuecomment-2153786207
 - 修复因没有配置环境变量，而导致没有初始化成功 OpenAI 使程序崩溃。 https://github.com/idootop/mi-gpt/issues/30#issuecomment-2153753279

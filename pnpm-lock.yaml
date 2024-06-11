@@ -18,8 +18,8 @@ importers:
         specifier: ^7.0.4
         version: 7.0.4
       mi-service-lite:
-        specifier: ^2.4.0
-        version: 2.4.0
+        specifier: ^2.5.0
+        version: 2.5.0
       openai:
         specifier: ^4.47.3
         version: 4.47.3
@@ -803,8 +803,8 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  mi-service-lite@2.4.0:
-    resolution: {integrity: sha512-imV+UcU9/+LWVZooKVZ93LFOsuDt+bNp6DlfneWTC5D9HP4wrGfsaa9aDDPEIn0Y3yJSnfz8PX3lI+T1+qQbUg==}
+  mi-service-lite@2.5.0:
+    resolution: {integrity: sha512-wrXxOUoR54QQRNiU7qZB0OqC20E1gO+eFw7W9ftsr8QkdmLyq+ewrCaT6QsSg1pObPAlZopb2Qci6PRBptdPzg==}
     engines: {node: '>=16'}
 
   micromatch@4.0.5:
@@ -1741,7 +1741,7 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  mi-service-lite@2.4.0:
+  mi-service-lite@2.5.0:
     dependencies:
       axios: 1.6.8
       pako: 2.1.0
