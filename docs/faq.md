@@ -8,13 +8,13 @@
 
 ### Q：提示“70016：登录验证失败”，无法正常启动
 
-账号密码不正确。注意小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。👉 相关 [issue](https://github.com/idootop/mi-gpt/issues/10)。
+账号密码不正确。注意小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看，相关 [issue](https://github.com/idootop/mi-gpt/issues/10)。
 
 ### Q：提示“login failed &&&START&&&{"notificationUrl”，无法正常启动
 
-这个提示是因为你的小米账号触发了异地登录保护，需要手动安全验证。只需打开小米官网登录你的小米账号，手动通过安全验证即可，然后等待大约 30 分钟之后即可正常登录。
+小米账号触发了异地登录保护，需要先通过安全验证。打开小米官网登录你的小米账号，手动通过安全验证，然后等待 30 分钟左右应该就可以正常登录了。
 
-注意：最好使用和你运行 docker 相同的网络环境，如果你是在海外服务器等，非中国大陆网络环境下登录小米账号，需要先同意小米的「个人数据跨境传输」协议。[👉 相关教程](https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622)
+注意：最好使用和你运行 docker 相同的网络环境，如果你是在海外服务器等非中国大陆网络环境下登录小米账号，需要先同意小米的「个人数据跨境传输」协议。[👉 相关教程](https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622)
 
 ### Q：提示“ERR_MODULE_NOT_FOUND”，无法正常启动
 
@@ -29,6 +29,26 @@ docker run --env-file D:/hello/mi-gpt/.env -v D:/hello/mi-gpt/.migpt.js:/app/.mi
 ### Q：小爱音箱收到消息后，没有调用 AI 进行回复
 
 `MiGPT` 收到消息默认不会调用 AI 进行回复，只会回复以唤醒词开头的消息，比如：“请问 xxx”、“你 xxx” 等，你也可以自定义唤醒词（`callAIKeywords`）列表。
+
+```js
+// .migpt.js
+export default {
+  speaker: {
+    // 当消息以下面的关键词开头时，会调用 AI 来回复消息
+    callAIKeywords: ["请", "你", "傻妞"],
+    // ...
+  },
+};
+```
+
+注意：你需要先召唤小爱同学，而非直接对小爱音箱说：“请你 xxx”，这样是无效的，因为还没有唤醒小爱同学，你说的话她接收不到。
+
+```shell
+// ❌ 错误示范
+请问地球为什么是圆的？
+// ✅ 正确示范
+小爱同学，请问地球为什么是圆的？
+```
 
 ### Q：小爱音箱没有播放 AI 的回答，但控制台有打印 AI 的回复
 

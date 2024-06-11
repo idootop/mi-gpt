@@ -19,6 +19,7 @@
 
 - ✅ 优化关于小米账号安全验证相关的提示语和使用说明。https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622
 - ✅ 优化关于 Azure OpenAI 配置的说明。https://github.com/idootop/mi-gpt/issues/7
+- ✅ 优化调用 AI 进行回复的相关说明和示例。
 - 优化找不到小爱设备的提示文案以及 FAQ 教程。https://github.com/idootop/mi-gpt/issues/28#issuecomment-2153645819
 - 添加关于唤醒小爱、唤醒词、唤醒模式的说明和注意事项。
 - ✅ 添加关于 clone 项目本地运行的相关配置教程。
