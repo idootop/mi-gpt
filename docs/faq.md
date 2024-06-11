@@ -126,18 +126,9 @@ OPENAI_MODEL=moonshot-v1-8k
 OPENAI_API_KEY=$MOONSHOT_API_KEY
 ```
 
-### Q：是否支持 Azure OpenAI，如何配置？
+### Q：提示“LLM 响应异常 404 The model `gpt-4o` does not exist”
 
-如果你想使用 [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/ai-services/openai-service)，可通过配置以下环境变量开启：
-
-```shell
-OPENAI_API_VERSION=2024-04-01-preview
-AZURE_OPENAI_API_KEY=你的密钥
-AZURE_OPENAI_ENDPOINT=https://你的资源名.openai.azure.com
-AZURE_OPENAI_DEPLOYMENT=你的模型部署名，比如：gpt-35-turbo-instruct
-```
-
-注意：Azure OpenAI Studio 部署页面显示的模型版本号，可能并非实际的 `OPENAI_API_VERSION` 值。请打开模型 Play Ground 页面，选择你想用的部署（模型），然后点击示例代码，查看里面的 `api_version` 并替换上面的 `OPENAI_API_VERSION` 的值。
+当前 OpenAI 账号没有使用 `gpt-4` 系列模型的权限，请切换到 `gpt-3` 系列模型，比如：`gpt-3.5-turbo`，相关 [issue](https://github.com/idootop/mi-gpt/issues/30#issuecomment-2154656498)。
 
 ### Q：提示“LLM 响应异常，401 Invalid Authentication”
 
@@ -150,6 +141,19 @@ AZURE_OPENAI_DEPLOYMENT=你的模型部署名，比如：gpt-35-turbo-instruct
 ### Q：提示“LLM 响应异常，404 Not Found”
 
 模型路径不存在或者代理 IP 被风控。请检查 `OPENAI_BASEURL` 等环境变量是否配置正确，或切换代理节点后重试，相关 [issue](https://github.com/idootop/mi-gpt/issues/43)。
+
+### Q：是否支持 Azure OpenAI，如何配置？
+
+如果你想使用 [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/ai-services/openai-service)，可通过配置以下环境变量开启：
+
+```shell
+OPENAI_API_VERSION=2024-04-01-preview
+AZURE_OPENAI_API_KEY=你的密钥
+AZURE_OPENAI_ENDPOINT=https://你的资源名.openai.azure.com
+AZURE_OPENAI_DEPLOYMENT=你的模型部署名，比如：gpt-35-turbo-instruct
+```
+
+注意：Azure OpenAI Studio 部署页面显示的模型版本号，可能并非实际的 `OPENAI_API_VERSION` 值。请打开模型 Play Ground 页面，选择你想用的部署（模型），然后点击示例代码，查看里面的 `api_version` 并替换上面的 `OPENAI_API_VERSION` 的值。
 
 ## 🚗 运行原理类问题
 
