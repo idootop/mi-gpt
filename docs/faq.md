@@ -96,6 +96,18 @@ export default {
 
 或者你也可以关闭配置文件中的流式响应（streamResponse）选项，确保小爱能够回复完整的句子。不过需要注意的是，关闭流式响应后，唤醒模式等功能将会失效。
 
+## 📶 网络异常类问题
+
+### Q：提示“LLM 响应异常 Connection error”，AI 回复失败
+
+网络异常。OpenAI 的服务在国内需要配代理才能访问，相关 [issue](https://github.com/idootop/mi-gpt/issues/36)。
+
+对于国内环境无法访问 OpenAI 服务的情况，有以下几种处理方法：
+
+1. 环境变量里填上你的代理地址，比如：`HTTP_PROXY=http://127.0.0.1:7890`
+2. 使用第三方部署的 OpenAI API 反向代理服务，然后更新 `OPENAI_BASE_URL`
+3. 使用国内的 LLM 服务提供商，比如 [通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1)、[零一万物](https://platform.01.ai/docs#making-an-api-request)、[Moonshot](https://platform.moonshot.cn/docs/api/chat)、[DeepSeek](https://platform.deepseek.com/api-docs/)等
+
 ## 🤖 大模型类问题
 
 ### Q：除了 OpenAI 还支持哪些模型，如何设置？

@@ -27,7 +27,7 @@
 - 添加关于 playingCommand 的详细说明，默认不需要配置。
 - 添加常见小爱音箱型号的支持情况和参数列表。
 - ✅ 添加关于 clone 项目本地运行提示找不到 bot 的相关说明。
-- 添加国内设备代理配置相关的说明。https://github.com/idootop/mi-gpt/issues/29
+- ✅ 添加国内网络配置代理访问 OpenAI 服务的相关说明。https://github.com/idootop/mi-gpt/issues/29
 - 添加国内设备使用 Docker 镜像配置镜像代理的说明。https://github.com/idootop/mi-gpt/issues/31
 - ✅ 添加关于 OpenAI 401 账号 API_KEY 错误， 403 触发 IP 访问风控的说明。https://github.com/idootop/mi-gpt/issues/19，https://github.com/idootop/mi-gpt/issues/33
 - 添加关于 OpenAI 模型不存在的相关说明
