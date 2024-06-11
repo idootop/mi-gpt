@@ -4,11 +4,13 @@
 
 ## 🔥 Hotfix
 
+- 修复 MIoT 和 Mina 接口查询到的设备名称不一致的问题。https://github.com/idootop/mi-gpt/issues/62
 - 提示语列表为空时，不播放提示语。
 - 提示语和提示音链接都为空时，不播放提示音。https://github.com/idootop/mi-gpt/issues/30#issuecomment-2153786207
 - 修复因没有配置环境变量，而导致没有初始化成功 OpenAI 使程序崩溃。 https://github.com/idootop/mi-gpt/issues/30#issuecomment-2153753279
 - 修复唤醒模式下，重新匹配唤醒词时，应该走询问 AI 的流程。([issues#25](https://github.com/idootop/mi-gpt/issues/25))
 - 修复使用提示音链接时，小爱回答完毕后，仍然重复播放文字提示语的问题。
+- 优化网络请求错误重试策略（消息/播放状态轮询）
 
 ## 💪 优化
 
@@ -43,6 +45,7 @@
 - @otkHsiao 反馈 Azure OpenAI Service 配置 deployment 的问题 https://github.com/idootop/mi-gpt/pull/34#issuecomment-2156068725
 - @siseboy 提供群晖 docker 使用教程 https://github.com/idootop/mi-gpt/issues/41
 - @moffefei 提供的 Windows 下 docker 启动命令的示例 https://github.com/idootop/mi-gpt/issues/45
+- @imhsz 协助调试 MIoT 和 Mina 接口查询到的设备名称不一致的问题。https://github.com/idootop/mi-gpt/issues/62
 
 # v4.0.0
 

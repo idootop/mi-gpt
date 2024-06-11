@@ -22,7 +22,14 @@ type ActionCommand = [number, number];
 type PropertyCommand = [number, number, number];
 
 export type BaseSpeakerConfig = MiServiceConfig & {
+  /**
+   * 启用调试（仅调试 MiGPT 相关日志）
+   */
   debug?: boolean;
+  /**
+   * 追踪 Mi Service 相关日志（更底层）
+   */
+  enableTrace?: boolean;
   /**
    * 是否启用流式响应
    *
