@@ -226,6 +226,29 @@ services:
 
 注意：其中的 `env_file` 和 `volumes` 路径，请根据自己的配置文件实际路径来填写。
 
+### Q：如何关闭 AI 开始和结束回复的提示语？
+
+在配置文件中，将对应提示语属性设置成空数组即可，比如：
+
+```js
+// .migpt.js
+export default {
+  speaker: {
+    // 取消进入 AI 模式的欢迎语
+    onEnterAI: [],
+    // 取消退出 AI 模式的提示语
+    onExitAI: [],
+    // 取消 AI 开始回答时的提示语
+    onAIAsking: [],
+    // 取消 AI 结束回答时的提示语
+    onAIReplied: [],
+    // ...
+  },
+};
+```
+
+> 注意：提示语是为了更好的提示当前小爱回复的状态，去掉提示语可能会导致感觉小爱没有反应。
+
 ### Q：是否支持同时使用多个小米音箱设备/账号？
 
 目前 `MiGPT` 只支持单实例运行。但是你可以通过创建多个不同设备/账号配置的 docker 容器，来实现对多设备/账号的支持，相关 [issue](https://github.com/idootop/mi-gpt/issues/51)。
