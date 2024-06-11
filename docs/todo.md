@@ -33,6 +33,7 @@
 - 添加关于 OpenAI 模型不存在的相关说明
 - ✅ 添加关于 Node 项目下 MiGPT.create 参数配置的说明。 https://github.com/idootop/mi-gpt/issues/27
 - ✅ 添加关于 Widnows 下 docker 启动参数配置的说明。https://github.com/idootop/mi-gpt/issues/26
+- ✅ 添加对多账号/设备支持的相关说明
 
 ## ❤️ 感谢
 
