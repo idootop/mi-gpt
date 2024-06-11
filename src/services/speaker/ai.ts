@@ -166,13 +166,17 @@ export class AISpeaker extends Speaker {
   get commands() {
     return [
       {
-        match: (msg) => this.wakeUpKeywords.some((e) => msg.text.includes(e)),
+        match: (msg) =>
+          !this.keepAlive &&
+          this.wakeUpKeywords.some((e) => msg.text.startsWith(e)),
         run: async (msg) => {
           await this.enterKeepAlive();
         },
       },
       {
-        match: (msg) => this.exitKeywords.some((e) => msg.text.includes(e)),
+        match: (msg) =>
+          this.keepAlive &&
+          this.exitKeywords.some((e) => msg.text.startsWith(e)),
         run: async (msg) => {
           await this.exitKeepAlive();
         },
