@@ -17,6 +17,7 @@
 
 ## 📒 文档 FAQ
 
+- ✅ 优化关于小米账号安全验证相关的提示语和使用说明。https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622
 - ✅ 优化关于 Azure OpenAI 配置的说明。https://github.com/idootop/mi-gpt/issues/7
 - 优化找不到小爱设备的提示文案以及 FAQ 教程。https://github.com/idootop/mi-gpt/issues/28#issuecomment-2153645819
 - 添加关于唤醒小爱、唤醒词、唤醒模式的说明和注意事项。
@@ -29,7 +30,7 @@
 - 添加国内设备使用 Docker 镜像配置镜像代理的说明。https://github.com/idootop/mi-gpt/issues/31
 - 添加关于 OpenAI 401 账号 API_KEY 错误， 403 触发 IP 访问风控的说明。https://github.com/idootop/mi-gpt/issues/19，https://github.com/idootop/mi-gpt/issues/33
 - ✅ 添加关于 Node 项目下 MiGPT.create 参数配置的说明。 https://github.com/idootop/mi-gpt/issues/27
-- 【待更新】添加关于 Widnows 下 docker 启动参数配置的说明。https://github.com/idootop/mi-gpt/issues/26
+- ✅ 添加关于 Widnows 下 docker 启动参数配置的说明。https://github.com/idootop/mi-gpt/issues/26
 
 ## ❤️ 感谢
 

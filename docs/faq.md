@@ -6,14 +6,19 @@
 
 ## ❌ 启动失败类问题
 
-### Q：提示登录小米账号失败，无法正常启动
+### Q：提示“70016：登录验证失败”，无法正常启动
 
-1. **账号密码不正确**：小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。
-2. **网络环境异常**：如果你是在海外服务器等，非中国大陆网络环境下登录小米账号，需要先同意小米的「个人数据跨境传输」协议，然后按照提示验证手机号或邮箱，等待大约 30 分钟之后即可正常登录。[👉 相关教程](https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622)
+账号密码不正确。注意小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看。👉 相关 [issue](https://github.com/idootop/mi-gpt/issues/10)。
 
-### Q：启动 docker 提示 ERR_MODULE_NOT_FOUND，无法正常启动
+### Q：提示“login failed &&&START&&&{"notificationUrl”，无法正常启动
 
-在 Windows 终端（比如：PowerShell、cmd）下，无法使用 `$(pwd)` 获取当前工作目录绝对路径，需要填写 `.env` 和 `.migpt.js` 文件的绝对路径。示例：
+这个提示是因为你的小米账号触发了异地登录保护，需要手动安全验证。只需打开小米官网登录你的小米账号，手动通过安全验证即可，然后等待大约 30 分钟之后即可正常登录。
+
+注意：最好使用和你运行 docker 相同的网络环境，如果你是在海外服务器等，非中国大陆网络环境下登录小米账号，需要先同意小米的「个人数据跨境传输」协议。[👉 相关教程](https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622)
+
+### Q：提示“ERR_MODULE_NOT_FOUND”，无法正常启动
+
+在 Windows 终端（比如：PowerShell、cmd）下，无法使用 `$(pwd)` 获取当前工作目录绝对路径，需要填写 `.env` 和 `.migpt.js` 文件的绝对路径，相关 [issue](https://github.com/idootop/mi-gpt/issues/45)。示例：
 
 ```shell
 docker run --env-file D:/hello/mi-gpt/.env -v D:/hello/mi-gpt/.migpt.js:/app/.migpt.js idootop/mi-gpt:latest
@@ -103,6 +108,21 @@ AZURE_OPENAI_DEPLOYMENT=你的模型部署名，比如：gpt-35-turbo-instruct
 - https://github.com/idootop/mi-gpt/issues/21#issuecomment-2147125219
 
 ## ⭐️ 其他问题
+
+### Q：如何打开调试开关？
+
+调试模式下可以输出更为详细的错误日志，方便分析和定位错误来源。你可以按照下面的配置方式开启 `debug` 模式：
+
+```js
+// .migpt.js
+export default {
+  speaker: {
+    // 打开调试开关
+    debug: true,
+    // ...
+  },
+};
+```
 
 ### Q：怎样使用豆包的音色
 
