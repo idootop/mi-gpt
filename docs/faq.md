@@ -108,6 +108,10 @@ export default {
 2. 使用第三方部署的 OpenAI API 反向代理服务，然后更新 `OPENAI_BASE_URL`
 3. 使用国内的 LLM 服务提供商，比如 [通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1)、[零一万物](https://platform.01.ai/docs#making-an-api-request)、[Moonshot](https://platform.moonshot.cn/docs/api/chat)、[DeepSeek](https://platform.deepseek.com/api-docs/)等
 
+### Q：Docker 镜像拉取失败
+
+网络异常。近期国内代理普遍不稳定，可以设置 Docker Hub 国内镜像，👉 [相关教程](https://github.com/idootop/mi-gpt/issues/31#issuecomment-2153741281)。
+
 ## 🤖 大模型类问题
 
 ### Q：除了 OpenAI 还支持哪些模型，如何设置？

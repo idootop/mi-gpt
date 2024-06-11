@@ -30,7 +30,7 @@
 - ✅ 添加关于 Widnows 下 docker 启动参数配置的说明。https://github.com/idootop/mi-gpt/issues/26
 - ✅ 添加对多账号/设备支持的相关说明
 - ✅ 添加群晖 docker 使用教程
-- 添加国内设备使用 Docker 镜像配置镜像代理的说明。https://github.com/idootop/mi-gpt/issues/31
+- ✅ 添加国内使用 Docker 配置镜像代理的相关说明。https://github.com/idootop/mi-gpt/issues/31
 - 添加关于 OpenAI gpt4 模型不存在的相关说明
 - 添加关于唤醒小爱、唤醒词、唤醒模式的说明和注意事项。
 - 添加关于 playingCommand 的详细说明，默认不需要配置。
