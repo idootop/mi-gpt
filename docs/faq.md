@@ -166,10 +166,6 @@ AZURE_OPENAI_DEPLOYMENT=你的模型部署名，比如：gpt-35-turbo-instruct
 
 ## ⭐️ 其他问题
 
-### Q：是否支持同时使用多个小米音箱设备/账号？
-
-目前 `MiGPT` 只支持单实例运行。但是你可以通过创建多个不同设备/账号配置的 docker 容器，来实现对多设备/账号的支持，相关 [issue](https://github.com/idootop/mi-gpt/issues/51)。
-
 ### Q：如何打开调试开关？
 
 调试模式下可以输出更为详细的错误日志，方便分析和定位错误来源。你可以按照下面的配置方式开启 `debug` 模式：
@@ -184,6 +180,30 @@ export default {
   },
 };
 ```
+
+### Q：怎么在群晖上使用这个项目？
+
+在群晖 docker 控制面板新建项目，按如下示例填写配置，👉 [参考教程](https://github.com/idootop/mi-gpt/issues/41)。
+
+```yaml
+services:
+  mi-gpt:
+    image: idootop/mi-gpt:latest
+    container_name: mi-gpt
+    network_mode: bridge
+    environment:
+      - TZ=Asia/Shanghai
+    env_file:
+      - /volume1/docker/xiaomi/.env
+    volumes:
+      - /volume1/docker/xiaomi/.migpt.js:/app/.migpt.js
+```
+
+注意：其中的 `env_file` 和 `volumes` 路径，请根据自己的配置文件实际路径来填写。
+
+### Q：是否支持同时使用多个小米音箱设备/账号？
+
+目前 `MiGPT` 只支持单实例运行。但是你可以通过创建多个不同设备/账号配置的 docker 容器，来实现对多设备/账号的支持，相关 [issue](https://github.com/idootop/mi-gpt/issues/51)。
 
 ### Q：怎样使用豆包的音色
 
