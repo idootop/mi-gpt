@@ -225,7 +225,12 @@ export class AISpeaker extends Speaker {
       }
     },
     async (msg, data) => {
-      if (data.answer && data.res == null && this.streamResponse) {
+      if (
+        data.answer &&
+        data.res == null &&
+        !this.audioBeep &&
+        this.streamResponse
+      ) {
         // 回复完毕
         await this.response({
           text: pickOne(this.onAIReplied)!,
