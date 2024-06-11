@@ -29,7 +29,8 @@
 - ✅ 添加关于 clone 项目本地运行提示找不到 bot 的相关说明。
 - 添加国内设备代理配置相关的说明。https://github.com/idootop/mi-gpt/issues/29
 - 添加国内设备使用 Docker 镜像配置镜像代理的说明。https://github.com/idootop/mi-gpt/issues/31
-- 添加关于 OpenAI 401 账号 API_KEY 错误， 403 触发 IP 访问风控的说明。https://github.com/idootop/mi-gpt/issues/19，https://github.com/idootop/mi-gpt/issues/33
+- ✅ 添加关于 OpenAI 401 账号 API_KEY 错误， 403 触发 IP 访问风控的说明。https://github.com/idootop/mi-gpt/issues/19，https://github.com/idootop/mi-gpt/issues/33
+- 添加关于 OpenAI 模型不存在的相关说明
 - ✅ 添加关于 Node 项目下 MiGPT.create 参数配置的说明。 https://github.com/idootop/mi-gpt/issues/27
 - ✅ 添加关于 Widnows 下 docker 启动参数配置的说明。https://github.com/idootop/mi-gpt/issues/26
 

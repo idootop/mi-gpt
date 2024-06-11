@@ -123,6 +123,18 @@ AZURE_OPENAI_DEPLOYMENT=你的模型部署名，比如：gpt-35-turbo-instruct
 
 注意：Azure OpenAI Studio 部署页面显示的模型版本号，可能并非实际的 `OPENAI_API_VERSION` 值。请打开模型 Play Ground 页面，选择你想用的部署（模型），然后点击示例代码，查看里面的 `api_version` 并替换上面的 `OPENAI_API_VERSION` 的值。
 
+### Q：提示“LLM 响应异常，401 Invalid Authentication”
+
+无效的 `OpenAI_API_KEY`。请检查 `OpenAI_API_KEY` 是否能正常使用，以及对应环境变量是否生效，相关 [issue](https://github.com/idootop/mi-gpt/issues/59)。
+
+### Q：提示“LLM 响应异常，403 PermissionDeniedError”
+
+代理 IP 被 Cloudflare 风控了，试试看切换代理节点。或者把环境变量里的 `HTTP_PROXY` 设置成空字符串 `HTTP_PROXY='' ` 关闭代理（仅适用于国产大模型），相关 [issue](https://github.com/idootop/mi-gpt/issues/33)。
+
+### Q：提示“LLM 响应异常，404 Not Found”
+
+模型路径不存在或者代理 IP 被风控。请检查 `OPENAI_BASEURL` 等环境变量是否配置正确，或切换代理节点后重试，相关 [issue](https://github.com/idootop/mi-gpt/issues/43)。
+
 ## 🚗 运行原理类问题
 
 ### Q：什么是唤醒模式？
