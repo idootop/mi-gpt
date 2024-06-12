@@ -6,7 +6,7 @@
     "start": "tsx index.ts"
   },
   "dependencies": {
-    "mi-gpt": "^2.1.1"
+    "mi-gpt": "^3.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.4.9",

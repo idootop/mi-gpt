@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       mi-gpt:
-        specifier: ^2.1.1
-        version: 2.1.1
+        specifier: ^3.1.0
+        version: 3.1.0
     devDependencies:
       '@types/node':
         specifier: ^20.4.9
@@ -284,12 +284,12 @@ packages:
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
 
-  mi-gpt@2.1.1:
-    resolution: {integrity: sha512-a7oSFkGQSfNVyQBW2iYHXfKaSUWHoIcXpR4ta8izmp/I0JphBE1poqG+FqBQJebQwYKT9QovHqxqlkXt36Z9ew==}
+  mi-gpt@3.1.0:
+    resolution: {integrity: sha512-E2szgC2rQzWJka1MqlnQwqqpTV4jUHXShn9rNmVoJBs9LyuasAM3eq4kY1Rk1pHfoO/Q5M4lxp2UtmOPT1FwLw==}
     engines: {node: '>=16'}
 
-  mi-service-lite@2.3.0:
-    resolution: {integrity: sha512-a9r5quQjwGRz7aE7oOjLAJfgwp0E6nKpP2c/ZYbl6jYKsvz05f/e8bPGY73dDtCtQHGTONxPZjeoGraQbQLJZg==}
+  mi-service-lite@2.5.0:
+    resolution: {integrity: sha512-wrXxOUoR54QQRNiU7qZB0OqC20E1gO+eFw7W9ftsr8QkdmLyq+ewrCaT6QsSg1pObPAlZopb2Qci6PRBptdPzg==}
     engines: {node: '>=16'}
 
   mime-db@1.52.0:
@@ -589,12 +589,12 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  mi-gpt@2.1.1:
+  mi-gpt@3.1.0:
     dependencies:
       '@prisma/client': 5.14.0(prisma@5.14.0)
       fs-extra: 11.2.0
       https-proxy-agent: 7.0.4
-      mi-service-lite: 2.3.0
+      mi-service-lite: 2.5.0
       openai: 4.47.3
       prisma: 5.14.0
     transitivePeerDependencies:
@@ -602,7 +602,7 @@ snapshots:
       - encoding
       - supports-color
 
-  mi-service-lite@2.3.0:
+  mi-service-lite@2.5.0:
     dependencies:
       axios: 1.6.8
       pako: 2.1.0
