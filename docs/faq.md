@@ -150,7 +150,7 @@ export default {
 
 ### Q：Docker 镜像拉取失败
 
-网络异常。近期国内代理普遍不稳定，可以设置 Docker Hub 国内镜像，👉 [相关教程](https://github.com/idootop/mi-gpt/issues/31#issuecomment-2153741281)。
+网络异常。近期国内代理普遍不稳定，可以设置 Docker Hub 国内镜像。👉 [相关教程](https://github.com/idootop/mi-gpt/issues/31#issuecomment-2153741281)
 
 ## 🤖 大模型类问题
 
@@ -214,7 +214,7 @@ export default {
 
 ### Q：怎么在群晖上使用这个项目？
 
-在群晖 docker 控制面板新建项目，按如下示例填写配置，👉 [参考教程](https://github.com/idootop/mi-gpt/issues/41)。
+在群晖 docker 控制面板新建项目，按如下示例填写配置。👉 [参考教程](https://github.com/idootop/mi-gpt/issues/41)
 
 ```yaml
 services:
@@ -231,6 +231,12 @@ services:
 ```
 
 注意：其中的 `env_file` 和 `volumes` 路径，请根据自己的配置文件实际路径来填写。
+
+### Q：“小爱同学”唤醒词能否换成其他的，比如“豆包”等
+
+不可以，小爱音箱的唤醒词（小爱同学，xxx）是小爱音箱固件里写死的，外部无法自定义。
+
+要想修改只能刷机替换自己训练的语音识别模型。👉 [相关讨论](https://github.com/idootop/mi-gpt/issues/84#issuecomment-2164826933)
 
 ### Q：如何关闭 AI 开始和结束回复的提示语？
 
