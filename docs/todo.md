@@ -15,9 +15,9 @@
 
 ## 📚 文档
 
-- 添加 System Prompt 模板字符串变量的说明
-  - DAN 模式，猫娘等整活 prompt 的演示示例
-  - Awesome prompt 征集
+- ✅ 添加 System Prompt 模板字符串变量的说明
+  - ✅ DAN 模式，猫娘等整活 prompt 的演示示例
+  - ✅ Awesome prompt 征集
 - 添加更新人设 Prompt 的使用说明（你是 xxx，你喜欢 xxx）
 - 添加常见小爱音箱型号的支持情况和参数列表
 - 添加更详细的使用和配置视频教程
