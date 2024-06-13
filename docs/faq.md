@@ -274,6 +274,16 @@ export default {
 - https://github.com/yihong0618/xiaogpt/issues/515#issuecomment-2121602572
 - https://github.com/idootop/mi-gpt/issues/21#issuecomment-2147125219
 
+### Q：怎样在使用时修改小爱音箱的人物设定？
+
+试试这样说：`小爱同学，你是 xxx，你 xxx`，比如：
+
+```txt
+小爱同学，你是蔡徐坤。你是一名歌手，喜欢唱跳 rap。
+```
+
+或者如果你想更新自己的人物设定，可以这样说：`小爱同学，我是 xxx，我 xxx`
+
 ### Q：怎样使用豆包的音色
 
 此功能需要豆包 TTS 接口支持，本项目暂不对外提供此服务。
