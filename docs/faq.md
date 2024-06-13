@@ -57,7 +57,7 @@ export default {
 注意：在 Windows 终端（比如：PowerShell、cmd）下启动 docker 时，无法使用 `$(pwd)` 获取当前工作目录绝对路径，需要填写 `.env` 和 `.migpt.js` 文件的绝对路径。示例：
 
 ```shell
-docker run --env-file D:/hello/mi-gpt/.env -v D:/hello/mi-gpt/.migpt.js:/app/.migpt.js idootop/mi-gpt:latest
+docker run -d --env-file D:/hello/mi-gpt/.env -v D:/hello/mi-gpt/.migpt.js:/app/.migpt.js idootop/mi-gpt:latest
 ```
 
 ### Q：提示“找不到设备：xxx”，初始化 Mi Services 失败

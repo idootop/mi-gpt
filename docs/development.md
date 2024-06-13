@@ -38,7 +38,7 @@ docker build --platform linux/arm/v7 -t mi-gpt .
 运行构建后的 docker
 
 ```shell
-docker run --env-file $(pwd)/.env -v $(pwd)/.migpt.js:/app/.migpt.js mi-gpt
+docker run -d --env-file $(pwd)/.env -v $(pwd)/.migpt.js:/app/.migpt.js mi-gpt
 ```
 
 ## 常见问题
