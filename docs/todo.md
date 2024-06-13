@@ -22,6 +22,6 @@
 - 添加常见小爱音箱型号的支持情况和参数列表
 - 添加更详细的使用和配置视频教程
 - 添加部署和接入本地大语言模型的教程 https://github.com/idootop/mi-gpt/issues/82
-- 添加对其他品牌音箱的支持情况的说明 https://github.com/idootop/mi-gpt/issues/83
+- ✅ 添加对其他品牌音箱的支持情况的说明 https://github.com/idootop/mi-gpt/issues/83
 - 添加“小爱同学”唤醒词的相关说明 https://github.com/idootop/mi-gpt/issues/84
 - ✅ 添加进入唤醒模式时小爱莫名开始播放歌曲的说明 https://github.com/idootop/mi-gpt/issues/71
