@@ -8,7 +8,7 @@ import { StreamResponse } from "../speaker/stream";
 import { IBotConfig } from "./config";
 import { ConversationManager, MessageContext } from "./conversation";
 
-const systemTemplate = `
+const kDefaultSystemTemplate = `
 请重置所有之前的上下文、文件和指令。现在，你将扮演一个名为{{botName}}的角色，使用第一人称视角回复消息。
 
 ## 关于你
@@ -71,15 +71,21 @@ const userTemplate = `
 {{message}}
 `.trim();
 
-export type MyBotConfig = DeepPartial<IBotConfig> & { speaker: AISpeaker };
+export type MyBotConfig = DeepPartial<IBotConfig> & {
+  speaker: AISpeaker;
+  systemTemplate?: string;
+};
+
 export class MyBot {
   speaker: AISpeaker;
   manager: ConversationManager;
+  systemTemplate?: string;
   constructor(config: MyBotConfig) {
     this.speaker = config.speaker;
+    this.systemTemplate = config.systemTemplate;
     this.manager = new ConversationManager(config);
     // 更新 bot 人设命令
-    // 比如：你是蔡徐坤，喜欢唱跳rap。
+    // 比如：你是蔡徐坤，你喜欢唱跳rap。
     this.speaker.addCommand({
       match: (msg) =>
         /.*你是(?<name>[^你]*)你(?<profile>.*)/.exec(msg.text) != null,
@@ -154,28 +160,31 @@ export class MyBot {
     const shortTermMemory = shortTermMemories[0]?.text ?? "短期记忆为空";
     const longTermMemories = await memory.getLongTermMemories({ take: 1 });
     const longTermMemory = longTermMemories[0]?.text ?? "长期记忆为空";
-    const systemPrompt = buildPrompt(systemTemplate, {
-      shortTermMemory,
-      longTermMemory,
-      botName: bot!.name,
-      botProfile: bot!.profile.trim(),
-      masterName: master!.name,
-      masterProfile: master!.profile.trim(),
-      roomName: room!.name,
-      roomIntroduction: room!.description.trim(),
-      messages:
-        lastMessages.length < 1
-          ? "暂无历史消息"
-          : lastMessages
-              .map((e) =>
-                formatMsg({
-                  name: e.sender.name,
-                  text: e.text,
-                  timestamp: e.createdAt.getTime(),
-                })
-              )
-              .join("\n"),
-    });
+    const systemPrompt = buildPrompt(
+      this.systemTemplate ?? kDefaultSystemTemplate,
+      {
+        shortTermMemory,
+        longTermMemory,
+        botName: bot!.name,
+        botProfile: bot!.profile.trim(),
+        masterName: master!.name,
+        masterProfile: master!.profile.trim(),
+        roomName: room!.name,
+        roomIntroduction: room!.description.trim(),
+        messages:
+          lastMessages.length < 1
+            ? "暂无历史消息"
+            : lastMessages
+                .map((e) =>
+                  formatMsg({
+                    name: e.sender.name,
+                    text: e.text,
+                    timestamp: e.createdAt.getTime(),
+                  })
+                )
+                .join("\n"),
+      }
+    );
     const userPrompt = buildPrompt(userTemplate, {
       message: formatMsg({
         name: master!.name,
