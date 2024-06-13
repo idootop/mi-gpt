@@ -166,6 +166,12 @@ OPENAI_MODEL=moonshot-v1-8k
 OPENAI_API_KEY=$MOONSHOT_API_KEY
 ```
 
+当然，对于其他不兼容 OpenAI API 的大模型，比如豆包大模型、文心一言等，你也可以通过第三方的 API 聚合工具将其转换为 OpenAI API 兼容的格式，比如：[One API](https://github.com/songquanpeng/one-api)，然后修改对应的环境变量值即可完成接入。
+
+### Q：我想在本地部署大模型，如何在本项目中使用？
+
+你可以使用 [Ollama](https://github.com/ollama)、[LM Studio](https://lmstudio.ai/)、[mistral.rs](https://github.com/EricLBuehler/mistral.rs) 等项目在本地部署大模型，它们都开箱自带兼容 OpenAI 的 API 服务，修改对应的环境变量值即可完成接入。
+
 ### Q：提示“LLM 响应异常 404 The model `gpt-4o` does not exist”
 
 当前 OpenAI 账号没有使用 `gpt-4` 系列模型的权限，请切换到 `gpt-3` 系列模型，比如：`gpt-3.5-turbo`，相关 [issue](https://github.com/idootop/mi-gpt/issues/30#issuecomment-2154656498)。
