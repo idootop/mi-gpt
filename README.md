@@ -90,7 +90,7 @@ main();
 
 注意：此模式下并不会主动读取 `.env` 和 `.migpt.js` 中的配置信息，你需要手动初始化 Node 环境变量，并将 `.migpt.js` 中的参数作为 `MiGPT.create` 的初始化参数传入。👉 [示例代码](https://github.com/idootop/mi-gpt/blob/example/index.ts)
 
-## 📖 项目文档
+## 📖 使用文档
 
 以下为更详细的使用教程，大多数问题都可在 [💬 常见问题](https://github.com/idootop/mi-gpt/blob/main/docs/faq.md) 中找到答案。
 
