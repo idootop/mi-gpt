@@ -9,6 +9,7 @@ import { clamp, jsonEncode, sleep } from "../../utils/base";
 import { Logger } from "../../utils/log";
 import { StreamResponse } from "./stream";
 import { kAreYouOK } from "../../utils/string";
+import { fastRetry } from "../../utils/retry";
 
 export type TTSProvider = "xiaoai" | "doubao";
 
@@ -337,24 +338,23 @@ export class BaseSpeaker {
       // 等待一段时间，确保本地设备状态已更新
       await sleep(this.checkTTSStatusAfter * 1000);
       // 等待回答播放完毕
+      const retry = fastRetry(this, "设备状态");
       while (true) {
+        // 检测设备播放状态
         let playing: any = { status: "idle" };
-        if (this.playingCommand) {
-          const res = await this.MiIOT!.getProperty(
-            this.playingCommand[0],
-            this.playingCommand[1]
-          );
-          if (this.debug) {
-            this.logger.debug(jsonEncode({ playState: res ?? "undefined" }));
-          }
-          if (res === this.playingCommand[2]) {
-            playing = { status: "playing" };
-          }
-        } else {
-          const res = await this.MiNA!.getStatus();
-          if (this.debug) {
-            this.logger.debug(jsonEncode({ playState: res ?? "undefined" }));
-          }
+        let res = this.playingCommand
+          ? await this.MiIOT!.getProperty(
+              this.playingCommand[0],
+              this.playingCommand[1]
+            )
+          : await this.MiNA!.getStatus();
+        if (this.debug) {
+          this.logger.debug(jsonEncode({ playState: res ?? "undefined" }));
+        }
+        if (this.playingCommand && res === this.playingCommand[2]) {
+          playing = { status: "playing" };
+        }
+        if (!this.playingCommand) {
           playing = { ...playing, ...res };
         }
         if (
@@ -365,7 +365,11 @@ export class BaseSpeaker {
           // 响应被中断
           return "break";
         }
-        if (playing.status !== "playing") {
+        const isOk = retry.onResponse(res);
+        if (isOk === "break") {
+          break; // 获取设备状态异常
+        }
+        if (res && playing.status !== "playing") {
           break;
         }
         await sleep(this.checkInterval);

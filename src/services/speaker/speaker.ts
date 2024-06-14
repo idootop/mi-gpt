@@ -1,4 +1,5 @@
 import { clamp, firstOf, lastOf, sleep } from "../../utils/base";
+import { fastRetry } from "../../utils/retry";
 import { kAreYouOK } from "../../utils/string";
 import { BaseSpeaker, BaseSpeakerConfig } from "./base";
 import { StreamResponse } from "./stream";
@@ -76,8 +77,13 @@ export class Speaker extends BaseSpeaker {
     }
     this.logger.success("服务已启动...");
     this.activeKeepAliveMode();
+    const retry = fastRetry(this, "消息列表");
     while (this.status === "running") {
       const nextMsg = await this.fetchNextMessage();
+      const isOk = retry.onResponse(this._lastConversation);
+      if (isOk === "break") {
+        process.exit(1); // 退出应用
+      }
       if (nextMsg) {
         this.responding = false;
         this.logger.log("🔥 " + nextMsg.text);
@@ -275,6 +281,7 @@ export class Speaker extends BaseSpeaker {
     }
   }
 
+  private _lastConversation: any;
   async getMessages(options?: {
     limit?: number;
     timestamp?: number;
@@ -282,6 +289,7 @@ export class Speaker extends BaseSpeaker {
   }): Promise<QueryMessage[]> {
     const filterTTS = options?.filterTTS ?? true;
     const conversation = await this.MiNA!.getConversations(options);
+    this._lastConversation = conversation;
     let records = conversation?.records ?? [];
     if (filterTTS) {
       // 过滤有小爱回答的消息
