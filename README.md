@@ -114,3 +114,7 @@ main();
 - https://github.com/jialeicui/open-lx01
 - https://github.com/inu1255/mi-service
 - https://github.com/Yonsm/MiService
+
+## License
+
+[MIT](https://github.com/idootop/mi-gpt/blob/main/LICENSE) License © 2024-PRESENT Del Wang

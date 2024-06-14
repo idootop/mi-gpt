@@ -7,12 +7,12 @@
 - ✅ 新增自定义系统 Prompt 功能
 - 登录凭证过期后自动刷新 token https://github.com/idootop/mi-gpt/issues/76
 - 支持火山引擎 TTS 和音色切换能力（微软 TTS、OpenAI TTS 待定）
+- 添加 MIT license
 
 ## 💪 优化
 
 - ✅ 优化网络请求错误重试策略（消息/播放状态轮询）
 - 移除 TTS 不发音字符（emoji）
-- 【待定】使用通知事件获取最新消息和设备播放状态
 
 ## 📚 文档
 
