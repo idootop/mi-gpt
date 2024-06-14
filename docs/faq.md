@@ -2,7 +2,9 @@
 
 ### Q：支持哪些型号的小爱音箱？
 
-大部分型号的小爱音箱都支持，推荐小爱音箱 Pro（完美运行）。部分机型的 MioT 接口开放能力并不完整，比如小米音箱 Play 增强版（L05C），将会导致 `MiGPT` 部分功能异常（比如流式响应和唤醒模式等），相关 [issue](https://github.com/idootop/mi-gpt/issues/14)。
+大部分型号的小爱音箱都支持，推荐小爱音箱 Pro（完美运行）
+
+👉 [查看兼容的小爱音箱型号和配置参数](https://github.com/idootop/mi-gpt/blob/main/docs/compatibility.md)
 
 > 注意：本项目暂不支持小度音箱、天猫精灵、HomePod 等智能音箱设备，亦无相关适配计划。
 

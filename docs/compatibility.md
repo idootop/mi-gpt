@@ -1,0 +1,41 @@
+# 🔊 支持的小爱音箱型号
+
+## ✅ 完美运行
+
+已知可以完美运行 `MiGPT` 的小爱音箱型号有：
+
+| 名称         | 型号                                                                                                | ttsCommand | wakeUpCommand | playingCommand | streamResponse | 反馈来源                               |
+| ------------ | --------------------------------------------------------------------------------------------------- | ---------- | ------------- | -------------- | -------------- | -------------------------------------- |
+| 小爱音箱 Pro | [LX06](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-lx06:2) | `[5, 1]`   | `[5, 3]`      | -              | true           | [@idootop](https://github.com/idootop) |
+
+## 🚗 正常运行
+
+> 部分机型的 MIoT 接口不支持查询设备播放状态或查询状态异常，比如小米音箱 Play 增强版（L05C），将会导致 `MiGPT` 部分功能异常，无法使用连续对话等，此时需要关闭 `streamResponse`。相关 [issue](https://github.com/idootop/mi-gpt/issues/14)
+
+可以正常运行 `MiGPT`，但不支持连续对话的小爱音箱型号有：
+
+| 名称                          | 型号                                                                                                | ttsCommand | wakeUpCommand | playingCommand | streamResponse | 反馈来源                                                   |
+| ----------------------------- | --------------------------------------------------------------------------------------------------- | ---------- | ------------- | -------------- | -------------- | ---------------------------------------------------------- |
+| 小爱音箱                      | [L06A](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-l06a:2) | `[5, 1]`   | `[5, 2]`      | -              | false          | [@zhanglc](https://github.com/idootop/mi-gpt/issues/42)    |
+| 小爱音箱 Play                 | [L05B](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-l05b:1) | `[5, 3]`   | `[5, 1]`      | -              | false          | [@BiuBiu2323](https://github.com/idootop/mi-gpt/issues/48) |
+| 小米小爱音箱 Play 增强版      | [L05C](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-l05c:1) | `[5, 3]`   | `[5, 1]`      | -              | false          | [@lyddias](https://github.com/idootop/mi-gpt/issues/14)    |
+| Xiaomi 智能家庭屏 6           | [X6A](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-x6a:1)   | `[7, 3]`   | `[7, 1]`      | -              | false          | [@Hongwing](https://github.com/idootop/mi-gpt/issues/80)   |
+| Redmi 小爱触屏音箱 Pro 8 英寸 | [X08E](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-x08e:1) | `[7, 3]`   | `[7, 1]`      | -              | false          | [@shangjiyu](https://github.com/idootop/mi-gpt/issues/20)  |
+
+## ❌ 不支持
+
+完全不支持 `MiGPT` 的小爱音箱型号有：
+
+| 名称            | 型号                                                           | 反馈来源                                                  |
+| --------------- | -------------------------------------------------------------- | --------------------------------------------------------- |
+| 小米小爱音箱 HD | [SM4](https://home.miot-spec.com/spec/onemore.wifispeaker.sm4) | [@romantech](https://github.com/idootop/mi-gpt/issues/91) |
+
+## 🔥 型号分享
+
+如果你是其他型号的小爱音箱，欢迎把你的型号和配置参数分享给大家，谢谢。分享格式如下：
+
+- 型号：小爱音箱 Pro【LX06】
+- ttsCommand：[5, 1]
+- wakeUpCommand：[5, 3]
+- playingCommand：未设置
+- streamResponse：true（支持唤醒模式）

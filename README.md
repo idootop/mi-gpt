@@ -33,6 +33,14 @@
 - **🔊 自定义 TTS**。厌倦了小爱同学的语音？帮你解锁[「豆包」](https://doubao.com)同款音色，就像真人在回你的消息。
 - **🤖️ 智能家居 Agent**。心情不好？小爱立刻懂你，自动帮你播放喜欢的音乐，调节灯光，逗你开心。_TODO_
 
+## 🔊 设备要求
+
+本项目支持大部分的小爱音箱型号，推荐使用小爱音箱 Pro（完美运行）
+
+👉 [查看更多兼容的小爱音箱型号和配置参数](https://github.com/idootop/mi-gpt/blob/main/docs/compatibility.md)
+
+> 注意：本项目暂不支持小度音箱、天猫精灵、HomePod 等智能音箱设备，亦无相关适配计划。
+
 ## ⚡️ 快速开始
 
 `MiGPT` 有两种启动方式: [Docker](#docker) 和 [Node.js](#nodejs)。
