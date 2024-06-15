@@ -332,7 +332,7 @@ export class BaseSpeaker {
       }
       if (!this.streamResponse) {
         // 非流式响应，直接返回，不再等待设备播放完毕
-        // todo 考虑后续通过 MioT 通知事件，接收设备播放状态变更通知。
+        // todo 考虑后续通过 MIoT 通知事件，接收设备播放状态变更通知。
         return;
       }
       // 等待一段时间，确保本地设备状态已更新
