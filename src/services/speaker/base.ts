@@ -79,6 +79,10 @@ export type BaseSpeakerConfig = MiServiceConfig & {
    * TTS 开始/结束提示音
    */
   audioBeep?: string;
+  /**
+   * 网络请求超时时长，单位毫秒，默认值 3000 （3 秒）
+   */
+  timeout?: number;
 };
 
 export class BaseSpeaker {
