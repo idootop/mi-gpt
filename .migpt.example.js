@@ -41,6 +41,10 @@ export default {
     streamResponse: true,
     // 查询是否在播放中指令，请到 https://home.miot-spec.com 查询具体指令
     // playingCommand: [3, 1, 1], // 默认无需配置此参数，播放出现问题时再尝试开启
+    // 是否启用调试
+    debug: false, // 一般情况下不要打开
+    // 是否跟踪 Mi Service 相关日志（打开后可以查看设备 did）
+    enableTrace: false, // 一般情况下不要打开
   },
 };
 
