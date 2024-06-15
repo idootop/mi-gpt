@@ -10,7 +10,7 @@
 | 小爱音箱 mini            | [LX01](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-lx01:1) | `[5, 1]`   | `[5, 2]`      | `[4, 1, 1]`    | true           | [@gsscsd](https://github.com/idootop/mi-gpt/issues/92#issuecomment-2168013500)   |
 | 小爱音箱 Play（2019 款） | [LX05](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-lx05:1) | `[5, 1]`   | `[5, 3]`      | `[3, 1, 1]`    | true           | [@wt666666](https://github.com/idootop/mi-gpt/issues/92#issuecomment-2168424538) |
 | 小爱音箱 万能遥控版      | [LX5A](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-lx5a:2) | `[5, 1]`   | `[5, 3]`      | -              | true           | [@imhsz](https://github.com/idootop/mi-gpt/issues/62)                            |
-| 小米 AI 音箱             | [S12](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-s12:2)   | `[5, 1]`   | `[5, 3]`      | -              | true           | @CMSJ                                                                            |
+| 小米 AI 音箱             | [S12](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-s12:2)   | `[5, 1]`   | `[5, 3]`      | -              | true           | 微信: CMSJ                                                                       |
 
 ## 🚗 正常运行
 
@@ -33,7 +33,7 @@
 | 名称                   | 型号                                                           | 反馈来源                                                  |
 | ---------------------- | -------------------------------------------------------------- | --------------------------------------------------------- |
 | 小米小爱音箱 HD        | [SM4](https://home.miot-spec.com/spec/onemore.wifispeaker.sm4) | [@romantech](https://github.com/idootop/mi-gpt/issues/91) |
-| 小米小爱蓝牙音箱随身版 | -                                                              | @明天                                                     |
+| 小米小爱蓝牙音箱随身版 | -                                                              | 微信: 明天                                                |
 
 ## 🔥 型号分享
 
