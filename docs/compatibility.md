@@ -4,9 +4,11 @@
 
 已知可以完美运行 `MiGPT` 的小爱音箱型号有：
 
-| 名称         | 型号                                                                                                | ttsCommand | wakeUpCommand | playingCommand | streamResponse | 反馈来源                               |
-| ------------ | --------------------------------------------------------------------------------------------------- | ---------- | ------------- | -------------- | -------------- | -------------------------------------- |
-| 小爱音箱 Pro | [LX06](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-lx06:2) | `[5, 1]`   | `[5, 3]`      | -              | true           | [@idootop](https://github.com/idootop) |
+| 名称                     | 型号                                                                                                | ttsCommand | wakeUpCommand | playingCommand | streamResponse | 反馈来源                                                                         |
+| ------------------------ | --------------------------------------------------------------------------------------------------- | ---------- | ------------- | -------------- | -------------- | -------------------------------------------------------------------------------- |
+| 小爱音箱 Pro             | [LX06](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-lx06:2) | `[5, 1]`   | `[5, 3]`      | -              | true           | [@idootop](https://github.com/idootop)                                           |
+| 小爱音箱 mini            | [LX01](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-lx01:1) | `[5, 1]`   | `[5, 2]`      | `[4, 1, 1]`    | true           | [@gsscsd](https://github.com/idootop/mi-gpt/issues/92#issuecomment-2168013500)   |
+| 小爱音箱 Play（2019 款） | [LX05](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-lx05:1) | `[5, 1]`   | `[5, 3]`      | `[3, 1, 1]`    | true           | [@wt666666](https://github.com/idootop/mi-gpt/issues/92#issuecomment-2168424538) |
 
 ## 🚗 正常运行
 
@@ -32,10 +34,11 @@
 
 ## 🔥 型号分享
 
-如果你是其他型号的小爱音箱，欢迎把你的型号和配置参数分享给大家，谢谢。分享格式如下：
+如果你是其他型号的小爱音箱，欢迎把你的型号和配置参数分享给大家，分享格式如下：
 
-- 型号：小爱音箱 Pro【LX06】
+- 名称：小爱音箱 Pro
+- 型号：LX06
 - ttsCommand：[5, 1]
 - wakeUpCommand：[5, 3]
 - playingCommand：未设置
-- streamResponse：true（支持唤醒模式）
+- streamResponse：true（支持连续对话）
