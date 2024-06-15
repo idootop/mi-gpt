@@ -21,8 +21,8 @@ importers:
         specifier: ^2.5.0
         version: 2.5.0
       openai:
-        specifier: ^4.47.3
-        version: 4.47.3
+        specifier: ^4.51.0
+        version: 4.51.0
       prisma:
         specifier: ^5.14.0
         version: 5.14.0
@@ -554,8 +554,8 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
-  axios@1.6.8:
-    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
+  axios@1.7.2:
+    resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -869,8 +869,8 @@ packages:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
 
-  openai@4.47.3:
-    resolution: {integrity: sha512-470d4ibH5kizXflCzgur22GpM4nOjrg7WQ9jTOa3dNKEn248oBy4+pjOyfcFR4V4YUn/YlDNjp6h83PbviCCKQ==}
+  openai@4.51.0:
+    resolution: {integrity: sha512-UKuWc3/qQyklqhHM8CbdXCv0Z0obap6T0ECdcO5oATQxAbKE5Ky3YCXFQY207z+eGG6ez4U9wvAcuMygxhmStg==}
     hasBin: true
 
   pako@2.1.0:
@@ -1458,7 +1458,7 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios@1.6.8:
+  axios@1.7.2:
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0
@@ -1743,7 +1743,7 @@ snapshots:
 
   mi-service-lite@2.5.0:
     dependencies:
-      axios: 1.6.8
+      axios: 1.7.2
       pako: 2.1.0
     transitivePeerDependencies:
       - debug
@@ -1795,7 +1795,7 @@ snapshots:
     dependencies:
       mimic-fn: 2.1.0
 
-  openai@4.47.3:
+  openai@4.51.0:
     dependencies:
       '@types/node': 18.19.33
       '@types/node-fetch': 2.6.11
