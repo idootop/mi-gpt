@@ -31,7 +31,7 @@
     "@prisma/client": "^5.14.0",
     "fs-extra": "^11.2.0",
     "https-proxy-agent": "^7.0.4",
-    "mi-service-lite": "^2.5.0",
+    "mi-service-lite": "^3.0.0",
     "openai": "^4.51.0",
     "prisma": "^5.14.0"
   },
