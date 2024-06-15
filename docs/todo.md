@@ -7,7 +7,7 @@
 - ✅ 新增自定义系统 Prompt 功能
 - 登录凭证过期后自动刷新 token https://github.com/idootop/mi-gpt/issues/76
 - 支持火山引擎 TTS 和音色切换能力（微软 TTS、OpenAI TTS 待定）
-- 添加 MIT license
+- ✅ 添加 MIT license
 
 ## 💪 优化
 
@@ -25,6 +25,7 @@
 - ✅ 添加进入唤醒模式时小爱莫名开始播放歌曲的说明 https://github.com/idootop/mi-gpt/issues/71
 - ✅ 添加部署和接入本地大语言模型的教程 https://github.com/idootop/mi-gpt/issues/82
 - ✅ 添加获取小爱音箱 did 的相关说明
+- ✅ 添加提示无法找到共享设备的相关说明
 - ✅ 添加常见小爱音箱型号的支持情况和参数列表
 - 添加更详细的使用和配置视频教程
 - 添加 302.AI Sponsor 链接

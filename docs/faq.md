@@ -123,7 +123,7 @@ export default {
 
 </details>
 
-注意：Mina 获取不到共享设备，如果你的小爱音箱是共享设备，是无法正常启动本项目的。
+注意：Mina 获取不到共享设备，如果你的小爱音箱是共享设备，是无法正常启动本项目的。相关 [issue](https://github.com/idootop/mi-gpt/issues/86)
 
 ### Q：提示“login failed &&&START&&&{"notificationUrl”，无法正常启动
 
