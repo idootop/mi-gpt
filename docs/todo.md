@@ -5,12 +5,12 @@
 ## ✨ 新功能
 
 - ✅ 新增自定义系统 Prompt 功能
-- 登录凭证过期后自动刷新 token https://github.com/idootop/mi-gpt/issues/76
 - 支持火山引擎 TTS 和音色切换能力（微软 TTS、OpenAI TTS 待定）
 - ✅ 添加 MIT license
 
 ## 💪 优化
 
+- 登录凭证过期后自动刷新 token https://github.com/idootop/mi-gpt/issues/76
 - ✅ 优化网络请求错误重试策略（消息/播放状态轮询）
 - 移除 TTS 不发音字符（emoji）
 
@@ -27,5 +27,6 @@
 - ✅ 添加获取小爱音箱 did 的相关说明
 - ✅ 添加提示无法找到共享设备的相关说明
 - ✅ 添加常见小爱音箱型号的支持情况和参数列表
+- ✅ 添加 OpenAI 账号充值前可能无法使用 gpt-4 系列模型的相关说明
 - 添加更详细的使用和配置视频教程
 - 添加 302.AI Sponsor 链接

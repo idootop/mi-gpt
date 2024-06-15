@@ -242,6 +242,8 @@ OPENAI_API_KEY=$MOONSHOT_API_KEY
 
 当前 OpenAI 账号没有使用 `gpt-4` 系列模型的权限，请切换到 `gpt-3` 系列模型，比如：`gpt-3.5-turbo`，相关 [issue](https://github.com/idootop/mi-gpt/issues/30#issuecomment-2154656498)。
 
+> 补充：似乎 OpenAI 账号在没有绑卡充值之前，是用不了 `gpt-4` 系列模型的，相关 [issue](https://github.com/idootop/mi-gpt/issues/94)
+
 ### Q：提示“LLM 响应异常，401 Invalid Authentication”
 
 无效的 `OpenAI_API_KEY`。请检查 `OpenAI_API_KEY` 是否能正常使用，以及对应环境变量是否生效，相关 [issue](https://github.com/idootop/mi-gpt/issues/59)。
