@@ -232,7 +232,9 @@ OPENAI_MODEL=moonshot-v1-8k
 OPENAI_API_KEY=$MOONSHOT_API_KEY
 ```
 
-当然，对于其他不兼容 OpenAI API 的大模型，比如豆包大模型、文心一言等，你也可以通过第三方的 API 聚合工具将其转换为 OpenAI API 兼容的格式，比如：[One API](https://github.com/songquanpeng/one-api)，然后修改对应的环境变量值即可完成接入。
+当然，对于其他不兼容 OpenAI API 的大模型，比如豆包大模型、文心一言等，你也可以通过第三方的 API 聚合工具将其转换为 OpenAI API 兼容的格式，比如： [One API](https://github.com/songquanpeng/one-api) 和 [simple-one-api](https://github.com/fruitbars/simple-one-api)（推荐：支持 coze，使用更简单），然后修改对应的环境变量值即可完成接入。
+
+> 注意：环境变量名称不变，只需修改对应模型服务提供商的环境变量的值。
 
 ### Q：我想在本地部署大模型，如何在本项目中使用？
 

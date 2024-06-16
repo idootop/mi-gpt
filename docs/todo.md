@@ -5,7 +5,7 @@
 ## ✨ 新功能
 
 - ✅ 新增自定义系统 Prompt 功能
-- 支持火山引擎 TTS 和音色切换能力（微软 TTS、OpenAI TTS 待定）
+- ✅ 支持火山引擎 TTS 和音色切换能力
 - ✅ 添加 MIT license
 
 ## 💪 优化
@@ -29,5 +29,11 @@
 - ✅ 添加常见小爱音箱型号的支持情况和参数列表
 - ✅ 添加 OpenAI 账号充值前可能无法使用 gpt-4 系列模型的相关说明
 - ✅ 添加无需和小爱音箱在同一局域网下运行的说明
+- 添加自定义 TTS 和音色的配置和使用教程
 - 添加更详细的使用和配置视频教程
 - 添加 302.AI Sponsor 链接
+
+## ❤️ 感谢
+
+- @LycsHub 推荐了使用 [simple-one-api](https://github.com/fruitbars/simple-one-api) 将其他模型的请求格式统一成 OpenAI 的格式，支持 Coze
+- @shinedlc 实现了一个小爱音箱接入 [OpenGlass](https://github.com/BasedHardware/OpenGlass) 摄像头硬件 + 本机搭建 [Ollama](https://github.com/ollama/ollama) 模型的 [Fork](https://github.com/shinedlc/mi-gpt)
