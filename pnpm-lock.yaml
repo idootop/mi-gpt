@@ -319,8 +319,8 @@ packages:
       encoding:
         optional: true
 
-  openai@4.47.3:
-    resolution: {integrity: sha512-470d4ibH5kizXflCzgur22GpM4nOjrg7WQ9jTOa3dNKEn248oBy4+pjOyfcFR4V4YUn/YlDNjp6h83PbviCCKQ==}
+  openai@4.51.0:
+    resolution: {integrity: sha512-UKuWc3/qQyklqhHM8CbdXCv0Z0obap6T0ECdcO5oATQxAbKE5Ky3YCXFQY207z+eGG6ez4U9wvAcuMygxhmStg==}
     hasBin: true
 
   pako@2.1.0:
@@ -595,7 +595,7 @@ snapshots:
       fs-extra: 11.2.0
       https-proxy-agent: 7.0.4
       mi-service-lite: 2.5.0
-      openai: 4.47.3
+      openai: 4.51.0
       prisma: 5.14.0
     transitivePeerDependencies:
       - debug
@@ -625,7 +625,7 @@ snapshots:
     dependencies:
       whatwg-url: 5.0.0
 
-  openai@4.47.3:
+  openai@4.51.0:
     dependencies:
       '@types/node': 18.19.33
       '@types/node-fetch': 2.6.11
