@@ -192,7 +192,7 @@ export class AISpeaker extends Speaker {
             msg.text.startsWith(e)
           )!;
           const speaker = msg.text.replace(prefix, "");
-          const success = await this.switchDefaultSpeaker(speaker);
+          const success = await this.switchSpeaker(speaker);
           await this.response({
             text: success ? "音色已切换！" : "音色切换失败！",
             keepAlive: this.keepAlive,

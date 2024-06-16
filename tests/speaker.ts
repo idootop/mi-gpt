@@ -47,8 +47,8 @@ async function testSpeakerUnWakeUp(speaker: AISpeaker) {
 
 async function testSwitchSpeaker(speaker: AISpeaker) {
   await speaker.response({ text: "你好，我是傻妞，很高兴认识你！" });
-  const success = await speaker.switchDefaultSpeaker("魅力苏菲");
-  console.log("switchDefaultSpeaker 魅力苏菲", success);
+  const success = await speaker.switchSpeaker("魅力苏菲");
+  console.log("switchSpeaker 魅力苏菲", success);
   await speaker.response({ text: "你好，我是傻妞，很高兴认识你！" });
   console.log("hello");
 }

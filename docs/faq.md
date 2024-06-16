@@ -1,5 +1,7 @@
 # 💬 常见问题
 
+> 善用搜索，大多数问题都可在此处找到答案。如果你有新的问题，欢迎提交 [issue](https://github.com/idootop/mi-gpt/issues)。
+
 ### Q：支持哪些型号的小爱音箱？
 
 大部分型号的小爱音箱都支持，推荐小爱音箱 Pro（完美运行）
@@ -7,6 +9,12 @@
 👉 [查看兼容的小爱音箱型号和配置参数](https://github.com/idootop/mi-gpt/blob/main/docs/compatibility.md)
 
 > 注意：本项目暂不支持小度音箱、天猫精灵、HomePod 等智能音箱设备，亦无相关适配计划。
+
+### Q：是否支持其他 TTS 服务，如何接入？
+
+支持接入任意 TTS 服务，包括本地部署的 ChatTTS 等。
+
+具体的配置和使用教程，请查看此处：[🚗 使用第三方 TTS](https://github.com/idootop/mi-gpt/blob/main/docs/tts.md)
 
 ### Q：什么是唤醒模式，如何唤醒 AI？
 

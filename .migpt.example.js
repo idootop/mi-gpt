@@ -9,6 +9,8 @@ export default {
     profile: masterProfile,
   },
   speaker: {
+    // TTS 引擎
+    tts: "xiaoai",
     // 小米 ID
     userId: "987654321", // 注意：不是手机号或邮箱，请在「个人信息」-「小米 ID」查看
     // 账号密码

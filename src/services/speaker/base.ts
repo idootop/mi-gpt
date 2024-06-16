@@ -11,11 +11,11 @@ import { StreamResponse } from "./stream";
 import { kAreYouOK } from "../../utils/string";
 import { fastRetry } from "../../utils/retry";
 
-export type TTSProvider = "xiaoai" | "doubao";
+export type TTSProvider = "xiaoai" | "custom";
 
 type Speaker = {
-  name: string;
-  gender: "男" | "女";
+  name?: string;
+  gender?: string;
   speaker: string;
 };
 
@@ -205,9 +205,9 @@ export class BaseSpeaker {
       return;
     }
 
-    const doubaoTTS = process.env.TTS_DOUBAO;
-    if (!doubaoTTS) {
-      tts = "xiaoai"; // 没有提供豆包语音接口时，只能使用小爱自带 TTS
+    const customTTS = process.env.TTS_BASE_URL;
+    if (!customTTS) {
+      tts = "xiaoai"; // 没有提供 TTS 接口时，只能使用小爱自带 TTS
     }
 
     const ttsNotXiaoai = tts !== "xiaoai" && !audio;
@@ -300,16 +300,10 @@ export class BaseSpeaker {
       playSFX = true,
       keepAlive = false,
       tts = this.tts,
-      speaker = this._defaultSpeaker,
+      speaker = this._currentSpeaker,
     } = options ?? {};
 
-    const hasNewMsg = () => {
-      const flag = options.hasNewMsg?.();
-      if (this.debug) {
-        this.logger.debug("checkIfHasNewMsg:" + flag);
-      }
-      return flag;
-    };
+    const hasNewMsg = () => options.hasNewMsg?.();
 
     const ttsText = text?.replace(/\n\s*\n/g, "\n")?.trim();
     const ttsNotXiaoai = tts !== "xiaoai" && !audio;
@@ -399,10 +393,9 @@ export class BaseSpeaker {
     } else if (ttsText) {
       // 文字回复
       switch (tts) {
-        case "doubao":
+        case "custom":
           const _text = encodeURIComponent(ttsText);
-          const doubaoTTS = process.env.TTS_DOUBAO;
-          const url = `${doubaoTTS}?speaker=${speaker}&text=${_text}`;
+          const url = `${process.env.TTS_BASE_URL}/tts.mp3?speaker=${speaker}&text=${_text}`;
           res = await play({ url });
           break;
         case "xiaoai":
@@ -414,26 +407,27 @@ export class BaseSpeaker {
     return res;
   }
 
-  private _doubaoSpeakers?: Speaker[];
-  private _defaultSpeaker = "zh_female_maomao_conversation_wvae_bigtts";
-  async switchDefaultSpeaker(speaker: string) {
-    const speakersAPI = process.env.SPEAKERS_DOUBAO;
-    if (!this._doubaoSpeakers && speakersAPI) {
-      const resp = await fetch(speakersAPI).catch(() => null);
+  private _speakers?: Speaker[];
+  private _currentSpeaker: string | undefined;
+  async switchSpeaker(speaker: string) {
+    if (!this._speakers && process.env.TTS_BASE_URL) {
+      const resp = await fetch(`${process.env.TTS_BASE_URL}/speakers`).catch(
+        () => null
+      );
       const res = await resp?.json().catch(() => null);
       if (Array.isArray(res)) {
-        this._doubaoSpeakers = res;
+        this._speakers = res;
       }
     }
-    if (!this._doubaoSpeakers) {
+    if (!this._speakers) {
       return false;
     }
-    const target = this._doubaoSpeakers.find(
+    const target = this._speakers.find(
       (e) => e.name === speaker || e.speaker === speaker
     );
     if (target) {
-      this._defaultSpeaker = target.speaker;
+      this._currentSpeaker = target.speaker;
+      return true;
     }
-    return this._defaultSpeaker === target?.speaker;
   }
 }
