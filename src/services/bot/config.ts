@@ -111,7 +111,7 @@ class _BotConfig {
     }
     const bot = await UserCRUD.get(this.botIndex!.botId);
     if (!bot) {
-      this._logger.error("find bot failed");
+      this._logger.error("find bot failed. 请删除 .bot.json 文件后重试！");
       return undefined;
     }
     const master = await UserCRUD.get(this.botIndex!.masterId);

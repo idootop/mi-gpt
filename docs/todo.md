@@ -13,6 +13,7 @@
 - ✅ 登录凭证过期后自动刷新 token https://github.com/idootop/mi-gpt/issues/76
 - ✅ 优化网络请求错误重试策略（消息/播放状态轮询）
 - ✅ 移除 TTS 不发音字符（emoji）
+- ✅ 优化 db 路径查找方式
 
 ## 📚 文档
 
