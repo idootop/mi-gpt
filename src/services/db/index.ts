@@ -37,16 +37,16 @@ export function getDBInfo() {
     rootDir = "/" + rootDir; // linux root path
   }
   const dbPath = rootDir + "/prisma/app.db";
-  const withSchema = `--schema ${rootDir}/prisma/schema.prisma`;
-  return { dbPath, withSchema };
+  return { rootDir, dbPath };
 }
 
 export async function initDB(debug = false) {
-  const { dbPath, withSchema } = getDBInfo();
+  const { rootDir, dbPath } = getDBInfo();
   if (!exists(dbPath)) {
     await deleteFile(".bot.json");
-    await Shell.run(`npx prisma migrate dev --name init ${withSchema}`, {
-      silent: debug ? false : true,
+    await Shell.run(`npm run postinstall`, {
+      cwd: rootDir,
+      silent: !debug,
     });
   }
   const success = exists(dbPath);

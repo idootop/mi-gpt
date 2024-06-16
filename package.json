@@ -25,7 +25,7 @@
     "build": "npx -y prisma generate && tsup",
     "db:gen": "npx -y prisma migrate dev --name init",
     "db:reset": "rm -f .mi.json .bot.json prisma/app.db prisma/app.db-journal",
-    "postinstall": "npx prisma migrate dev --name hello"
+    "postinstall": "npx -y prisma migrate dev --name hello"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
