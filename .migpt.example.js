@@ -1,55 +1,3 @@
-export default {
-  systemTemplate,
-  bot: {
-    name: "傻妞",
-    profile: botProfile,
-  },
-  master: {
-    name: "陆小千",
-    profile: masterProfile,
-  },
-  speaker: {
-    // TTS 引擎
-    tts: "xiaoai",
-    // 小米 ID
-    userId: "987654321", // 注意：不是手机号或邮箱，请在「个人信息」-「小米 ID」查看
-    // 账号密码
-    password: "123456",
-    // 小爱音箱 DID 或在米家中设置的名称
-    did: "小爱音箱Pro",
-    // 当消息以下面的关键词开头时，会调用 AI 来回复消息
-    callAIKeywords: ["请", "你", "傻妞"],
-    // 当消息以下面的关键词开头时，会进入 AI 唤醒状态
-    wakeUpKeywords: ["打开", "进入", "召唤"],
-    // 当消息以下面的关键词开头时，会退出 AI 唤醒状态
-    exitKeywords: ["关闭", "退出", "再见"],
-    // 进入 AI 模式的欢迎语
-    onEnterAI: ["你好，我是傻妞，很高兴认识你"],
-    // 退出 AI 模式的提示语
-    onExitAI: ["傻妞已退出"],
-    // AI 开始回答时的提示语
-    onAIAsking: ["让我先想想", "请稍等"],
-    // AI 结束回答时的提示语
-    onAIReplied: ["我说完了", "还有其他问题吗"],
-    // AI 回答异常时的提示语
-    onAIError: ["啊哦，出错了，请稍后再试吧！"],
-    // 无响应一段时间后，多久自动退出唤醒模式（默认 30 秒）
-    exitKeepAliveAfter: 30,
-    // TTS 指令，请到 https://home.miot-spec.com 查询具体指令
-    ttsCommand: [5, 1],
-    // 设备唤醒指令，请到 https://home.miot-spec.com 查询具体指令
-    wakeUpCommand: [5, 3],
-    // 是否启用流式响应，部分小爱音箱型号不支持查询播放状态，此时需要关闭流式响应
-    streamResponse: true,
-    // 查询是否在播放中指令，请到 https://home.miot-spec.com 查询具体指令
-    // playingCommand: [3, 1, 1], // 默认无需配置此参数，播放出现问题时再尝试开启
-    // 是否启用调试
-    debug: false, // 一般情况下不要打开
-    // 是否跟踪 Mi Service 相关日志（打开后可以查看设备 did）
-    enableTrace: false, // 一般情况下不要打开
-  },
-};
-
 // 小爱音箱扮演角色的简介
 const botProfile = `
 性别：女
@@ -123,3 +71,55 @@ Bad example: "2024年02月28日星期三 23:01 {{botName}}: 我是{{botName}}"
 ## 开始
 请以{{botName}}的身份，直接回复{{masterName}}的新消息，继续你们之间的对话。
 `.trim();
+
+export default {
+  systemTemplate,
+  bot: {
+    name: "傻妞",
+    profile: botProfile,
+  },
+  master: {
+    name: "陆小千",
+    profile: masterProfile,
+  },
+  speaker: {
+    // TTS 引擎
+    tts: "xiaoai",
+    // 小米 ID
+    userId: "987654321", // 注意：不是手机号或邮箱，请在「个人信息」-「小米 ID」查看
+    // 账号密码
+    password: "123456",
+    // 小爱音箱 DID 或在米家中设置的名称
+    did: "小爱音箱Pro",
+    // 当消息以下面的关键词开头时，会调用 AI 来回复消息
+    callAIKeywords: ["请", "你", "傻妞"],
+    // 当消息以下面的关键词开头时，会进入 AI 唤醒状态
+    wakeUpKeywords: ["打开", "进入", "召唤"],
+    // 当消息以下面的关键词开头时，会退出 AI 唤醒状态
+    exitKeywords: ["关闭", "退出", "再见"],
+    // 进入 AI 模式的欢迎语
+    onEnterAI: ["你好，我是傻妞，很高兴认识你"],
+    // 退出 AI 模式的提示语
+    onExitAI: ["傻妞已退出"],
+    // AI 开始回答时的提示语
+    onAIAsking: ["让我先想想", "请稍等"],
+    // AI 结束回答时的提示语
+    onAIReplied: ["我说完了", "还有其他问题吗"],
+    // AI 回答异常时的提示语
+    onAIError: ["啊哦，出错了，请稍后再试吧！"],
+    // 无响应一段时间后，多久自动退出唤醒模式（默认 30 秒）
+    exitKeepAliveAfter: 30,
+    // TTS 指令，请到 https://home.miot-spec.com 查询具体指令
+    ttsCommand: [5, 1],
+    // 设备唤醒指令，请到 https://home.miot-spec.com 查询具体指令
+    wakeUpCommand: [5, 3],
+    // 是否启用流式响应，部分小爱音箱型号不支持查询播放状态，此时需要关闭流式响应
+    streamResponse: true,
+    // 查询是否在播放中指令，请到 https://home.miot-spec.com 查询具体指令
+    // playingCommand: [3, 1, 1], // 默认无需配置此参数，播放出现问题时再尝试开启
+    // 是否启用调试
+    debug: false, // 一般情况下不要打开
+    // 是否跟踪 Mi Service 相关日志（打开后可以查看设备 did）
+    enableTrace: false, // 一般情况下不要打开
+  },
+};
