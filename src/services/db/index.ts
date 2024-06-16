@@ -41,12 +41,12 @@ export function getDBInfo() {
   return { dbPath, withSchema };
 }
 
-export async function initDB() {
+export async function initDB(debug = false) {
   const { dbPath, withSchema } = getDBInfo();
   if (!exists(dbPath)) {
     await deleteFile(".bot.json");
     await Shell.run(`npx prisma migrate dev --name init ${withSchema}`, {
-      silent: true,
+      silent: debug ? false : true,
     });
   }
   const success = exists(dbPath);

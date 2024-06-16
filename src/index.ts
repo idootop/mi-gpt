@@ -50,7 +50,7 @@ export class MiGPT {
   }
 
   async start() {
-    await initDB();
+    await initDB(this.speaker.debug);
     const main = () => {
       console.log(kBannerASCII);
       return this.ai.run();
