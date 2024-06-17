@@ -37,6 +37,14 @@
 
 `MiGPT` 有两种启动方式: [Docker](#docker) 和 [Node.js](#nodejs)。
 
+### 设备要求
+
+本项目支持大部分的小爱音箱型号，推荐使用小爱音箱 Pro（完美运行）
+
+👉 [查看更多兼容的小爱音箱型号和配置参数](https://github.com/idootop/mi-gpt/blob/main/docs/compatibility.md)
+
+> 注意：本项目暂不支持小度音箱、天猫精灵、HomePod 等智能音箱设备，亦无相关适配计划。
+
 ### Docker
 
 [![Docker Image Version](https://img.shields.io/docker/v/idootop/mi-gpt?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/mi-gpt)
@@ -46,7 +54,7 @@
 请先按照 [⚙️ 参数设置](https://github.com/idootop/mi-gpt/blob/main/docs/settings.md) 相关说明，配置好你的 `.env` 和 `.migpt.js` 文件，然后使用以下命令启动 docker：
 
 ```shell
-docker run --env-file $(pwd)/.env -v $(pwd)/.migpt.js:/app/.migpt.js idootop/mi-gpt:latest
+docker run -d --env-file $(pwd)/.env -v $(pwd)/.migpt.js:/app/.migpt.js idootop/mi-gpt:latest
 ```
 
 注意：在 Windows 终端下需要将配置文件路径 `$(pwd)` 替换为绝对路径。
@@ -82,16 +90,52 @@ main();
 
 注意：此模式下并不会主动读取 `.env` 和 `.migpt.js` 中的配置信息，你需要手动初始化 Node 环境变量，并将 `.migpt.js` 中的参数作为 `MiGPT.create` 的初始化参数传入。👉 [示例代码](https://github.com/idootop/mi-gpt/blob/example/index.ts)
 
-## 📖 项目文档
+## 📖 使用文档
 
 以下为更详细的使用教程，大多数问题都可在 [💬 常见问题](https://github.com/idootop/mi-gpt/blob/main/docs/faq.md) 中找到答案。
 
 - [⚙️ 参数设置](https://github.com/idootop/mi-gpt/blob/main/docs/settings.md)
 - [💬 常见问题](https://github.com/idootop/mi-gpt/blob/main/docs/faq.md)
+- [🚗 使用第三方 TTS](https://github.com/idootop/mi-gpt/blob/main/docs/tts.md)
 - [🛠️ 本地开发](https://github.com/idootop/mi-gpt/blob/main/docs/development.md)
 - [💎 工作原理](https://github.com/idootop/mi-gpt/blob/main/docs/how-it-works.md)
+- [🦄 Sponsors](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md)
 - [✨ 更新日志](https://github.com/idootop/mi-gpt/blob/main/docs/changelog.md)
 - [🚀 Roadmap](https://github.com/idootop/mi-gpt/blob/main/docs/roadmap.md)
+
+## 🦄 Sponsors
+
+<div align="center">
+  <table>
+    <tr>
+      <td colspan="3" align="left">
+        <p align="center">
+          <a href="https://302.ai" target="_blank">
+            <img src="https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/sponsors/302logo.png" alt="302.AI" width="300" />
+          </a>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td align="left">302.AI 是一个汇集全球顶级 AI 的自助平台，按需付费，零月费，零门槛使用各种类型 AI。</td>
+      <td align="center" width="120px">
+        <a href="https://302.ai" target="_blank">官方网站</a>
+      </td>
+      <td align="center" width="120px">
+        <a href="https://help.302.ai" target="_blank">网站介绍</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+## ❤️ 鸣谢
+
+特别感谢以下项目提供的实现参考：
+
+- https://github.com/yihong0618/xiaogpt
+- https://github.com/jialeicui/open-lx01
+- https://github.com/inu1255/mi-service
+- https://github.com/Yonsm/MiService
 
 ## 🚨 免责声明
 
@@ -100,9 +144,6 @@ main();
 作者不保证本项目的准确性、完整性、及时性、可靠性，也不承担任何因使用本项目而产生的任何损失或损害责任。
 使用本项目即表示您已阅读并同意本免责声明的全部内容。
 
-## ❤️ 鸣谢
+## License
 
-- https://github.com/yihong0618/xiaogpt
-- https://github.com/jialeicui/open-lx01
-- https://github.com/inu1255/mi-service
-- https://github.com/Yonsm/MiService
+[MIT](https://github.com/idootop/mi-gpt/blob/main/LICENSE) License © 2024-PRESENT Del Wang

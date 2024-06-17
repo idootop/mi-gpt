@@ -9,12 +9,13 @@ import { clamp, jsonEncode, sleep } from "../../utils/base";
 import { Logger } from "../../utils/log";
 import { StreamResponse } from "./stream";
 import { kAreYouOK } from "../../utils/string";
+import { fastRetry } from "../../utils/retry";
 
-export type TTSProvider = "xiaoai" | "doubao";
+export type TTSProvider = "xiaoai" | "custom";
 
 type Speaker = {
-  name: string;
-  gender: "男" | "女";
+  name?: string;
+  gender?: string;
   speaker: string;
 };
 
@@ -78,6 +79,10 @@ export type BaseSpeakerConfig = MiServiceConfig & {
    * TTS 开始/结束提示音
    */
   audioBeep?: string;
+  /**
+   * 网络请求超时时长，单位毫秒，默认值 3000 （3 秒）
+   */
+  timeout?: number;
 };
 
 export class BaseSpeaker {
@@ -200,9 +205,9 @@ export class BaseSpeaker {
       return;
     }
 
-    const doubaoTTS = process.env.TTS_DOUBAO;
-    if (!doubaoTTS) {
-      tts = "xiaoai"; // 没有提供豆包语音接口时，只能使用小爱自带 TTS
+    const customTTS = process.env.TTS_BASE_URL;
+    if (!customTTS) {
+      tts = "xiaoai"; // 没有提供 TTS 接口时，只能使用小爱自带 TTS
     }
 
     const ttsNotXiaoai = tts !== "xiaoai" && !audio;
@@ -295,16 +300,10 @@ export class BaseSpeaker {
       playSFX = true,
       keepAlive = false,
       tts = this.tts,
-      speaker = this._defaultSpeaker,
+      speaker = this._currentSpeaker,
     } = options ?? {};
 
-    const hasNewMsg = () => {
-      const flag = options.hasNewMsg?.();
-      if (this.debug) {
-        this.logger.debug("checkIfHasNewMsg:" + flag);
-      }
-      return flag;
-    };
+    const hasNewMsg = () => options.hasNewMsg?.();
 
     const ttsText = text?.replace(/\n\s*\n/g, "\n")?.trim();
     const ttsNotXiaoai = tts !== "xiaoai" && !audio;
@@ -331,30 +330,29 @@ export class BaseSpeaker {
       }
       if (!this.streamResponse) {
         // 非流式响应，直接返回，不再等待设备播放完毕
-        // todo 考虑后续通过 MioT 通知事件，接收设备播放状态变更通知。
+        // todo 考虑后续通过 MIoT 通知事件，接收设备播放状态变更通知。
         return;
       }
       // 等待一段时间，确保本地设备状态已更新
       await sleep(this.checkTTSStatusAfter * 1000);
       // 等待回答播放完毕
+      const retry = fastRetry(this, "设备状态");
       while (true) {
+        // 检测设备播放状态
         let playing: any = { status: "idle" };
-        if (this.playingCommand) {
-          const res = await this.MiIOT!.getProperty(
-            this.playingCommand[0],
-            this.playingCommand[1]
-          );
-          if (this.debug) {
-            this.logger.debug(jsonEncode({ playState: res ?? "undefined" }));
-          }
-          if (res === this.playingCommand[2]) {
-            playing = { status: "playing" };
-          }
-        } else {
-          const res = await this.MiNA!.getStatus();
-          if (this.debug) {
-            this.logger.debug(jsonEncode({ playState: res ?? "undefined" }));
-          }
+        let res = this.playingCommand
+          ? await this.MiIOT!.getProperty(
+              this.playingCommand[0],
+              this.playingCommand[1]
+            )
+          : await this.MiNA!.getStatus();
+        if (this.debug) {
+          this.logger.debug(jsonEncode({ playState: res ?? "undefined" }));
+        }
+        if (this.playingCommand && res === this.playingCommand[2]) {
+          playing = { status: "playing" };
+        }
+        if (!this.playingCommand) {
           playing = { ...playing, ...res };
         }
         if (
@@ -365,7 +363,11 @@ export class BaseSpeaker {
           // 响应被中断
           return "break";
         }
-        if (playing.status !== "playing") {
+        const isOk = retry.onResponse(res);
+        if (isOk === "break") {
+          break; // 获取设备状态异常
+        }
+        if (res && playing.status !== "playing") {
           break;
         }
         await sleep(this.checkInterval);
@@ -391,10 +393,9 @@ export class BaseSpeaker {
     } else if (ttsText) {
       // 文字回复
       switch (tts) {
-        case "doubao":
+        case "custom":
           const _text = encodeURIComponent(ttsText);
-          const doubaoTTS = process.env.TTS_DOUBAO;
-          const url = `${doubaoTTS}?speaker=${speaker}&text=${_text}`;
+          const url = `${process.env.TTS_BASE_URL}/tts.mp3?speaker=${speaker}&text=${_text}`;
           res = await play({ url });
           break;
         case "xiaoai":
@@ -406,26 +407,27 @@ export class BaseSpeaker {
     return res;
   }
 
-  private _doubaoSpeakers?: Speaker[];
-  private _defaultSpeaker = "zh_female_maomao_conversation_wvae_bigtts";
-  async switchDefaultSpeaker(speaker: string) {
-    const speakersAPI = process.env.SPEAKERS_DOUBAO;
-    if (!this._doubaoSpeakers && speakersAPI) {
-      const resp = await fetch(speakersAPI).catch(() => null);
+  private _speakers?: Speaker[];
+  private _currentSpeaker: string | undefined;
+  async switchSpeaker(speaker: string) {
+    if (!this._speakers && process.env.TTS_BASE_URL) {
+      const resp = await fetch(`${process.env.TTS_BASE_URL}/speakers`).catch(
+        () => null
+      );
       const res = await resp?.json().catch(() => null);
       if (Array.isArray(res)) {
-        this._doubaoSpeakers = res;
+        this._speakers = res;
       }
     }
-    if (!this._doubaoSpeakers) {
+    if (!this._speakers) {
       return false;
     }
-    const target = this._doubaoSpeakers.find(
+    const target = this._speakers.find(
       (e) => e.name === speaker || e.speaker === speaker
     );
     if (target) {
-      this._defaultSpeaker = target.speaker;
+      this._currentSpeaker = target.speaker;
+      return true;
     }
-    return this._defaultSpeaker === target?.speaker;
   }
 }

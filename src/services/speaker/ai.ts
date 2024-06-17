@@ -46,7 +46,7 @@ export type AISpeakerConfig = SpeakerConfig & {
    *
    * 比如：音色切换到（文静毛毛）
    */
-  switchSpeakerPrefix?: string[];
+  switchSpeakerKeywords?: string[];
   /**
    * 唤醒关键词
    *
@@ -93,7 +93,7 @@ type AnswerStep = (
 export class AISpeaker extends Speaker {
   askAI: AISpeakerConfig["askAI"];
   name: string;
-  switchSpeakerPrefix: string[];
+  switchSpeakerKeywords: string[];
   onEnterAI: string[];
   onExitAI: string[];
   callAIKeywords: string[];
@@ -110,7 +110,7 @@ export class AISpeaker extends Speaker {
     const {
       askAI,
       name = "傻妞",
-      switchSpeakerPrefix,
+      switchSpeakerKeywords,
       callAIKeywords = ["请", "你", "傻妞"],
       wakeUpKeywords = ["打开", "进入", "召唤"],
       exitKeywords = ["关闭", "退出", "再见"],
@@ -134,8 +134,8 @@ export class AISpeaker extends Speaker {
     this.onAIReplied = onAIReplied;
     this.audioActive = audioActive;
     this.audioError = audioError;
-    this.switchSpeakerPrefix =
-      switchSpeakerPrefix ?? getDefaultSwitchSpeakerPrefix();
+    this.switchSpeakerKeywords =
+      switchSpeakerKeywords ?? getDefaultSwitchSpeakerPrefix();
   }
 
   async enterKeepAlive() {
@@ -183,16 +183,16 @@ export class AISpeaker extends Speaker {
       },
       {
         match: (msg) =>
-          this.switchSpeakerPrefix.some((e) => msg.text.startsWith(e)),
+          this.switchSpeakerKeywords.some((e) => msg.text.startsWith(e)),
         run: async (msg) => {
           await this.response({
             text: "正在切换音色，请稍等...",
           });
-          const prefix = this.switchSpeakerPrefix.find((e) =>
+          const prefix = this.switchSpeakerKeywords.find((e) =>
             msg.text.startsWith(e)
           )!;
           const speaker = msg.text.replace(prefix, "");
-          const success = await this.switchDefaultSpeaker(speaker);
+          const success = await this.switchSpeaker(speaker);
           await this.response({
             text: success ? "音色已切换！" : "音色切换失败！",
             keepAlive: this.keepAlive,
@@ -281,18 +281,29 @@ export class AISpeaker extends Speaker {
 }
 
 const getDefaultSwitchSpeakerPrefix = () => {
-  let prefixes = ["音色切换到", "切换音色到", "把音色调到"];
-  const replaces = [
+  const words = [
+    ["把", ""],
     ["音色", "声音"],
-    ["切换", "调"],
-    ["到", "为"],
-    ["到", "成"],
+    ["切换", "换", "调"],
+    ["到", "为", "成"],
   ];
-  for (const r of replaces) {
-    prefixes = toSet([
-      ...prefixes,
-      ...prefixes.map((e) => e.replace(r[0], r[1])),
-    ]);
-  }
-  return prefixes;
+
+  const generateSentences = (words: string[][]) => {
+    const results: string[] = [];
+    const generate = (currentSentence: string[], index: number) => {
+      if (index === words.length) {
+        results.push(currentSentence.join(""));
+        return;
+      }
+      for (const word of words[index]) {
+        currentSentence.push(word);
+        generate(currentSentence, index + 1);
+        currentSentence.pop();
+      }
+    };
+    generate([], 0);
+    return results;
+  };
+
+  return generateSentences(words);
 };

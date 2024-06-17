@@ -1,4 +1,5 @@
 import { sleep } from "../../utils/base";
+import { removeEmojis } from "../../utils/string";
 
 type ResponseStatus = "idle" | "responding" | "finished" | "canceled";
 
@@ -47,11 +48,16 @@ export class StreamResponse {
     return this.status === "canceled";
   }
 
-  addResponse(text: string) {
+  addResponse(_text: string) {
     if (this.status === "idle") {
       this.status = "responding";
     }
     if (this.status !== "responding") {
+      return;
+    }
+    // 移除不发音字符（emoji）
+    let text = removeEmojis(_text);
+    if (!text) {
       return;
     }
     this._batchSubmit(text);

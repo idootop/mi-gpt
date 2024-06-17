@@ -10,7 +10,7 @@ async function testRunBot() {
   const name = "傻妞";
   const speaker = new AISpeaker({
     name,
-    tts: "doubao",
+    tts: "custom",
     userId: process.env.MI_USER!,
     password: process.env.MI_PASS!,
     did: process.env.MI_DID,
@@ -41,7 +41,7 @@ async function testStreamResponse() {
     userId: process.env.MI_USER!,
     password: process.env.MI_PASS!,
     did: process.env.MI_DID,
-    tts: "doubao",
+    tts: "custom",
   };
   const speaker = new AISpeaker(config);
   await speaker.initMiServices();

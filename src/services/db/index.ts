@@ -28,21 +28,25 @@ export function getSkipWithCursor(skip: number, cursorId: any) {
 }
 
 export function getDBInfo() {
-  const isExternal = exists("node_modules/mi-gpt/prisma");
-  const dbPath = isExternal
-    ? "node_modules/mi-gpt/prisma/app.db"
-    : "prisma/app.db";
-  const schemaPath = isExternal ? "node_modules/mi-gpt" : ".";
-  const withSchema = `--schema ${schemaPath}/prisma/schema.prisma`;
-  return { dbPath, isExternal, withSchema };
+  let rootDir = import.meta.url
+    .replace("/dist/index.js", "")
+    .replace("/dist/index.cjs", "")
+    .replace("/src/services/db/index.ts", "")
+    .replace("file:///", "");
+  if (rootDir[1] !== ":") {
+    rootDir = "/" + rootDir; // linux root path
+  }
+  const dbPath = rootDir + "/prisma/app.db";
+  return { rootDir, dbPath };
 }
 
-export async function initDB() {
-  const { dbPath, withSchema } = getDBInfo();
+export async function initDB(debug = false) {
+  const { rootDir, dbPath } = getDBInfo();
   if (!exists(dbPath)) {
     await deleteFile(".bot.json");
-    await Shell.run(`npx prisma migrate dev --name init ${withSchema}`, {
-      silent: true,
+    await Shell.run(`npm run postinstall`, {
+      cwd: rootDir,
+      silent: !debug,
     });
   }
   const success = exists(dbPath);

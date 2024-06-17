@@ -1,6 +1,6 @@
 {
   "name": "mi-gpt",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "type": "module",
   "description": "将小爱音箱接入 ChatGPT 和豆包，改造成你的专属语音助手。",
   "homepage": "https://github.com/idootop/mi-gpt",
@@ -25,14 +25,14 @@
     "build": "npx -y prisma generate && tsup",
     "db:gen": "npx -y prisma migrate dev --name init",
     "db:reset": "rm -f .mi.json .bot.json prisma/app.db prisma/app.db-journal",
-    "postinstall": "npx prisma migrate dev --name hello"
+    "postinstall": "npx -y prisma migrate dev --name hello"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
     "fs-extra": "^11.2.0",
     "https-proxy-agent": "^7.0.4",
-    "mi-service-lite": "^2.5.0",
-    "openai": "^4.47.3",
+    "mi-service-lite": "^3.0.0",
+    "openai": "^4.51.0",
     "prisma": "^5.14.0",
     "socks-proxy-agent": "^8.0.3"
   },

@@ -14,6 +14,9 @@ pnpm install
 
 # 构建项目
 pnpm build
+
+# 运行项目
+pnpm dev
 ```
 
 然后按照 [⚙️ 参数设置](https://github.com/idootop/mi-gpt/blob/main/docs/settings.md) 教程，配置好你的 `.env` 和 `.migpt.js` 文件。
@@ -38,7 +41,7 @@ docker build --platform linux/arm/v7 -t mi-gpt .
 运行构建后的 docker
 
 ```shell
-docker run --env-file $(pwd)/.env -v $(pwd)/.migpt.js:/app/.migpt.js mi-gpt
+docker run -d --env-file $(pwd)/.env -v $(pwd)/.migpt.js:/app/.migpt.js mi-gpt
 ```
 
 ## 常见问题
