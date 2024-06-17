@@ -218,7 +218,7 @@ export default {
 
 对于国内环境无法访问 OpenAI 服务的情况，有以下几种处理方法：
 
-1. 环境变量里填上你的代理地址，比如：`HTTP_PROXY=http://127.0.0.1:7890`
+1. 环境变量里填上你的代理地址，比如：`HTTP_PROXY=http://127.0.0.1:7890`（或 `SOCKS_PROXY`）
 2. 使用第三方部署的 OpenAI API 反向代理服务，然后更新 `OPENAI_BASE_URL`
 3. 使用国内的 LLM 服务提供商，比如 [通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1)、[零一万物](https://platform.01.ai/docs#making-an-api-request)、[Moonshot](https://platform.moonshot.cn/docs/api/chat)、[DeepSeek](https://platform.deepseek.com/api-docs/)等
 

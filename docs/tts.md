@@ -19,10 +19,16 @@ export default {
   speaker: {
     // TTS 引擎
     tts: 'custom',
+    // 切换 TTS 引擎发言人音色关键词
+    switchSpeakerKeywords: ["把声音换成"], // 以此关键词开头即可切换音色，比如：把声音换成东北老铁
     // ...
   },
 };
 ```
+
+配置成功后，即可通过 `小爱同学，把声音换成 xxx` 语音指令切换 TTS 音色。
+
+[MiGPT-TTS](https://github.com/idootop/mi-gpt-tts) 支持的完整 TTS 音色列表与名称请查看此处：[volcano.ts](https://github.com/idootop/mi-gpt-tts/blob/main/src/tts/volcano.ts)
 
 ## TTS_BASE_URL
 

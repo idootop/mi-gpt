@@ -15,7 +15,7 @@
 - ✅ 优化网络请求错误重试策略（消息/播放状态轮询）
 - ✅ 优化 db 路径查找方式与初始化脚本
 - ✅ 移除 TTS 不发音字符（emoji）
-- 优化切换音色指令（自定义）
+- ✅ 优化切换音色默认语音指令
 
 ## 📚 文档
 
@@ -33,13 +33,13 @@
 - ✅ 添加 OpenAI 账号充值前可能无法使用 gpt-4 系列模型的相关说明
 - ✅ 添加无需和小爱音箱在同一局域网下运行的说明
 - ✅ 添加自定义 TTS 和音色的配置和使用教程
-- 添加切换音色使用教程
+- ✅ 添加切换音色使用教程
 - 添加更详细的使用和配置视频教程
 - 添加 302.AI Sponsor 链接
 
 ## ❤️ 感谢
 
-- @tluo-github 添加对 SOCKS 代理的支持 https://github.com/idootop/mi-gpt/pull/100
+- @tluo-github 添加了对 SOCKS 代理的支持 https://github.com/idootop/mi-gpt/pull/100
 - @shinedlc 实现了一个小爱音箱接入 [OpenGlass](https://github.com/BasedHardware/OpenGlass) 摄像头硬件 + 本机搭建 [Ollama](https://github.com/ollama/ollama) 模型的 [Fork](https://github.com/shinedlc/mi-gpt)
 - @LycsHub 推荐了 [simple-one-api](https://github.com/fruitbars/simple-one-api) 将其他模型的接口统一成 OpenAI 的格式，支持 Coze
 - @lmk123 推荐了国内 docker 镜像设置与大模型服务申请配置教程
