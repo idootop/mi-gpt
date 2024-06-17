@@ -230,21 +230,19 @@ export default {
 
 ### Q：除了 OpenAI 还支持哪些模型，如何设置？
 
-理论上兼容 [OpenAI SDK](https://www.npmjs.com/package/openai) 的模型都支持，只需修改环境变量即可接入到 MiGPT。
-
-比如：[通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1)、[零一万物](https://platform.01.ai/docs#making-an-api-request)、[Moonshot](https://platform.moonshot.cn/docs/api/chat)、[DeepSeek](https://platform.deepseek.com/api-docs/) 等，以 Moonshot 为例：
+理论上兼容 [OpenAI SDK](https://www.npmjs.com/package/openai) 的模型都支持，只需修改环境变量即可接入到 MiGPT。比如：[通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1)、[零一万物](https://platform.01.ai/docs#making-an-api-request)、[Moonshot](https://platform.moonshot.cn/docs/api/chat)、[DeepSeek](https://platform.deepseek.com/api-docs/) 等。以 [通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1) 为例：
 
 ```shell
-OPENAI_BASE_URL=https://api.moonshot.cn/v1
-OPENAI_MODEL=moonshot-v1-8k
-OPENAI_API_KEY=$MOONSHOT_API_KEY
+OPENAI_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+OPENAI_MODEL=qwen-turbo
+OPENAI_API_KEY=通义千问 API_KEY
 ```
 
-对于其他不兼容 OpenAI API 的大模型，比如豆包大模型、文心一言等，你也可以通过第三方的 API 聚合工具将其转换为 OpenAI API 兼容的格式，比如： [One API](https://github.com/songquanpeng/one-api) 和 [simple-one-api](https://github.com/fruitbars/simple-one-api)（推荐：支持 coze，使用更简单），然后修改对应的环境变量值即可完成接入。
+> 注意：OPENAI 环境变量名称不变，只需修改对应模型服务提供商的环境变量的值。
+
+对于其他不兼容 OpenAI API 的大模型，比如豆包大模型、文心一言等，你也可以通过第三方的 API 聚合工具将其转换为 OpenAI API 兼容的格式。比如： [One API](https://github.com/songquanpeng/one-api) 和 [simple-one-api](https://github.com/fruitbars/simple-one-api)（推荐：支持 coze，使用更简单），然后修改对应的环境变量值即可完成接入。
 
 关于不同模型的详细申请和配置教程，可以查看这篇文章：[划词翻译服务申请教程](https://hcfy.app/docs/services/intro/#compare)
-
-> 注意：环境变量名称不变，只需修改对应模型服务提供商的环境变量的值。
 
 ### Q：我想在本地部署大模型，如何在本项目中使用？
 
