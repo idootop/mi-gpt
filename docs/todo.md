@@ -6,6 +6,7 @@
 
 - ✅ 新增自定义系统 Prompt 功能
 - ✅ 支持火山引擎 TTS 和音色切换能力
+- ✅ 支持使用 SOCKS 代理 by [@tluo-github](https://github.com/idootop/mi-gpt/pull/100)
 - ✅ 添加 MIT license
 
 ## 💪 优化
@@ -38,8 +39,9 @@
 
 ## ❤️ 感谢
 
+- @tluo-github 添加对 SOCKS 代理的支持 https://github.com/idootop/mi-gpt/pull/100
 - @shinedlc 实现了一个小爱音箱接入 [OpenGlass](https://github.com/BasedHardware/OpenGlass) 摄像头硬件 + 本机搭建 [Ollama](https://github.com/ollama/ollama) 模型的 [Fork](https://github.com/shinedlc/mi-gpt)
 - @LycsHub 推荐了 [simple-one-api](https://github.com/fruitbars/simple-one-api) 将其他模型的接口统一成 OpenAI 的格式，支持 Coze
-- @lmk123 推荐了国内 docker 镜像设置与大模型服务申请配置教程  
+- @lmk123 推荐了国内 docker 镜像设置与大模型服务申请配置教程
 - @laiquziru 协助调试小米 AI 音箱（第二代）
 - @wt666666、@mingtian886、@imlinhanchao、@HJ66 帮助网友解答常见问题（比如通义千问如何配置等）
