@@ -6,8 +6,9 @@
     "target": "esnext",
     "module": "esnext",
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "noImplicitAny": false
   },
-  "include": ["src", "tests", "index.ts"],
+  "include": ["src", "tests", "index.ts", ".migpt.js"],
   "exclude": ["node_modules", "dist"]
 }

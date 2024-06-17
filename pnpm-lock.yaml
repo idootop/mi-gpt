@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       mi-gpt:
-        specifier: ^3.1.0
-        version: 3.1.0
+        specifier: ^4.0.0
+        version: 4.0.0
     devDependencies:
       '@types/node':
         specifier: ^20.4.9
@@ -281,15 +281,22 @@ packages:
   humanize-ms@1.2.1:
     resolution: {integrity: sha512-Fl70vYtsAFb/C06PTS9dZBo7ihau+Tu/DNCk/OyHhea07S+aeMWpFFkUaXRa8fI+ScZbEI8dfSxwY7gxZ9SAVQ==}
 
+  ip-address@9.0.5:
+    resolution: {integrity: sha512-zHtQzGojZXTwZTHQqra+ETKd4Sn3vgi7uBmlPoXVWZqYvuKmtI0l/VZTjqGmJY9x88GGOaZ9+G9ES8hC4T4X8g==}
+    engines: {node: '>= 12'}
+
+  jsbn@1.1.0:
+    resolution: {integrity: sha512-4bYVV3aAMtDTTu4+xsDYa6sy9GyJ69/amsu9sYF2zqjiEoZA5xJi3BrfX3uY+/IekIu7MwdObdbDWpoZdBv3/A==}
+
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
 
-  mi-gpt@3.1.0:
-    resolution: {integrity: sha512-E2szgC2rQzWJka1MqlnQwqqpTV4jUHXShn9rNmVoJBs9LyuasAM3eq4kY1Rk1pHfoO/Q5M4lxp2UtmOPT1FwLw==}
+  mi-gpt@4.0.0:
+    resolution: {integrity: sha512-G4fpsm9mLlLwP6ObBa7UHpRMXA0G52sPd46U7/2ZFnwCJauwGg3LUfYlGaH8GKAHjVAqDUBeI1yQ/2bEOs2IjA==}
     engines: {node: '>=16'}
 
-  mi-service-lite@2.5.0:
-    resolution: {integrity: sha512-wrXxOUoR54QQRNiU7qZB0OqC20E1gO+eFw7W9ftsr8QkdmLyq+ewrCaT6QsSg1pObPAlZopb2Qci6PRBptdPzg==}
+  mi-service-lite@3.0.0:
+    resolution: {integrity: sha512-Fbz3lGPNp1Jbqqlj4EK1vya9zj3WCWXeW6+mnpcQi9RTMMPmGXC+126HHmw8WWUWj4G0tNHHP/ApHMCAIzzENQ==}
     engines: {node: '>=16'}
 
   mime-db@1.52.0:
@@ -336,6 +343,21 @@ packages:
 
   resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
+
+  smart-buffer@4.2.0:
+    resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
+    engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
+
+  socks-proxy-agent@8.0.3:
+    resolution: {integrity: sha512-VNegTZKhuGq5vSD6XNKlbqWhyt/40CgoEw8XxD6dhnm8Jq9IEa3nIa4HwnM8XOqU0CdB0BwWVXusqiFXfHB3+A==}
+    engines: {node: '>= 14'}
+
+  socks@2.8.3:
+    resolution: {integrity: sha512-l5x7VUUWbjVFbafGLxPWkYsHIhEvmF85tbIeFZWc8ZPtoMyybuEhL7Jye/ooC4/d48FgOjSJXgsF/AJPYCW8Zw==}
+    engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
+
+  sprintf-js@1.1.3:
+    resolution: {integrity: sha512-Oo+0REFV59/rz3gfJNKQiBlwfHaSESl1pcGyABQsnnIfWOFt6JNj5gCog2U6MLZ//IGYD+nA8nI+mTShREReaA==}
 
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
@@ -583,26 +605,34 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
+  ip-address@9.0.5:
+    dependencies:
+      jsbn: 1.1.0
+      sprintf-js: 1.1.3
+
+  jsbn@1.1.0: {}
+
   jsonfile@6.1.0:
     dependencies:
       universalify: 2.0.1
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  mi-gpt@3.1.0:
+  mi-gpt@4.0.0:
     dependencies:
       '@prisma/client': 5.14.0(prisma@5.14.0)
       fs-extra: 11.2.0
       https-proxy-agent: 7.0.4
-      mi-service-lite: 2.5.0
+      mi-service-lite: 3.0.0
       openai: 4.51.0
       prisma: 5.14.0
+      socks-proxy-agent: 8.0.3
     transitivePeerDependencies:
       - debug
       - encoding
       - supports-color
 
-  mi-service-lite@2.5.0:
+  mi-service-lite@3.0.0:
     dependencies:
       axios: 1.6.8
       pako: 2.1.0
@@ -647,6 +677,23 @@ snapshots:
   proxy-from-env@1.1.0: {}
 
   resolve-pkg-maps@1.0.0: {}
+
+  smart-buffer@4.2.0: {}
+
+  socks-proxy-agent@8.0.3:
+    dependencies:
+      agent-base: 7.1.1
+      debug: 4.3.4
+      socks: 2.8.3
+    transitivePeerDependencies:
+      - supports-color
+
+  socks@2.8.3:
+    dependencies:
+      ip-address: 9.0.5
+      smart-buffer: 4.2.0
+
+  sprintf-js@1.1.3: {}
 
   tr46@0.0.3: {}
 
