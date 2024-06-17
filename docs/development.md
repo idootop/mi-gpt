@@ -14,6 +14,9 @@ pnpm install
 
 # 构建项目
 pnpm build
+
+# 运行项目
+pnpm dev
 ```
 
 然后按照 [⚙️ 参数设置](https://github.com/idootop/mi-gpt/blob/main/docs/settings.md) 教程，配置好你的 `.env` 和 `.migpt.js` 文件。
