@@ -33,17 +33,17 @@
 - **🔊 自定义 TTS**。厌倦了小爱同学的语音？帮你解锁[「豆包」](https://doubao.com)同款音色，就像真人在回你的消息。
 - **🤖️ 智能家居 Agent**。心情不好？小爱立刻懂你，自动帮你播放喜欢的音乐，调节灯光，逗你开心。_TODO_
 
-## 🔊 设备要求
+## ⚡️ 快速开始
+
+`MiGPT` 有两种启动方式: [Docker](#docker) 和 [Node.js](#nodejs)。
+
+### 设备要求
 
 本项目支持大部分的小爱音箱型号，推荐使用小爱音箱 Pro（完美运行）
 
 👉 [查看更多兼容的小爱音箱型号和配置参数](https://github.com/idootop/mi-gpt/blob/main/docs/compatibility.md)
 
 > 注意：本项目暂不支持小度音箱、天猫精灵、HomePod 等智能音箱设备，亦无相关适配计划。
-
-## ⚡️ 快速开始
-
-`MiGPT` 有两种启动方式: [Docker](#docker) 和 [Node.js](#nodejs)。
 
 ### Docker
 
@@ -99,8 +99,43 @@ main();
 - [🚗 使用第三方 TTS](https://github.com/idootop/mi-gpt/blob/main/docs/tts.md)
 - [🛠️ 本地开发](https://github.com/idootop/mi-gpt/blob/main/docs/development.md)
 - [💎 工作原理](https://github.com/idootop/mi-gpt/blob/main/docs/how-it-works.md)
+- [🦄 Sponsors](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md)
 - [✨ 更新日志](https://github.com/idootop/mi-gpt/blob/main/docs/changelog.md)
 - [🚀 Roadmap](https://github.com/idootop/mi-gpt/blob/main/docs/roadmap.md)
+
+## 🦄 Sponsors
+
+<div align="center">
+  <table>
+    <tr>
+      <td colspan="3" align="left">
+        <p align="center">
+          <a href="https://302.ai" target="_blank">
+            <img src="https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/sponsors/302logo.png" alt="302.AI" width="300" />
+          </a>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td align="left">302.AI 是一个汇集全球顶级 AI 的自助平台，按需付费，零月费，零门槛使用各种类型 AI。</td>
+      <td align="center" width="120px">
+        <a href="https://302.ai" target="_blank">官方网站</a>
+      </td>
+      <td align="center" width="120px">
+        <a href="https://help.302.ai" target="_blank">网站介绍</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+## ❤️ 鸣谢
+
+特别感谢以下项目提供的实现参考：
+
+- https://github.com/yihong0618/xiaogpt
+- https://github.com/jialeicui/open-lx01
+- https://github.com/inu1255/mi-service
+- https://github.com/Yonsm/MiService
 
 ## 🚨 免责声明
 
@@ -108,13 +143,6 @@ main();
 本项目可能存在未知的缺陷和风险（包括但不限于设备损坏和账号封禁等），使用者应自行承担使用本项目所产生的所有风险及责任。
 作者不保证本项目的准确性、完整性、及时性、可靠性，也不承担任何因使用本项目而产生的任何损失或损害责任。
 使用本项目即表示您已阅读并同意本免责声明的全部内容。
-
-## ❤️ 鸣谢
-
-- https://github.com/yihong0618/xiaogpt
-- https://github.com/jialeicui/open-lx01
-- https://github.com/inu1255/mi-service
-- https://github.com/Yonsm/MiService
 
 ## License
 

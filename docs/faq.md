@@ -10,6 +10,24 @@
 
 > 注意：本项目暂不支持小度音箱、天猫精灵、HomePod 等智能音箱设备，亦无相关适配计划。
 
+### Q：除了 OpenAI 还支持哪些模型，如何设置？
+
+理论上兼容 [OpenAI SDK](https://www.npmjs.com/package/openai) 的模型都支持，只需修改环境变量即可接入到 MiGPT。比如：[通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1)、[零一万物](https://platform.01.ai/docs#making-an-api-request)、[Moonshot](https://platform.moonshot.cn/docs/api/chat)、[DeepSeek](https://platform.deepseek.com/api-docs/) 等。以 [通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1) 为例：
+
+```shell
+OPENAI_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+OPENAI_MODEL=qwen-turbo
+OPENAI_API_KEY=通义千问 API_KEY
+```
+
+> 注意：OPENAI 环境变量名称不变，只需修改对应模型服务提供商的环境变量的值。
+
+对于其他不兼容 OpenAI API 的大模型，比如豆包大模型、文心一言等，你也可以通过第三方的 API 聚合工具将其转换为 OpenAI API 兼容的格式。比如： [One API](https://github.com/songquanpeng/one-api) 和 [simple-one-api](https://github.com/fruitbars/simple-one-api)（推荐：支持 coze，使用更简单），然后修改对应的环境变量值即可完成接入。
+
+关于不同模型的详细申请和配置教程，可以查看这篇文章：[划词翻译服务申请教程](https://hcfy.app/docs/services/intro/#compare)
+
+> 对于国内的用户，可以查看 [此处](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md) 获取国内可以直接访问的 OpenAI 代理服务以及免费的 OpenAI 体验 API_KEY。
+
 ### Q：是否支持其他 TTS 服务，如何接入？
 
 支持接入任意 TTS 服务，包括本地部署的 ChatTTS 等。
@@ -222,27 +240,13 @@ export default {
 2. 使用第三方部署的 OpenAI API 反向代理服务，然后更新 `OPENAI_BASE_URL`
 3. 使用国内的 LLM 服务提供商，比如 [通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1)、[零一万物](https://platform.01.ai/docs#making-an-api-request)、[Moonshot](https://platform.moonshot.cn/docs/api/chat)、[DeepSeek](https://platform.deepseek.com/api-docs/)等
 
+> 对于国内的用户，可以查看 [此处](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md) 获取国内可以直接访问的 OpenAI 代理服务以及免费的 OpenAI 体验 API_KEY。
+
 ### Q：Docker 镜像拉取失败
 
 网络异常。近期国内代理普遍不稳定，可以设置 Docker Hub 国内镜像。👉 [相关教程](https://github.com/idootop/mi-gpt/issues/31#issuecomment-2153741281)
 
 ## 🤖 大模型类问题
-
-### Q：除了 OpenAI 还支持哪些模型，如何设置？
-
-理论上兼容 [OpenAI SDK](https://www.npmjs.com/package/openai) 的模型都支持，只需修改环境变量即可接入到 MiGPT。比如：[通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1)、[零一万物](https://platform.01.ai/docs#making-an-api-request)、[Moonshot](https://platform.moonshot.cn/docs/api/chat)、[DeepSeek](https://platform.deepseek.com/api-docs/) 等。以 [通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1) 为例：
-
-```shell
-OPENAI_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
-OPENAI_MODEL=qwen-turbo
-OPENAI_API_KEY=通义千问 API_KEY
-```
-
-> 注意：OPENAI 环境变量名称不变，只需修改对应模型服务提供商的环境变量的值。
-
-对于其他不兼容 OpenAI API 的大模型，比如豆包大模型、文心一言等，你也可以通过第三方的 API 聚合工具将其转换为 OpenAI API 兼容的格式。比如： [One API](https://github.com/songquanpeng/one-api) 和 [simple-one-api](https://github.com/fruitbars/simple-one-api)（推荐：支持 coze，使用更简单），然后修改对应的环境变量值即可完成接入。
-
-关于不同模型的详细申请和配置教程，可以查看这篇文章：[划词翻译服务申请教程](https://hcfy.app/docs/services/intro/#compare)
 
 ### Q：我想在本地部署大模型，如何在本项目中使用？
 
@@ -250,21 +254,25 @@ OPENAI_API_KEY=通义千问 API_KEY
 
 ### Q：提示“LLM 响应异常 404 The model `gpt-4o` does not exist”
 
-当前 OpenAI 账号没有使用 `gpt-4` 系列模型的权限，请切换到 `gpt-3` 系列模型，比如：`gpt-3.5-turbo`，相关 [issue](https://github.com/idootop/mi-gpt/issues/30#issuecomment-2154656498)。
+当前 OpenAI 账号没有使用 `gpt-4` 系列模型的权限，请切换到 `gpt-3` 系列模型，比如：`gpt-3.5-turbo`。相关 [issue](https://github.com/idootop/mi-gpt/issues/30#issuecomment-2154656498)
 
-> 补充：似乎 OpenAI 账号在没有绑卡充值之前，是用不了 `gpt-4` 系列模型的，相关 [issue](https://github.com/idootop/mi-gpt/issues/94)
+> 查看 [此处](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md) 获取国内可以直接访问的 OpenAI 代理服务（支持 GPT-4o）
+
+> 补充：新注册的 OpenAI 账号在没有绑卡充值之前，可能是用不了 `gpt-4` 系列模型的。相关 [issue](https://github.com/idootop/mi-gpt/issues/94)
 
 ### Q：提示“LLM 响应异常，401 Invalid Authentication”
 
-无效的 `OpenAI_API_KEY`。请检查 `OpenAI_API_KEY` 是否能正常使用，以及对应环境变量是否生效，相关 [issue](https://github.com/idootop/mi-gpt/issues/59)。
+无效的 `OpenAI_API_KEY`。请检查 `OpenAI_API_KEY` 是否能正常使用，以及对应环境变量是否生效。相关 [issue](https://github.com/idootop/mi-gpt/issues/59)
+
+> 查看 [此处](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md) 获取免费的 OpenAI 体验 API_KEY（支持 GPT-4o）
 
 ### Q：提示“LLM 响应异常，403 PermissionDeniedError”
 
-代理 IP 被 Cloudflare 风控了，试试看切换代理节点。或者把环境变量里的 `HTTP_PROXY` 设置成空字符串 `HTTP_PROXY='' ` 关闭代理（仅适用于国产大模型），相关 [issue](https://github.com/idootop/mi-gpt/issues/33)。
+代理 IP 被 Cloudflare 风控了，试试看切换代理节点。或者把环境变量里的 `HTTP_PROXY` 设置成空字符串 `HTTP_PROXY='' ` 关闭代理（仅适用于国产大模型）。相关 [issue](https://github.com/idootop/mi-gpt/issues/33)
 
 ### Q：提示“LLM 响应异常，404 Not Found”
 
-模型路径不存在或者代理 IP 被风控。请检查 `OPENAI_BASEURL` 等环境变量是否配置正确，或切换代理节点后重试，相关 [issue](https://github.com/idootop/mi-gpt/issues/43)。
+模型路径不存在或者代理 IP 被风控。请检查 `OPENAI_BASEURL` 等环境变量是否配置正确，或切换代理节点后重试。相关 [issue](https://github.com/idootop/mi-gpt/issues/43)
 
 ### Q：是否支持 Azure OpenAI，如何配置？
 
@@ -353,7 +361,7 @@ export default {
 
 不需要。`MiGPT` 底层是调用的 MIoT 云端接口，可在任意设备或服务器上运行，无需和小爱音箱在同一局域网下。
 
-### Q：为什么小爱音箱会在 AI 回答之前抢话？
+### Q：原来的小爱同学会在 AI 回答之前抢话？
 
 与本项目的实现原理有关。本项目通过轮询小米接口获取最新的对话信息，当检测到小爱在回复的时候会通过播放静音音频等方式快速 mute 掉小爱原来的回复。但是从小爱开始回复，到上报状态给小米服务云端，再到本项目通过小米云端接口轮训到这个状态变更，中间会有大约 1 -2 秒的延迟时间，无解。
 
@@ -374,14 +382,14 @@ export default {
 
 ### Q：怎样使用豆包的音色
 
-此功能需要豆包 TTS 接口支持，本项目暂不对外提供此服务。
+本项目暂不对外提供豆包 TTS 服务，但是你可以使用与豆包同款的火山 TTS 引擎。
 
-后续（v4.0.0 版本）会支持火山引擎 TTS 服务（豆包同款），可以使用演示视频中的熊二等音色。
+具体的配置和使用教程，请查看此处：[🚗 使用第三方 TTS](https://github.com/idootop/mi-gpt/blob/main/docs/tts.md)
 
 ### Q：怎样控制米家设备？
 
-这是一个 todo 功能，尚未进入开发阶段。后续有时间的话，我会继续添加智能家居 Agents 和插件系统（比如联网搜索，自定义语音指令等），保持关注。
+这是一个 todo 功能，尚未开始开发。后面有时间的话，我会继续添加智能家居 Agents 和插件系统（比如联网搜索，自定义语音指令）等功能，保持关注。
 
 ### Q：我还有其他问题
 
-请在此处提交 [issue](https://github.com/idootop/mi-gpt/issues) 反馈，并提供详细的问题描述和相关错误截图。
+请先在 FAQ 和 issue 列表搜索是否有人遇到与你类似的问题并已解答。如果确认是新的问题，请在此处提交 [issue](https://github.com/idootop/mi-gpt/issues) 反馈，并提供详细的问题描述和相关错误截图。
