@@ -32,13 +32,17 @@ export default {
 
 ## TTS_BASE_URL
 
-其中 `TTS_BASE_URL` 是你的外部 TTS 服务引擎地址。这里提供一个 Node.js 端的示例：[MiGPT-TTS](https://github.com/idootop/mi-gpt-tts)：目前只接入了 [火山引擎](https://www.volcengine.com/docs/6561/79817) 的语音合成服务，实名认证后可以免费使用 21 款常用音色。
+其中 `TTS_BASE_URL` 是你的外部 TTS 服务引擎地址。这里提供一个 Node.js 端的示例：[MiGPT-TTS](https://github.com/idootop/mi-gpt-tts)：
+
+目前接入了 [火山引擎](https://www.volcengine.com/docs/6561/79817) 的语音合成服务，实名认证后可以免费使用 21 款常用音色。
 
 具体部署和使用教程，请移步：https://github.com/idootop/mi-gpt-tts
 
 ## 支持更多的 TTS 服务
 
-如果你想使用本地 TTS 服务（比如：ChatTTS），或者接入其他 TTS 服务商（比如微软、讯飞、OpenAI 等），可参考上面的 [MiGPT-TTS](https://github.com/idootop/mi-gpt-tts) 项目代码自行搭建服务端，只需满足以下接口：
+如果你想使用本地 TTS 服务（比如：ChatTTS），或者接入其他 TTS 服务商（比如微软、讯飞、OpenAI 等），
+
+可参考上面的 [MiGPT-TTS](https://github.com/idootop/mi-gpt-tts) 项目代码自行搭建服务端，只需满足以下接口即可：
 
 ### GET `TTS_BASE_URL/api/tts.mp3`
 
