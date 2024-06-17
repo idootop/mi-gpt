@@ -38,5 +38,9 @@
 
 ## ❤️ 感谢
 
-- @LycsHub 推荐了使用 [simple-one-api](https://github.com/fruitbars/simple-one-api) 将其他模型的请求格式统一成 OpenAI 的格式，支持 Coze
 - @shinedlc 实现了一个小爱音箱接入 [OpenGlass](https://github.com/BasedHardware/OpenGlass) 摄像头硬件 + 本机搭建 [Ollama](https://github.com/ollama/ollama) 模型的 [Fork](https://github.com/shinedlc/mi-gpt)
+- @LycsHub 推荐了使用 [simple-one-api](https://github.com/fruitbars/simple-one-api) 将其他模型的请求格式统一成 OpenAI 的格式，支持 Coze
+- @lmk123 推荐了国内 docker 镜像设置与大模型服务申请配置教程  
+- @laiquziru 协助调试小米 AI 音箱（第二代）
+- @wt666666 在 issues 下协助解答常见问题
+- @mingtian886 在官方群内协助解答常见问题
