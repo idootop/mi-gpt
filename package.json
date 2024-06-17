@@ -5,7 +5,10 @@
   "description": "将小爱音箱接入 ChatGPT 和豆包，改造成你的专属语音助手。",
   "homepage": "https://github.com/idootop/mi-gpt",
   "bugs": "https://github.com/idootop/mi-gpt/issues",
-  "repository": "idootop/mi-gpt",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idootop/mi-gpt.git"
+  },
   "license": "MIT",
   "author": {
     "name": "Del Wang",
