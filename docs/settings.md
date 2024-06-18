@@ -26,6 +26,7 @@
 | `wakeUpCommand`              | 小爱音箱唤醒指令（[可在此查询](https://home.miot-spec.com)）                                                                                         | `[5, 3]`                                                         |
 | **speaker 其他参数（可选）** |
 | `tts`                        | TTS 引擎（教程：[🚗 使用第三方 TTS](https://github.com/idootop/mi-gpt/blob/main/docs/tts.md)）                                                       | `"xiaoai"`                                                       |
+| `switchSpeakerKeywords`      | 切换 TTS 音色关键词，只有配置了第三方 TTS 引擎时才有效                                                                                               | `["把声音换成"]`                                                 |
 | `callAIKeywords`             | 当消息以关键词开头时，会调用 AI 来响应用户消息                                                                                                       | `["请", "傻妞"]`                                                 |
 | `wakeUpKeywords`             | 当消息以关键词开头时，会进入 AI 唤醒状态                                                                                                             | `["召唤傻妞", "打开傻妞"]`                                       |
 | `exitKeywords`               | 当消息以关键词开头时，会退出 AI 唤醒状态                                                                                                             | `["退出傻妞", "关闭傻妞"]`                                       |
@@ -35,8 +36,8 @@
 | `onAIReplied`                | AI 结束回答时的提示语                                                                                                                                | `["我说完了", "还有其他问题吗"]`                                 |
 | `onAIError`                  | AI 回答异常时的提示语                                                                                                                                | `["出错了，请稍后再试吧！"]`                                     |
 | `playingCommand`             | 查询小爱音箱是否在播放中指令（注意：默认无需配置此参数，播放出现问题时再尝试开启）                                                                   | `[3, 1, 1]`                                                      |
-| `streamResponse`             | 是否启用流式响应（部分小爱音箱型号不支持查询播放状态，此时需要关闭流式响应）                                                                         | `true`                                                           |
-| `exitKeepAliveAfter`         | 无响应一段时间后，多久自动退出唤醒模式（单位秒，默认 30 秒）                                                                                         | `30`                                                             |
+| `streamResponse`             | 是否启用连续对话功能，部分小爱音箱型号无法查询到正确的播放状态，需要关闭连续对话应）                                                                 | `true`                                                           |
+| `exitKeepAliveAfter`         | 连续对话时，无响应多久后自动退出（默认 30 秒）                                                                                                       | `30`                                                             |
 
 ## 环境变量
 
@@ -44,17 +45,17 @@
 
 然后，将里面的环境变量修改成你自己的，参数含义如下：
 
-| 环境变量名称           | 描述                                                                                        | 示例                               |
-| ---------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------- |
-| **OpenAI**             |                                                                                             |                                    |
-| `OPENAI_API_KEY`       | OpenAI API 密钥                                                                             | `abc123`                           |
-| `OPENAI_MODEL`         | 使用的 OpenAI 模型                                                                          | `gpt-4o`                           |
-| `OPENAI_BASE_URL`      | 可选，OpenAI API BaseURL                                                                    | `https://api.openai.com/v1`        |
-| `AZURE_OPENAI_API_KEY` | 可选，[Microsoft Azure OpenAI](https://www.npmjs.com/package/openai#microsoft-azure-openai) | `abc123`                           |
-| **提示音效（可选）**   |                                                                                             |                                    |
-| `AUDIO_SILENT`         | 静音音频链接                                                                                | `"https://example.com/slient.wav"` |
-| `AUDIO_BEEP`           | 默认提示音链接                                                                              | `"https://example.com/beep.wav"`   |
-| `AUDIO_ACTIVE`         | 唤醒提示音链接                                                                              | `"https://example.com/active.wav"` |
-| `AUDIO_ERROR`          | 出错提示音链接                                                                              | `"https://example.com/error.wav"`  |
-| **第三方 TTS（可选）** |                                                                                             |                                    |
-| `TTS_BASE_URL`         | 第三方 TTS 服务接口                                                                         | `"https://example.com/tts.wav"`    |
+| 环境变量名称           | 描述                                                                                        | 示例                                           |
+| ---------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| **OpenAI**             |                                                                                             |                                                |
+| `OPENAI_API_KEY`       | OpenAI API 密钥                                                                             | `abc123`                                       |
+| `OPENAI_MODEL`         | 使用的 OpenAI 模型                                                                          | `gpt-4o`                                       |
+| `OPENAI_BASE_URL`      | 可选，OpenAI API BaseURL                                                                    | `https://api.openai.com/v1`                    |
+| `AZURE_OPENAI_API_KEY` | 可选，[Microsoft Azure OpenAI](https://www.npmjs.com/package/openai#microsoft-azure-openai) | `abc123`                                       |
+| **提示音效（可选）**   |                                                                                             |                                                |
+| `AUDIO_SILENT`         | 静音音频链接                                                                                | `"https://example.com/slient.wav"`             |
+| `AUDIO_BEEP`           | 默认提示音链接                                                                              | `"https://example.com/beep.wav"`               |
+| `AUDIO_ACTIVE`         | 唤醒提示音链接                                                                              | `"https://example.com/active.wav"`             |
+| `AUDIO_ERROR`          | 出错提示音链接                                                                              | `"https://example.com/error.wav"`              |
+| **第三方 TTS（可选）** |                                                                                             |                                                |
+| `TTS_BASE_URL`         | 第三方 TTS 服务接口                                                                         | `"http://[你的局域网或公网地址]:[端口号]/api"` |
