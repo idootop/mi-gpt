@@ -101,6 +101,7 @@ export class BaseSpeaker {
 
   constructor(config: BaseSpeakerConfig) {
     this.config = config;
+    this.config.timeout = config.timeout ?? 5000;
     const {
       debug = false,
       streamResponse = true,
