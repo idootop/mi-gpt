@@ -11,13 +11,20 @@ export async function testSpeaker() {
     debug: true,
   });
   await speaker.initMiServices();
+  await testTTS(speaker);
   // await testAISpeakerStatus(speaker);
   // await testSpeakerResponse(speaker);
-  await testSpeakerStreamResponse(speaker);
+  // await testSpeakerStreamResponse(speaker);
   // await testSpeakerGetMessages(speaker);
   // await testSwitchSpeaker(speaker);
   // await testSpeakerUnWakeUp(speaker);
   // await testAISpeaker(speaker);
+}
+
+async function testTTS(speaker: AISpeaker) {
+  const res1 = await speaker.MiIOT!.doAction(5, 1, "你好，很高兴认识你");
+  const res2 = await speaker.MiNA!.play({ tts: "你好，很高兴认识你" });
+  console.log("finished");
 }
 
 async function testAISpeakerStatus(speaker: AISpeaker) {
