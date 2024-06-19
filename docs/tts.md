@@ -20,7 +20,7 @@ export default {
     // TTS 引擎
     tts: 'custom',
     // 切换 TTS 引擎发言人音色关键词
-    switchSpeakerKeywords: ["把声音换成"], // 以此关键词开头即可切换音色，比如：把声音换成东北老铁
+    switchSpeakerKeywords: ["把声音换成"], // 以此关键词开头即可切换音色，比如：把声音换成 xxx
     // ...
   },
 };
