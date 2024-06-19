@@ -140,7 +140,7 @@ export class AISpeaker extends Speaker {
 
   async enterKeepAlive() {
     if (!this.streamResponse) {
-      await this.response({ text: "流式响应已关闭，无法进入唤醒模式" });
+      await this.response({ text: "您已关闭流式响应(streamResponse)，无法使用连续对话模式" });
       return;
     }
     // 回应
