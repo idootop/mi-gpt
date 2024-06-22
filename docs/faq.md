@@ -2,6 +2,8 @@
 
 > 善用搜索，大多数问题都可在此处找到答案。如果你有新的问题，欢迎提交 [issue](https://github.com/idootop/mi-gpt/issues)。
 
+## 🔥 高频问题
+
 ### Q：支持哪些型号的小爱音箱？
 
 大部分型号的小爱音箱都支持，推荐小爱音箱 Pro（完美运行）
@@ -33,6 +35,31 @@ OPENAI_API_KEY=通义千问 API_KEY
 支持接入任意 TTS 服务，包括本地部署的 ChatTTS 等。
 
 具体的配置和使用教程，请查看此处：[🚗 使用第三方 TTS](https://github.com/idootop/mi-gpt/blob/main/docs/tts.md)
+
+### Q：AI 回答的速度太慢了，怎么让她变快一点？
+
+默认情况下 `MiGPT` 的配置参数比较保守，你可以通过酌情修改以下参数加速 AI 回复的速度。
+
+```js
+// .migpt.js
+export default {
+  speaker: {
+    // 使用小爱自带的 TTS 引擎
+    tts: "xiaoai",
+    // 关闭 AI 开始回答时的提示语
+    onAIAsking: [],
+    // 关闭 AI 结束回答时的提示语
+    onAIReplied: [],
+    // 连续对话时，播放状态检测间隔（单位毫秒，最低 500 毫秒，默认 1 秒）
+    checkInterval: 500, // 调小此值可以降低小爱回复之间的停顿感，请酌情调节
+    // 连续对话时，下发 TTS 指令多长时间后开始检测设备播放状态（单位秒，最好不要低于 1s，默认 3 秒）
+    checkTTSStatusAfter: 3, // 可适当调小或调大
+    // ...
+  },
+};
+```
+
+另外你也可以选用 `gpt-3.5-turbo` 和 `gpt-4o` 等响应速度较快的模型，来加速 AI 的回复。
 
 ### Q：什么是唤醒模式，如何唤醒 AI？
 
