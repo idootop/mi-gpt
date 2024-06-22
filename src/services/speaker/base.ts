@@ -368,7 +368,7 @@ export class BaseSpeaker {
         if (isOk === "break") {
           break; // 获取设备状态异常
         }
-        if (res && playing.status !== "playing") {
+        if (res != null && playing.status !== "playing") {
           break;
         }
         await sleep(this.checkInterval);
