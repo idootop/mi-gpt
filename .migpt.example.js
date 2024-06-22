@@ -163,5 +163,7 @@ export default {
     debug: false, // 一般情况下不要打开
     // 是否跟踪 Mi Service 相关日志（打开后可以查看设备 did）
     enableTrace: false, // 一般情况下不要打开
+    // 网络请求超时时长（单位毫秒，默认 5 秒）
+    timeout: 5000, 
   },
 };

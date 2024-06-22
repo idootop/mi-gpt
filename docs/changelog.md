@@ -24,7 +24,7 @@
 - 添加 TTS 和 OpenAI baseURL 示例和注意事项
 - 添加如何关闭系统 Prompt 的说明
 - 添加系统 Prompt 字符串变量的示例
-- 添加 timeout 参数配置文档
+- ✅ 添加 timeout 参数说明
 
 ### ❤️ 感谢
 
