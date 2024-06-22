@@ -102,7 +102,7 @@ main();
 
 - [⚙️ 参数设置](https://github.com/idootop/mi-gpt/blob/main/docs/settings.md)
 - [💬 常见问题](https://github.com/idootop/mi-gpt/blob/main/docs/faq.md)
-- [🚗 使用第三方 TTS](https://github.com/idootop/mi-gpt/blob/main/docs/tts.md)
+- [🔊 使用第三方 TTS](https://github.com/idootop/mi-gpt/blob/main/docs/tts.md)
 - [🛠️ 本地开发](https://github.com/idootop/mi-gpt/blob/main/docs/development.md)
 - [💎 工作原理](https://github.com/idootop/mi-gpt/blob/main/docs/how-it-works.md)
 - [🦄 Sponsors](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md)

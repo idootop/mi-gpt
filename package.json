@@ -1,6 +1,6 @@
 {
   "name": "mi-gpt",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "type": "module",
   "description": "将小爱音箱接入 ChatGPT 和豆包，改造成你的专属语音助手。",
   "homepage": "https://github.com/idootop/mi-gpt",
