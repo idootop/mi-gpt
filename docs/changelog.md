@@ -21,7 +21,7 @@
 - ✅ 添加连续对话下和小爱音箱说话没有反应的说明
 - ✅ 添加如何快速打断 AI 的回答的说明
 - ✅ 添加 server 端异地登录失败，使用本地登录凭证的教程
-- 添加 TTS 和 OpenAI baseURL 示例和注意事项
+- ✅ 添加 TTS 和 OpenAI baseURL 示例和注意事项
 - 添加如何关闭系统 Prompt 的说明
 - 添加系统 Prompt 字符串变量的示例
 - ✅ 添加 timeout 参数说明

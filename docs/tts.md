@@ -12,7 +12,7 @@
 
 ```js
 // .env
-TTS_BASE_URL=http://[你的局域网或公网地址]:[端口号]/api
+TTS_BASE_URL=http://[你的局域网或公网地址]:[端口号]/api，比如：http://192.168.31.205:4321/api
 
 // .migpt.js
 export default {
