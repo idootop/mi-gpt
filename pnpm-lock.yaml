@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       mi-gpt:
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^4.1.0
+        version: 4.1.0
     devDependencies:
       '@types/node':
         specifier: ^20.4.9
@@ -291,8 +291,8 @@ packages:
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
 
-  mi-gpt@4.0.0:
-    resolution: {integrity: sha512-G4fpsm9mLlLwP6ObBa7UHpRMXA0G52sPd46U7/2ZFnwCJauwGg3LUfYlGaH8GKAHjVAqDUBeI1yQ/2bEOs2IjA==}
+  mi-gpt@4.1.0:
+    resolution: {integrity: sha512-Hx/EsmeK1zT0KFTYelIooTxv3CfkzBnh4GCxGP+2YnlGLZvZiBYAt2eyyc73n3nYvHx0QK7blCTdT58zq0ngZg==}
     engines: {node: '>=16'}
 
   mi-service-lite@3.0.0:
@@ -618,7 +618,7 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  mi-gpt@4.0.0:
+  mi-gpt@4.1.0:
     dependencies:
       '@prisma/client': 5.14.0(prisma@5.14.0)
       fs-extra: 11.2.0
