@@ -117,6 +117,21 @@ export default {
 
 账号密码不正确。注意小米 ID 并非手机号或邮箱，请在[「个人信息」-「小米 ID」](https://account.xiaomi.com/fe/service/account/profile)查看，相关 [issue](https://github.com/idootop/mi-gpt/issues/10)。
 
+### Q：提示触发小米账号异地登录保护机制，等待 1 个小时后仍然无法正常启动
+
+这是因为小米账号触发了异地登录保护机制，需要先通过安全验证。打开小米官网登录你的小米账号，手动通过安全验证，通常等待 1-24 小时左右就可以正常登录了。
+
+> 注意：最好使用和你运行 docker 相同的网络环境，如果你是在海外服务器等非中国大陆网络环境下登录小米账号，需要先同意小米的「个人数据跨境传输」协议。[👉 相关教程](https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622)
+
+在一些极端情况下，可能会因为你的服务器 IP 太脏，而导致一直无法正常访问小米账号登录链接。此时你可以尝试可以在本地运行 `MiGPT`，登录成功后把 `.mi.json` 文件导出，然后挂载到服务器对应容器的 `/app/.mi.json` 路径下即可解决此问题。相关 [issue](https://github.com/idootop/mi-gpt/issues/22#issuecomment-2148956802)
+
+```shell
+docker run -d  --env-file $(pwd)/.env \
+    -v $(pwd)/.migpt.js:/app/.migpt.js \
+    -v $(pwd)/.mi.json:/app/.mi.json \
+    idootop/mi-gpt:latest
+```
+
 ### Q：提示“找不到设备：xxx”，初始化 Mi Services 失败
 
 填写的设备 did 不存在，请检查设备名称是否和米家中的一致。相关 [issue](https://github.com/idootop/mi-gpt/issues/30)。
@@ -195,12 +210,6 @@ export default {
 </details>
 
 注意：Mina 获取不到共享设备，如果你的小爱音箱是共享设备，是无法正常启动本项目的。相关 [issue](https://github.com/idootop/mi-gpt/issues/86)
-
-### Q：提示“login failed &&&START&&&{"notificationUrl”，无法正常启动
-
-小米账号触发了异地登录保护，需要先通过安全验证。打开小米官网登录你的小米账号，手动通过安全验证，然后等待 30 分钟左右应该就可以正常登录了。
-
-注意：最好使用和你运行 docker 相同的网络环境，如果你是在海外服务器等非中国大陆网络环境下登录小米账号，需要先同意小米的「个人数据跨境传输」协议。[👉 相关教程](https://github.com/idootop/mi-gpt/issues/22#issuecomment-2150535622)
 
 ### Q：提示“ERR_MODULE_NOT_FOUND”，无法正常启动
 
