@@ -9,6 +9,7 @@ import { withDefault } from "../utils/base";
 import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions";
 import { Logger } from "../utils/log";
 import { kProxyAgent } from "./proxy";
+import { isNotEmpty } from "../utils/is";
 
 export interface ChatOptions {
   user: string;
@@ -68,8 +69,8 @@ class OpenAIClient {
         `🔥 onAskAI\n🤖️ System: ${system ?? "None"}\n😊 User: ${user}`.trim()
       );
     }
-    const systemMsg: ChatCompletionMessageParam[] = system
-      ? [{ role: "system", content: system }]
+    const systemMsg: ChatCompletionMessageParam[] = isNotEmpty(system)
+      ? [{ role: "system", content: system! }]
       : [];
     let signal: AbortSignal | undefined;
     if (requestId) {
@@ -120,8 +121,8 @@ class OpenAIClient {
         `🔥 onAskAI\n🤖️ System: ${system ?? "None"}\n😊 User: ${user}`.trim()
       );
     }
-    const systemMsg: ChatCompletionMessageParam[] = system
-      ? [{ role: "system", content: system }]
+    const systemMsg: ChatCompletionMessageParam[] = isNotEmpty(system)
+      ? [{ role: "system", content: system! }]
       : [];
     const stream = await this._client!.chat.completions.create({
       model,

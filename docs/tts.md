@@ -1,4 +1,4 @@
-# 🚗 使用第三方 TTS
+# 🔊 使用第三方 TTS
 
 `MiGPT` 默认使用小米自带的 TTS 朗读文字内容，如果你需要：
 
@@ -12,7 +12,7 @@
 
 ```js
 // .env
-TTS_BASE_URL=http://[你的局域网或公网地址]:[端口号]/api
+TTS_BASE_URL=http://[你的局域网或公网地址]:[端口号]/api，比如：http://192.168.31.205:4321/api
 
 // .migpt.js
 export default {
@@ -20,7 +20,7 @@ export default {
     // TTS 引擎
     tts: 'custom',
     // 切换 TTS 引擎发言人音色关键词
-    switchSpeakerKeywords: ["把声音换成"], // 以此关键词开头即可切换音色，比如：把声音换成东北老铁
+    switchSpeakerKeywords: ["把声音换成"], // 以此关键词开头即可切换音色，比如：把声音换成 xxx
     // ...
   },
 };

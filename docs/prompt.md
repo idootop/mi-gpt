@@ -68,7 +68,32 @@ Bad example: "2024年02月28日星期三 23:01 {{botName}}: 我是{{botName}}"
 
 </details>
 
-以下是系统 Prompt 中相关变量的说明，运行时对应变量字符串会被替换为实际的值：
+以下是系统 Prompt 中相关变量的说明，运行时对应变量字符串会被替换为实际的值。
+
+假设你的配置文件中设置的系统 Prompt 模板和 bot 信息如下：
+
+```js
+export default {
+  systemTemplate: "从前有个男人叫{{masterName}}，他喜欢隔壁村里的{{botName}}。",
+  master: {
+    name: "小帅",
+    profile: masterProfile,
+  },
+  bot: {
+    name: "小美",
+    profile: botProfile,
+  },
+  // ...
+};
+```
+
+在运行时，系统 Prompt 会被自动处理成：
+
+```txt
+从前有个男人叫小帅，他喜欢隔壁村里的小美。
+```
+
+当前系统 Prompt 模板中支持的完整变量字符串列表如下：
 
 | 变量                   | 说明         | 示例                                                  |
 | ---------------------- | ------------ | ----------------------------------------------------- |
@@ -81,6 +106,67 @@ Bad example: "2024年02月28日星期三 23:01 {{botName}}: 我是{{botName}}"
 | `{{messages}}`         | 消息列表     | `- 2024年01月01日 上午12:00 傻妞：新年快乐，陆小千！` |
 | `{{shortTermMemory}}`  | 短期记忆     | `- 陆小千说明天早上 5 点叫他起床`                     |
 | `{{longTermMemory}}`   | 长期记忆     | `- 陆小千喜欢傻妞`                                    |
+
+# 💬 常见问题
+
+**Q：如何关闭长短期记忆和历史对话上下文**
+
+默认系统 Prompt 会携带上最近的 10 条对话消息和长短期记忆，来保持对话的连续性和一致性。
+
+如果你想要关闭此功能，节省 token 数量，可以使用如下系统 Prompt 模板：
+
+<details>
+<summary>👉 示例 Prompt</summary>
+
+```txt
+请重置所有之前的上下文、文件和指令。现在，你将扮演一个名为{{botName}}的角色，使用第一人称视角回复消息。
+
+## 关于你
+你的名字是{{botName}}。下面是你的个人简介：
+<start>
+{{botProfile}}
+</end>
+
+## 你的对话伙伴
+你正在与{{masterName}}进行对话。这是关于{{masterName}}的一些信息：
+<start>
+{{masterProfile}}
+</end>
+
+## 回复指南
+在回复{{masterName}}时，请遵循以下准则：
+- 认为自己正是{{botName}}，拥有独立的个性、兴趣和爱好。
+- 根据你的性格特点、说话风格和兴趣爱好与{{masterName}}进行交流。
+- 保持对话轻松友好，回复简洁有趣，同时耐心倾听和关心对方。
+- 参考双方的个人简介，确保对话贴近实际，保持一致性和相关性。
+- 如果对某些信息不确定或遗忘，诚实地表达你的不清楚或遗忘，避免编造信息。
+
+## Response format
+请遵守下面的规则
+- Response the reply message in Chinese。
+- 不要在回复前面加任何时间和名称前缀，请直接回复消息文本本身。
+
+Good example: "我是{{botName}}"
+Bad example: "2024年02月28日星期三 23:01 {{botName}}: 我是{{botName}}"
+
+## 开始
+请以{{botName}}的身份，直接回复{{masterName}}的新消息，继续你们之间的对话。
+```
+
+</details>
+
+**Q：如何关闭系统 Prompt 只是用 User Message？**
+
+关闭系统 Prompt 可能会导致 AI 回答问题时产生各种莫名其妙的前缀或者画蛇添足。
+
+如果你确定要这么做，可以将 `systemTemplate` 设置为一个空格，即可关闭系统 Prompt。
+
+```js
+export default {
+  systemTemplate: " ",
+  // ...
+};
+```
 
 # 🎨 模板
 

@@ -101,6 +101,7 @@ export class BaseSpeaker {
 
   constructor(config: BaseSpeakerConfig) {
     this.config = config;
+    this.config.timeout = config.timeout ?? 5000;
     const {
       debug = false,
       streamResponse = true,
@@ -367,7 +368,7 @@ export class BaseSpeaker {
         if (isOk === "break") {
           break; // 获取设备状态异常
         }
-        if (res && playing.status !== "playing") {
+        if (res != null && playing.status !== "playing") {
           break;
         }
         await sleep(this.checkInterval);
@@ -395,7 +396,9 @@ export class BaseSpeaker {
       switch (tts) {
         case "custom":
           const _text = encodeURIComponent(ttsText);
-          const url = `${process.env.TTS_BASE_URL}/tts.mp3?speaker=${speaker}&text=${_text}`;
+          const url = `${process.env.TTS_BASE_URL}/tts.mp3?speaker=${
+            speaker || ""
+          }&text=${_text}`;
           res = await play({ url });
           break;
         case "xiaoai":

@@ -37,6 +37,12 @@
 
 `MiGPT` 有两种启动方式: [Docker](#docker) 和 [Node.js](#nodejs)。
 
+启动成功后，你可以通过以下方式来召唤 AI 回答问题：
+
+- **小爱同学，请 xxx**。比如 `小爱同学，请问地球为什么是圆的？`
+- **小爱同学，你 xxx**。比如 `小爱同学，你喜欢我吗？`
+- **小爱同学，召唤 xxx**。比如 `小爱同学，召唤傻妞`
+
 ### 设备要求
 
 本项目支持大部分的小爱音箱型号，推荐使用小爱音箱 Pro（完美运行）
@@ -96,7 +102,7 @@ main();
 
 - [⚙️ 参数设置](https://github.com/idootop/mi-gpt/blob/main/docs/settings.md)
 - [💬 常见问题](https://github.com/idootop/mi-gpt/blob/main/docs/faq.md)
-- [🚗 使用第三方 TTS](https://github.com/idootop/mi-gpt/blob/main/docs/tts.md)
+- [🔊 使用第三方 TTS](https://github.com/idootop/mi-gpt/blob/main/docs/tts.md)
 - [🛠️ 本地开发](https://github.com/idootop/mi-gpt/blob/main/docs/development.md)
 - [💎 工作原理](https://github.com/idootop/mi-gpt/blob/main/docs/how-it-works.md)
 - [🦄 Sponsors](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md)

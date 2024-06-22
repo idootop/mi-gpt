@@ -26,7 +26,7 @@ pnpm dev
 有两种运行方式：VS Code Debug 或 NPM Script：
 
 - **NPM Script**: 配置好 `.env` 和 `.migpt.js` 后直接使用 `pnpm run dev` 启动 `MiGPT`。
-- **VScode Debug**：使用 VS Code 打开项目根目录，然后按 `F5` 开始调试 `MiGPT`。注意，启动前请在 `tests/migpt.ts` 文件中配置 `MiGPT` 相关参数。
+- **VScode Debug**：使用 VS Code 打开项目根目录，然后按 `F5` 开始调试 `MiGPT`。
 
 > 本项目默认在 Node 20 中运行，如果你的 Node 版本过低可能无法正常启动本项目。
 

@@ -138,7 +138,7 @@ export default {
     // TTS 引擎
     tts: "xiaoai",
     // 切换 TTS 引擎发言人音色关键词，只有配置了第三方 TTS 引擎时才有效
-    // switchSpeakerKeywords: ["把声音换成"], // 以此关键词开头即可切换音色，比如：把声音换成东北老铁
+    // switchSpeakerKeywords: ["把声音换成"], // 以此关键词开头即可切换音色，比如：把声音换成 xxx
 
     /**
      * 💬 连续对话
@@ -163,5 +163,7 @@ export default {
     debug: false, // 一般情况下不要打开
     // 是否跟踪 Mi Service 相关日志（打开后可以查看设备 did）
     enableTrace: false, // 一般情况下不要打开
+    // 网络请求超时时长（单位毫秒，默认 5 秒）
+    timeout: 5000, 
   },
 };
