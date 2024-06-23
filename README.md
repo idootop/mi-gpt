@@ -113,7 +113,7 @@ main();
 
 | 项目名称与链接                                                                                                             | 简介                                                                                       | 来源      |
 | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------- |
-| [小爱音箱 PRO 的 AI 模式使用说明](https://github.com/idootop/mi-gpt/blob/bbdb80e9bc38b7c40865e52cbd6517980a68615a/assets/pdf/%E5%B0%8F%E7%88%B1%E9%9F%B3%E7%AE%B1PRO%20AI%E6%A8%A1%E5%BC%8F%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.pdf) | 这是一位老爸为家里的小朋友专门整理的贴心教程                                               | 微信/大雨 |
+| [小爱音箱 PRO 的 AI 模式使用说明](https://github.com/idootop/mi-gpt/blob/bbdb80e9bc38b7c40865e52cbd6517980a68615a/assets/pdf/%E5%B0%8F%E7%88%B1%E9%9F%B3%E7%AE%B1PRO%20AI%E6%A8%A1%E5%BC%8F%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.pdf) | 这是一位老爸为家里的小朋友专门整理的贴心教程                                               | @mxyblog |
 | [@shinedlc/mi-gpt](https://github.com/shinedlc/mi-gpt)                                                                     | 一个接入了摄像头硬件 + 本机搭建 Ollama 模型的 MiGPT 分支，让小爱同学可以看到和理解现实世界 | @shinedlc |
 
 ## 🦄 Sponsors
