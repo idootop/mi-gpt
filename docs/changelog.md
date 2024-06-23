@@ -30,7 +30,7 @@
 
 - @lmk123 正在为 MiGPT 制作 [GUI](https://github.com/idootop/mi-gpt/issues/111) 和启动 [CLI](https://github.com/lmk123/migpt-cli)，方便普通用户更简单的使用 MiGPT。
 - @mingtian886 提供了小爱音箱 Play 硬件，协助调试连续对话异常的问题
-- 以及其他在微信交流群内帮助群友积极解答问题的可爱的人们 ❤️
+- 以及 @uect 和 @miaowmint 等在微信交流群内帮助群友积极解答问题的可爱的人们 ❤️
 
 ## v4.0.0
 
