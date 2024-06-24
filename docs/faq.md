@@ -26,9 +26,9 @@ OPENAI_API_KEY=通义千问 API_KEY
 
 对于其他不兼容 OpenAI API 的大模型，比如豆包大模型、文心一言等，你也可以通过第三方的 API 聚合工具将其转换为 OpenAI API 兼容的格式。比如： [One API](https://github.com/songquanpeng/one-api) 和 [simple-one-api](https://github.com/fruitbars/simple-one-api)（推荐：支持 coze，使用更简单），然后修改对应的环境变量值即可完成接入。
 
-关于不同模型的详细申请和配置教程，可以查看这篇文章：[划词翻译服务申请教程](https://hcfy.app/docs/services/intro/#compare)
+关于不同模型的详细申请和配置教程，可以查看这篇文章：[MiGPT 接入豆包等大模型教程](https://migptgui.com/docs/apply/)
 
-> 对于国内的用户，可以查看 [此处](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md) 获取国内可以直接访问的 OpenAI 代理服务以及免费的 OpenAI 体验 API_KEY。
+> 对于国内用户，可以查看 [此处](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md) 获取国内可以直接访问的 OpenAI 代理服务以及免费的 OpenAI 体验 API_KEY。
 
 ### Q：是否支持其他 TTS 服务，如何接入？
 
@@ -294,7 +294,7 @@ export default {
 2. 使用第三方部署的 OpenAI API 反向代理服务，然后更新 `OPENAI_BASE_URL`
 3. 使用国内的 LLM 服务提供商，比如 [通义千问](https://help.aliyun.com/zh/dashscope/developer-reference/compatibility-of-openai-with-dashscope/?spm=a2c4g.11186623.0.i1)、[零一万物](https://platform.01.ai/docs#making-an-api-request)、[Moonshot](https://platform.moonshot.cn/docs/api/chat)、[DeepSeek](https://platform.deepseek.com/api-docs/)等
 
-> 对于国内的用户，可以查看 [此处](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md) 获取国内可以直接访问的 OpenAI 代理服务以及免费的 OpenAI 体验 API_KEY。
+> 对于国内用户，可以查看 [此处](https://github.com/idootop/mi-gpt/blob/main/docs/sponsors.md) 获取国内可以直接访问的 OpenAI 代理服务以及免费的 OpenAI 体验 API_KEY。
 
 ### Q：Docker 镜像拉取失败
 
