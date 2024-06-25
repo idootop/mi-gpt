@@ -44,13 +44,13 @@ export default {
 
 可参考上面的 [MiGPT-TTS](https://github.com/idootop/mi-gpt-tts) 项目代码自行搭建服务端，只需满足以下接口即可：
 
-### GET `TTS_BASE_URL/api/tts.mp3`
+### GET `TTS_BASE_URL/tts.mp3`
 
 文字合成音频，请求示例：`/api/tts.mp3?speaker=BV700_streaming&text=很高兴认识你`
 
 其中，请求参数 `speaker` 为指定音色名称或标识，可选。
 
-### GET `TTS_BASE_URL/api/speakers`
+### GET `TTS_BASE_URL/speakers`
 
 获取音色列表
 
