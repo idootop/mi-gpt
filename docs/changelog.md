@@ -1,5 +1,10 @@
 # ✨ 更新日志
 
+## v4.2.0
+
+- ✅ 新增官方[视频教程](https://www.bilibili.com/video/BV1zb421H7cS)和配套 [PPT](https://github.com/idootop/mi-gpt/blob/main/assets/pdf/MiGPT%E5%AE%98%E6%96%B9%E6%95%99%E7%A8%8B.pdf)
+- 修复关闭流失响应时回复仍然按句拆分的问题
+
 ## v4.1.0
 
 ### 🐛 修复
