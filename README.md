@@ -1,8 +1,12 @@
-![](https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/demo.png)
-
 # MiGPT：智能家居，从未如此贴心 ❤️
 
 [![npm version](https://badge.fury.io/js/mi-gpt.svg)](https://www.npmjs.com/package/mi-gpt) [![Docker Image Version](https://img.shields.io/docker/v/idootop/mi-gpt?color=%23086DCD&label=docker%20image)](https://hub.docker.com/r/idootop/mi-gpt)
+
+<video src='https://github.com/idootop/mi-gpt/assets/35302658/dc336916-9087-418b-bc1b-04d5534dce8f'></video>
+
+> 👉 查看完整演示视频：【[整活！将小爱音箱接入 ChatGPT 和豆包，改造成你的专属语音助手～](https://www.bilibili.com/video/BV1N1421y7qn/?share_source=copy_web&vd_source=5d4e78ff2a0dc6a661baa65f479199c1)】
+
+## 👋 项目简介
 
 在这个数字化的世界里，家已不仅仅是一个居住的地方，而是我们数字生活的延伸。
 
@@ -18,13 +22,7 @@
 
 而小爱音箱就像是你的智能家居专属管家，全心全意为你服务，释放智能家居的真正潜力。
 
-## 🔥 项目预览
-
-👉 查看完整演示视频：【[整活！将小爱音箱接入 ChatGPT 和豆包，改造成你的专属语音助手～](https://www.bilibili.com/video/BV1N1421y7qn/?share_source=copy_web&vd_source=5d4e78ff2a0dc6a661baa65f479199c1)】
-
-<video src='https://github.com/idootop/mi-gpt/assets/35302658/dc336916-9087-418b-bc1b-04d5534dce8f'></video>
-
-## ✨ 项目亮点
+## ✨ 功能亮点
 
 - **🎓 AI 问答**。想象一下，当小爱音箱接入大模型后，上知天文，下知地理，从“人工智障”秒变学霸。
 - **🎭 角色扮演**。一秒调教小爱，无论是成为你的完美伴侣，还是那个能听你倾诉心事的贴心闺蜜，都不在话下。
@@ -32,6 +30,12 @@
 - **🧠 长短期记忆**。小爱音箱现在能记住你们之间的每一次对话，越聊越默契，就像是你身边的老朋友。
 - **🔊 自定义 TTS**。厌倦了小爱同学的语音？帮你解锁[「豆包」](https://doubao.com)同款音色，就像真人在回你的消息。
 - **🤖️ 智能家居 Agent**。心情不好？小爱立刻懂你，自动帮你播放喜欢的音乐，调节灯光，逗你开心。_TODO_
+
+## 🦄 Sponsors
+
+![302.AI](https://github.com/idootop/mi-gpt/assets/35302658/89f82e00-4f80-43f3-8c4a-5fc66602fab6)
+
+> 302.AI 是一个汇集全球顶级 AI 的自助平台，按需付费，零月费，零门槛使用各种类型 AI。 [官方网站](https://302.ai)｜[网站介绍](https://help.302.ai)
 
 ## ⚡️ 快速开始
 
@@ -47,7 +51,7 @@
 
 ### 设备要求
 
-本项目支持大部分的小爱音箱型号，推荐使用小爱音箱 Pro（完美运行）
+`MiGPT` 支持大部分的小爱音箱型号，推荐使用小爱音箱 Pro（完美运行）
 
 👉 [查看更多兼容的小爱音箱型号和配置参数](https://github.com/idootop/mi-gpt/blob/main/docs/compatibility.md)
 
@@ -126,31 +130,6 @@ main();
 | [小爱音箱 PRO 的 AI 模式使用说明](https://github.com/idootop/mi-gpt/blob/bbdb80e9bc38b7c40865e52cbd6517980a68615a/assets/pdf/%E5%B0%8F%E7%88%B1%E9%9F%B3%E7%AE%B1PRO%20AI%E6%A8%A1%E5%BC%8F%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.pdf) | 这是一位老爸为家里的小朋友专门整理的贴心教程                                                                                                            | @mxyblog        |
 | [使用 MiGPT 将你的小爱音箱接入 ChatGPT](https://www.iloli.love/archives/1719073913220)                                                                                                                                               | 作者详细介绍了如何在 1Panel 上，通过 [OneAPI](https://github.com/songquanpeng/one-api) 来转换腾讯混元大模型，和讯飞星火大模型的 API 并成功接入 MiGPT    | @miaowmint      |
 | [Unraid 部署 MiGPT](https://github.com/idootop/mi-gpt/blob/adfdcc4ee51aef8d4f2d8996f18be716da19a0ad/assets/pdf/Unraid%E9%83%A8%E7%BD%B2MiGPT.pdf)                                                                                    | 在 Unraid 上使用 Docker 部署 MiGPT 的详细教程                                                                                                           | @ilovesouthpark |
-
-## 🦄 Sponsors
-
-<div align="center">
-  <table>
-    <tr>
-      <td colspan="3" align="left">
-        <p align="center">
-          <a href="https://302.ai" target="_blank">
-            <img src="https://raw.githubusercontent.com/idootop/mi-gpt/main/assets/sponsors/302logo.png" alt="302.AI" width="300" />
-          </a>
-        </p>
-      </td>
-    </tr>
-    <tr>
-      <td align="left">302.AI 是一个汇集全球顶级 AI 的自助平台，按需付费，零月费，零门槛使用各种类型 AI。</td>
-      <td align="center" width="120px">
-        <a href="https://302.ai" target="_blank">官方网站</a>
-      </td>
-      <td align="center" width="120px">
-        <a href="https://help.302.ai" target="_blank">网站介绍</a>
-      </td>
-    </tr>
-  </table>
-</div>
 
 ## ❤️ 鸣谢
 
