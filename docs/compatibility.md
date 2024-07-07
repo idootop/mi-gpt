@@ -13,6 +13,7 @@
 | 小米 AI 音箱             | [S12](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-s12:2)   | `[5, 1]`   | `[5, 3]`      | -              | true           | 微信: CMSJ                                                                        |
 | 小米 AI 音箱（第二代）   | [L15A](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-l15a:2) | `[7, 3]`   | `[7, 1]`      | `[3, 1, 1]`    | true           | 微信: 龙之广                                                                      |
 | 小爱智能家庭屏 10        | [X10A](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-x10a:1) | `[7, 3]`   | `[7, 1]`      | -              | true           | [@IDarkBoss](https://github.com/idootop/mi-gpt/issues/92#issuecomment-2190928452) |
+| Xiaomi Sound Pro         | [L17A](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-l17a:1) | `[7, 3]`   | `[7, 1]`      | -              | true           | 微信: eof                                                                         |
 
 ## 🚗 正常运行
 
