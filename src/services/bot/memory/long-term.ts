@@ -67,6 +67,10 @@ export class LongTermMemoryAgent {
         shortTermMemory: lastOf(newMemories)!.text,
       }),
     });
+    // 如果返回内容是个markdown代码块,就让他变回普通json
+    res?.content?.trim();
+    if (res?.content?.startsWith("```json")) {res.content = res?.content?.replace("```json", "");}
+    if (res?.content?.endsWith("```")) {res.content = res?.content?.replace("```", "");}
     return jsonDecode(res?.content)?.longTermMemories?.toString();
   }
 }
