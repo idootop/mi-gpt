@@ -7,7 +7,9 @@ import { openai } from "../../openai";
 import { MessageContext } from "../conversation";
 import { LongTermMemoryAgent } from "./long-term";
 import { ShortTermMemoryAgent } from "./short-term";
+import {Logger} from "../../../utils/log";
 
+export const memoryLogger = Logger.create({ tag: "Memory" });
 export class MemoryManager {
   private room: Room;
 
@@ -118,6 +120,7 @@ export class MemoryManager {
       lastMemory,
     });
     if (!newMemory) {
+      memoryLogger.error("💀 生成短期记忆失败");
       return false;
     }
     const res = await ShortTermMemoryCRUD.addOrUpdate({
@@ -151,6 +154,7 @@ export class MemoryManager {
       lastMemory,
     });
     if (!newMemory) {
+      memoryLogger.error("💀 生成长期记忆失败");
       return false;
     }
     const res = await LongTermMemoryCRUD.addOrUpdate({
