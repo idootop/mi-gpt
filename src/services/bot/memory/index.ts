@@ -100,7 +100,7 @@ export class MemoryManager {
       threshold?: number;
     }
   ) {
-    const { threshold = 1 } = options;
+    const { threshold = 10 } = options;
     const lastMemory = firstOf(await this.getShortTermMemories({ take: 1 }));
     const newMemories: (Memory & {
       msg: Message & {
