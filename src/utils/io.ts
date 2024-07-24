@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
 
-import { jsonDecode, jsonEncode } from "./base";
+import { jsonDecode, jsonEncode } from "./parse";
 
 export const kRoot = process.cwd();
 

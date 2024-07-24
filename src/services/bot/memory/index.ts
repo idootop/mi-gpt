@@ -1,5 +1,6 @@
 import { Memory, Message, Room, User } from "@prisma/client";
 import { firstOf, lastOf } from "../../../utils/base";
+import { Logger } from "../../../utils/log";
 import { MemoryCRUD } from "../../db/memory";
 import { LongTermMemoryCRUD } from "../../db/memory-long-term";
 import { ShortTermMemoryCRUD } from "../../db/memory-short-term";
@@ -15,6 +16,7 @@ export class MemoryManager {
    * owner 为空时，即房间自己的公共记忆
    */
   private owner?: User;
+  private _logger = Logger.create({ tag: "Memory" });
 
   constructor(room: Room, owner?: User) {
     this.room = room;
@@ -118,6 +120,7 @@ export class MemoryManager {
       lastMemory,
     });
     if (!newMemory) {
+      this._logger.error("💀 生成短期记忆失败");
       return false;
     }
     const res = await ShortTermMemoryCRUD.addOrUpdate({
@@ -151,6 +154,7 @@ export class MemoryManager {
       lastMemory,
     });
     if (!newMemory) {
+      this._logger.error("💀 生成长期记忆失败");
       return false;
     }
     const res = await LongTermMemoryCRUD.addOrUpdate({

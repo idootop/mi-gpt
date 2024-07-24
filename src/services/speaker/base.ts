@@ -5,7 +5,8 @@ import {
   getMiIOT,
   getMiNA,
 } from "mi-service-lite";
-import { clamp, jsonEncode, sleep } from "../../utils/base";
+import { clamp, sleep } from "../../utils/base";
+import { jsonEncode } from "../../utils/parse";
 import { Logger } from "../../utils/log";
 import { StreamResponse } from "./stream";
 import { kAreYouOK } from "../../utils/string";

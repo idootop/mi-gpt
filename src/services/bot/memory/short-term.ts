@@ -1,5 +1,5 @@
 import { Memory, Message, ShortTermMemory, User } from "@prisma/client";
-import { jsonDecode } from "../../../utils/base";
+import { cleanJsonAndDecode } from "../../../utils/parse";
 import { buildPrompt, formatMsg } from "../../../utils/string";
 import { openai } from "../../openai";
 import { MessageContext } from "../conversation";
@@ -78,6 +78,6 @@ export class ShortTermMemoryAgent {
           .join("\n"),
       }),
     });
-    return jsonDecode(res?.content)?.shortTermMemories?.toString();
+    return cleanJsonAndDecode(res?.content)?.shortTermMemories?.toString();
   }
 }

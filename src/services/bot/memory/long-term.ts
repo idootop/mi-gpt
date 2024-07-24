@@ -1,6 +1,7 @@
 import { LongTermMemory, ShortTermMemory } from "@prisma/client";
-import { jsonDecode, lastOf } from "../../../utils/base";
+import { lastOf } from "../../../utils/base";
 import { buildPrompt } from "../../../utils/string";
+import { cleanJsonAndDecode } from "../../../utils/parse";
 import { openai } from "../../openai";
 import { MessageContext } from "../conversation";
 
@@ -67,6 +68,6 @@ export class LongTermMemoryAgent {
         shortTermMemory: lastOf(newMemories)!.text,
       }),
     });
-    return jsonDecode(res?.content)?.longTermMemories?.toString();
+    return cleanJsonAndDecode(res?.content)?.longTermMemories?.toString();
   }
 }
