@@ -1,5 +1,5 @@
 import { Memory, Message, ShortTermMemory, User } from "@prisma/client";
-import { jsonDecode } from "../../../utils/base";
+import { cleanJsonAndDecode } from "../../../utils/parse";
 import { buildPrompt, formatMsg } from "../../../utils/string";
 import { openai } from "../../openai";
 import { MessageContext } from "../conversation";
@@ -78,10 +78,6 @@ export class ShortTermMemoryAgent {
           .join("\n"),
       }),
     });
-    // 如果返回内容是个markdown代码块,就让他变回普通json
-    res?.content?.trim();
-    if (res?.content?.startsWith("```json")) {res.content = res?.content?.replace("```json", "");}
-    if (res?.content?.endsWith("```")) {res.content = res?.content?.replace("```", "");}
-    return jsonDecode(res?.content)?.shortTermMemories?.toString();
+    return cleanJsonAndDecode(res?.content)?.shortTermMemories?.toString();
   }
 }

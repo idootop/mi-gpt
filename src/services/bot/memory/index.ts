@@ -1,5 +1,6 @@
 import { Memory, Message, Room, User } from "@prisma/client";
 import { firstOf, lastOf } from "../../../utils/base";
+import { Logger } from "../../../utils/log";
 import { MemoryCRUD } from "../../db/memory";
 import { LongTermMemoryCRUD } from "../../db/memory-long-term";
 import { ShortTermMemoryCRUD } from "../../db/memory-short-term";
@@ -7,9 +8,7 @@ import { openai } from "../../openai";
 import { MessageContext } from "../conversation";
 import { LongTermMemoryAgent } from "./long-term";
 import { ShortTermMemoryAgent } from "./short-term";
-import {Logger} from "../../../utils/log";
 
-export const memoryLogger = Logger.create({ tag: "Memory" });
 export class MemoryManager {
   private room: Room;
 
@@ -17,6 +16,7 @@ export class MemoryManager {
    * owner 为空时，即房间自己的公共记忆
    */
   private owner?: User;
+  private _logger = Logger.create({ tag: "Memory" });
 
   constructor(room: Room, owner?: User) {
     this.room = room;
@@ -100,7 +100,7 @@ export class MemoryManager {
       threshold?: number;
     }
   ) {
-    const { threshold = 10 } = options;
+    const { threshold = 1 } = options;
     const lastMemory = firstOf(await this.getShortTermMemories({ take: 1 }));
     const newMemories: (Memory & {
       msg: Message & {
@@ -120,7 +120,7 @@ export class MemoryManager {
       lastMemory,
     });
     if (!newMemory) {
-      memoryLogger.error("💀 生成短期记忆失败");
+      this._logger.error("💀 生成短期记忆失败");
       return false;
     }
     const res = await ShortTermMemoryCRUD.addOrUpdate({
@@ -154,7 +154,7 @@ export class MemoryManager {
       lastMemory,
     });
     if (!newMemory) {
-      memoryLogger.error("💀 生成长期记忆失败");
+      this._logger.error("💀 生成长期记忆失败");
       return false;
     }
     const res = await LongTermMemoryCRUD.addOrUpdate({
