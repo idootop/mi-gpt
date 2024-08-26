@@ -6,7 +6,7 @@
     "start": "tsx --env-file=.env index.ts"
   },
   "dependencies": {
-    "mi-gpt": "^4.1.0"
+    "mi-gpt": "^4.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.4.9",
