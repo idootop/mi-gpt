@@ -147,7 +147,7 @@ export default {
      */
 
     // 是否启用连续对话功能，部分小爱音箱型号无法查询到正确的播放状态，需要关闭连续对话
-    streamResponse: true,
+    streamResponse: false,
     // 连续对话时，无响应多久后自动退出
     exitKeepAliveAfter: 30, // 默认 30 秒，建议不要超过 1 分钟
     // 连续对话时，下发 TTS 指令多长时间后开始检测设备播放状态（默认 3 秒）
@@ -164,6 +164,6 @@ export default {
     // 是否跟踪 Mi Service 相关日志（打开后可以查看设备 did）
     enableTrace: false, // 一般情况下不要打开
     // 网络请求超时时长（单位毫秒，默认 5 秒）
-    timeout: 5000, 
+    timeout: 5000,
   },
 };

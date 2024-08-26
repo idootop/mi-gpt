@@ -199,7 +199,7 @@ export class Speaker extends BaseSpeaker {
   private async _fetchFirstMessage() {
     const msgs = await this.getMessages({
       limit: 1,
-      filterTTS: false,
+      filterAnswer: false,
     });
     this.currentQueryMsg = msgs[0];
   }
@@ -285,23 +285,26 @@ export class Speaker extends BaseSpeaker {
   async getMessages(options?: {
     limit?: number;
     timestamp?: number;
-    filterTTS?: boolean;
+    filterAnswer?: boolean;
   }): Promise<QueryMessage[]> {
-    const filterTTS = options?.filterTTS ?? true;
+    const filterAnswer = options?.filterAnswer ?? true;
     const conversation = await this.MiNA!.getConversations(options);
     this._lastConversation = conversation;
     let records = conversation?.records ?? [];
-    if (filterTTS) {
+    if (filterAnswer) {
       // 过滤有小爱回答的消息
       records = records.filter(
-        (e) => e.answers.length > 0 && e.answers.some((e) => e.type === "TTS")
+        (e) =>
+          ["TTS", "LLM"].includes(e.answers[0]?.type) && // 过滤 TTS 和 LLM 消息
+          e.answers.length === 1 // 播放音乐时会有 TTS、Audio 两个 Answer
       );
     }
     return records.map((e) => {
-      const ttsAnswer = e.answers.find((e) => e.type === "TTS") as any;
+      const msg: any = e.answers[0];
+      const answer = msg?.tts?.text?.trim() ?? msg?.llm?.text?.trim();
       return {
+        answer,
         text: e.query,
-        answer: ttsAnswer?.tts?.text?.trim(),
         timestamp: e.time,
       };
     });

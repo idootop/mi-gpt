@@ -1,5 +1,21 @@
 # ✨ 更新日志
 
+## v4.2.0
+
+### ✨ 新功能
+
+- ✅ 新增对小爱音箱 LLM 消息的支持
+
+### 🐛 修复
+
+- ✅ 修复 LLM 返回值格式与预期不符的问题 by @yanyao2333
+
+### ❤️ 感谢
+
+- @yanyao2333 让 LLM 返回值的解析更加健壮 https://github.com/idootop/mi-gpt/pull/160
+- @LyCecilion 对小爱音箱丢消息问题的详细反馈 https://github.com/idootop/mi-gpt/issues/177
+- @Jasonzhu1207 在 telegram 群中帮忙解答问题
+
 ## v4.1.0
 
 ### 🐛 修复
