@@ -33,9 +33,9 @@
 
 ## 🦄 Sponsors
 
-![302.AI](https://github.com/idootop/mi-gpt/assets/35302658/89f82e00-4f80-43f3-8c4a-5fc66602fab6)
+![302.AI](./assets/sponsors/302banner2.jpg)
 
-> 302.AI 是一个汇集全球顶级 AI 的自助平台，按需付费，零月费，零门槛使用各种类型 AI。 [官方网站](https://302.ai)｜[网站介绍](https://help.302.ai)
+> 302.AI 是一个按需付费的一站式 AI 应用平台，开放平台，开源生态。[官方网站](https://302.ai)｜[网站介绍](https://help.302.ai)
 
 ## ⚡️ 快速开始
 
