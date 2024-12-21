@@ -134,6 +134,7 @@ main();
 | [小爱音箱 PRO 的 AI 模式使用说明](https://github.com/idootop/mi-gpt/blob/bbdb80e9bc38b7c40865e52cbd6517980a68615a/assets/pdf/%E5%B0%8F%E7%88%B1%E9%9F%B3%E7%AE%B1PRO%20AI%E6%A8%A1%E5%BC%8F%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.pdf) | 这是一位老爸为家里的小朋友专门整理的贴心教程                                                                                                            | @mxyblog        |
 | [使用 MiGPT 将你的小爱音箱接入 ChatGPT](https://www.iloli.love/archives/1719073913220)                                                                                                                                               | 作者详细介绍了如何在 1Panel 上，通过 [OneAPI](https://github.com/songquanpeng/one-api) 来转换腾讯混元大模型，和讯飞星火大模型的 API 并成功接入 MiGPT    | @miaowmint      |
 | [Unraid 部署 MiGPT](https://github.com/idootop/mi-gpt/blob/adfdcc4ee51aef8d4f2d8996f18be716da19a0ad/assets/pdf/Unraid%E9%83%A8%E7%BD%B2MiGPT.pdf)                                                                                    | 在 Unraid 上使用 Docker 部署 MiGPT 的详细教程                                                                                                           | @ilovesouthpark |
+| [MiGPT 配置中心](https://github.com/LipapaSma/mi-gpt-vue)                                                                                                                                                                            | 基于 Vue 的 MiGPT 可视化配置界面，提供直观的服务管理和参数配置能力                                                                                       | @LipapaSma      |
 
 ## ❤️ 鸣谢
 
