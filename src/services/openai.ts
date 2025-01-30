@@ -19,6 +19,7 @@ export interface ChatOptions {
   jsonMode?: boolean;
   requestId?: string;
   trace?: boolean;
+  enableSearch?: boolean;
 }
 
 class OpenAIClient {
@@ -115,6 +116,7 @@ class OpenAIClient {
       onStream,
       trace = false,
       model = this.deployment ?? kEnvs.OPENAI_MODEL ?? "gpt-4o",
+      enableSearch = kEnvs.QWEN_ENABLE_SEARCH,
     } = options;
     if (trace && this.traceInput) {
       this._logger.log(
@@ -130,6 +132,7 @@ class OpenAIClient {
       stream: true,
       messages: [...systemMsg, { role: "user", content: user }],
       response_format: jsonMode ? { type: "json_object" } : undefined,
+      ...(enableSearch && { enable_search: true })
     }).catch((e) => {
       this._logger.error("LLM 响应异常", e);
       return null;
