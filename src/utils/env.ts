@@ -6,4 +6,8 @@ export const kEnvs: Partial<{
   OPENAI_API_KEY: string;
   AZURE_OPENAI_API_KEY: string;
   AZURE_OPENAI_DEPLOYMENT: string;
-}> = process.env as any;
+  QWEN_ENABLE_SEARCH: boolean;
+}> = {
+  ...process.env,
+  QWEN_ENABLE_SEARCH: process.env.QWEN_ENABLE_SEARCH === 'true'
+} as any;
