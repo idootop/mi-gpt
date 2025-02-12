@@ -43,6 +43,10 @@
 
 👉 [MiGPT 光速入门视频教程，手把手教你调教小爱音箱～](https://www.bilibili.com/video/BV1zb421H7cS)
 
+###文字教程
+
+👉 [通过Docker快速安装MiGPT，手把手教你绕开异地登录风控]([https://www.bilibili.com/video/BV1zb421H7cS](https://github.com/Jasonzhu1207/mi-gpt/blob/Jasonzhu1207-add-easy-setup/docs/mi-gpt-docker-easy-setup.md))
+
 ### 设备要求
 
 `MiGPT` 支持大部分的小爱音箱型号，推荐使用小爱音箱 Pro（完美运行）
