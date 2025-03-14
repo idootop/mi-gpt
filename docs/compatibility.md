@@ -33,7 +33,8 @@
 | 小爱触屏音箱                  | [LX04](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-lx04:2) | `[5, 1]`   | `[5, 2]`      | -              | false          | [@ilovesouthpark](https://github.com/idootop/mi-gpt/issues/92#issuecomment-2184678990) |
 | Xiaomi 智能家庭屏 Mini        | [ASX4B](https://home.miot-spec.com/spec/xiaomi.wifispeaker.x4b)                                     | `[5, 3]`   | `[5, 1]`      | -              | false          | [@VincentGresham](https://github.com/idootop/mi-gpt/issues/92#issuecomment-2645762809) |
 | Xiaomi 智能家庭屏 6           | [X6A](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-x6a:1)   | `[7, 3]`   | `[7, 1]`      | -              | false          | [@Hongwing](https://github.com/idootop/mi-gpt/issues/80)                               |
-| Redmi 小爱触屏音箱 Pro 8 英寸 | [X08E](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-x08e:1) | `[7, 3]`   | `[7, 1]`      | -              | false          | [@shangjiyu](https://github.com/idootop/mi-gpt/issues/20)                              |
+| Redmi 小爱触屏音箱 Pro 8 英寸 | [X08E](https://home.miot-spec.com/spec?type=urn:miot-spec-v2:device:speaker:0000A015:xiaomi-x08e:1) | `[7, 3]`   | `[7, 1]`      | -              | false          | [@shangjiyu](https://github.com/idootop/mi-gpt/issues/20)     
+| Xiaomi 智能家庭屏 Pro 8 | [X8F]([[https://home.miot-spec.com/spec/xiaomi.wifispeaker.x8f)) | `[7, 3]`   | `[7, 1]`      | -              | false          |  @xiaodou
 
 ## ❌ 不支持
 
