@@ -7,6 +7,20 @@
 ```shell
 pnpm install
 ```
+安装依赖时候出现Warning:
+
+```
+╭ Warning-───────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                            │
+│   Ignored build scripts: @prisma/client, @prisma/engines, esbuild, mi-gpt, prisma.         │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed to run scripts.   │
+│                                                                                            │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+```
+请按照提示执行命令构建依赖：
+```
+pnpm approve-builds
+```
 
 然后，创建并启动 `MiGPT` 实例，查看如何[「配置参数」](https://github.com/idootop/mi-gpt/tree/main#%EF%B8%8F-%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0)。
 
