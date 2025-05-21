@@ -8,6 +8,16 @@
 
 ## 👋 项目简介
 
+> [!TIP]
+> 如果你是小爱音箱 Pro 用户，推荐使用 [Open-XiaoAI](https://github.com/idootop/open-xiaoai) ✨ 
+>
+> 即刻解锁**自定义唤醒词、连续对话、接入小智 AI** 等全新玩法
+
+> [!IMPORTANT]
+> 全新 [MiGPT-Next](https://github.com/idootop/migpt-next) 已发布，该项目已停止维护 ⚠️
+> 
+> 新项目修复了一些已知问题，支持自定义消息回复，拥有更好的稳定性，建议尽早[迁移](https://github.com/idootop/migpt-next)
+
 在这个数字化的世界里，家已不仅仅是一个居住的地方，而是我们数字生活的延伸。
 
 `MiGPT` 通过将小爱音箱、米家智能设备，与 ChatGPT 的理解能力完美融合，让你的智能家居更懂你。
