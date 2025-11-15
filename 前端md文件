@@ -1,0 +1,1957 @@
+# 最佳体验目录AI辅助变更流程 - 前端原型设计稿
+
+**文档版本**: V1.0
+**创建日期**: 2025-11-05
+**设计工具**: Ant Design 5.x + AIOS 组件库
+**技术栈**: React 18 + TypeScript + Ant Design + Styled-Components
+
+---
+
+## 📐 设计原则
+
+### 1. 设计系统
+- **组件库**: 基于 Ant Design 5.x 和 AIOS 组件库
+- **设计语言**: 遵循 Ant Design 设计规范
+- **色彩系统**:
+  - 主色: `#1890ff` (Ant Design Blue)
+  - 成功: `#52c41a`
+  - 警告: `#faad14`
+  - 错误: `#f5222d`
+  - 文本: `#262626` / `#595959` / `#8c8c8c`
+
+### 2. 交互原则
+- **响应式**: 支持桌面端和平板端（移动端暂不支持）
+- **即时反馈**: 所有用户操作提供即时视觉反馈
+- **渐进式展示**: 复杂信息分步骤引导用户
+- **无障碍**: 支持键盘导航和屏幕阅读器
+
+---
+
+## 🎨 核心界面设计
+
+### 1. 目录助手（AI对话组件）
+
+#### 1.1 组件位置与触发
+
+**入口按钮设计**
+
+```tsx
+// CatalogAssistantButton.tsx
+import { Button, Badge } from 'antd';
+import { RobotOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
+
+const FloatingButton = styled(Button)`
+  position: fixed;
+  right: 24px;
+  bottom: 80px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+
+  &:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+`;
+
+const CatalogAssistantButton = ({ onClick, hasUnread }) => {
+  return (
+    <Badge dot={hasUnread} offset={[-8, 8]}>
+      <FloatingButton
+        type="primary"
+        shape="circle"
+        size="large"
+        icon={<RobotOutlined style={{ fontSize: 24 }} />}
+        onClick={onClick}
+      />
+    </Badge>
+  );
+};
+```
+
+**视觉效果**:
+```
+┌─────────────────────────────────────────┐
+│                                         │
+│                                         │
+│           主内容区域                     │
+│                                         │
+│                                    ●    │ <- 浮动按钮
+│                                  🤖     │    右下角固定
+│                                         │    带阴影和悬浮效果
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+---
+
+#### 1.2 对话抽屉组件
+
+**主体结构**
+
+```tsx
+// CatalogAssistantDrawer.tsx
+import { Drawer, Input, Button, Space, Tabs, Empty, Spin } from 'antd';
+import { SendOutlined, ClearOutlined, HistoryOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
+
+const StyledDrawer = styled(Drawer)`
+  .ant-drawer-body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+`;
+
+const ChatContainer = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background: #f5f5f5;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d9d9d9;
+    border-radius: 3px;
+  }
+`;
+
+const InputContainer = styled.div`
+  padding: 16px;
+  background: #ffffff;
+  border-top: 1px solid #f0f0f0;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+`;
+
+const MessageBubble = styled.div<{ role: 'user' | 'assistant' }>`
+  display: flex;
+  justify-content: ${props => props.role === 'user' ? 'flex-end' : 'flex-start'};
+  margin-bottom: 16px;
+
+  .bubble-content {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: ${props => props.role === 'user' ? '#1890ff' : '#ffffff'};
+    color: ${props => props.role === 'user' ? '#ffffff' : '#262626'};
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word;
+  }
+`;
+
+const QuickActionButtons = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+`;
+
+const CatalogAssistantDrawer = ({
+  visible,
+  onClose,
+  messages,
+  onSendMessage,
+  loading
+}) => {
+  return (
+    <StyledDrawer
+      title={
+        <Space>
+          <RobotOutlined style={{ fontSize: 20, color: '#1890ff' }} />
+          <span>目录助手</span>
+        </Space>
+      }
+      placement="right"
+      width={520}
+      open={visible}
+      onClose={onClose}
+      extra={
+        <Space>
+          <Button icon={<HistoryOutlined />} type="text">
+            历史对话
+          </Button>
+        </Space>
+      }
+    >
+      <Tabs
+        defaultActiveKey="chat"
+        items={[
+          {
+            key: 'chat',
+            label: '💬 对话',
+            children: (
+              <>
+                <ChatContainer>
+                  {messages.length === 0 ? (
+                    <Empty
+                      description="开始与目录助手对话"
+                      image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    />
+                  ) : (
+                    messages.map((msg, index) => (
+                      <MessageBubble key={index} role={msg.role}>
+                        <div className="bubble-content">
+                          {msg.content}
+                          {msg.quickActions && (
+                            <QuickActionButtons>
+                              {msg.quickActions.map((action, idx) => (
+                                <Button
+                                  key={idx}
+                                  size="small"
+                                  type={action.primary ? 'primary' : 'default'}
+                                  onClick={action.onClick}
+                                >
+                                  {action.label}
+                                </Button>
+                              ))}
+                            </QuickActionButtons>
+                          )}
+                        </div>
+                      </MessageBubble>
+                    ))
+                  )}
+                  {loading && (
+                    <MessageBubble role="assistant">
+                      <div className="bubble-content">
+                        <Spin size="small" /> 正在思考...
+                      </div>
+                    </MessageBubble>
+                  )}
+                </ChatContainer>
+
+                <InputContainer>
+                  <Space.Compact style={{ width: '100%' }}>
+                    <Input.TextArea
+                      placeholder="在此输入您的问题..."
+                      autoSize={{ minRows: 1, maxRows: 4 }}
+                      onPressEnter={(e) => {
+                        if (!e.shiftKey) {
+                          e.preventDefault();
+                          onSendMessage(e.currentTarget.value);
+                        }
+                      }}
+                    />
+                    <Button
+                      type="primary"
+                      icon={<SendOutlined />}
+                      onClick={() => onSendMessage()}
+                    >
+                      发送
+                    </Button>
+                  </Space.Compact>
+                </InputContainer>
+              </>
+            )
+          },
+          {
+            key: 'history',
+            label: '📝 变更记录',
+            children: <div>变更记录列表...</div>
+          }
+        ]}
+      />
+    </StyledDrawer>
+  );
+};
+```
+
+**视觉原型**:
+
+```
+┌────────────────────────────────────────────────┐
+│ 🤖 目录助手                 [📜 历史对话]  [×] │
+├────────────────────────────────────────────────┤
+│  [💬 对话]  [📝 变更记录]                      │
+├────────────────────────────────────────────────┤
+│                                                │
+│  ┌──────────────────────────────────────┐    │
+│  │ 🤖 小助手                             │    │
+│  │ 您好！我是目录助手，可以帮您完成      │    │
+│  │ 最佳体验目录的新建和存量目录的探索。  │    │
+│  │ 请问您想完成什么内容？                │    │
+│  │                                       │    │
+│  │ [新建目录] [探索现有目录]             │    │
+│  └──────────────────────────────────────┘    │
+│                                                │
+│                   ┌─────────────────────────┐ │
+│                   │ 我想看看充电场景下的     │ │
+│                   │ 体验目录是否完善         │ │
+│                   └─────────────────────────┘ │
+│                                                │
+│  ┌──────────────────────────────────────┐    │
+│  │ 🤖 小助手                             │    │
+│  │ 好的，请问您想对哪个品类进行探索？    │    │
+│  │                                       │    │
+│  │ [充电摄像机] [扫地机器人] [其他...]   │    │
+│  └──────────────────────────────────────┘    │
+│                                                │
+│                                                │
+│                                                │
+│  (滚动区域，可查看历史消息)                   │
+│                                                │
+├────────────────────────────────────────────────┤
+│ ┌────────────────────────────────────────┐   │
+│ │ 在此输入您的问题...                    │ 📤│
+│ └────────────────────────────────────────┘   │
+└────────────────────────────────────────────────┘
+```
+
+---
+
+#### 1.3 对话流程界面
+
+**阶段1：欢迎界面**
+
+```tsx
+const WelcomeMessage = () => (
+  <MessageBubble role="assistant">
+    <div className="bubble-content">
+      <Space direction="vertical" size={12}>
+        <div>
+          <RobotOutlined style={{ fontSize: 32, color: '#1890ff' }} />
+        </div>
+        <div style={{ fontSize: 16, fontWeight: 500 }}>
+          您好！我是目录助手
+        </div>
+        <div style={{ color: '#595959' }}>
+          可以帮您完成最佳体验目录的新建和存量目录的探索。
+          <br />
+          请问您想完成什么内容？
+        </div>
+        <QuickActionButtons>
+          <Button type="primary" icon={<PlusOutlined />}>
+            新建目录
+          </Button>
+          <Button icon={<SearchOutlined />}>
+            探索现有目录
+          </Button>
+        </QuickActionButtons>
+      </Space>
+    </div>
+  </MessageBubble>
+);
+```
+
+**阶段2：品类选择**
+
+```tsx
+const CategorySelectionMessage = ({ categories, onSelect }) => (
+  <MessageBubble role="assistant">
+    <div className="bubble-content">
+      <div style={{ marginBottom: 12 }}>
+        好的，请问您想对哪个品类进行探索？
+      </div>
+      <Select
+        showSearch
+        style={{ width: '100%' }}
+        placeholder="搜索或选择品类"
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+        }
+        options={categories}
+        onChange={onSelect}
+      />
+      <QuickActionButtons style={{ marginTop: 12 }}>
+        {categories.slice(0, 3).map(cat => (
+          <Button key={cat.value} onClick={() => onSelect(cat.value)}>
+            {cat.label}
+          </Button>
+        ))}
+      </QuickActionButtons>
+    </div>
+  </MessageBubble>
+);
+```
+
+**阶段3：AI分析结果**
+
+```tsx
+const AnalysisResultMessage = ({ result }) => (
+  <MessageBubble role="assistant">
+    <div className="bubble-content">
+      <Space direction="vertical" size={16} style={{ width: '100%' }}>
+        <div>
+          我已为您分析当前<Tag color="blue">{result.category}</Tag>
+          的最佳体验目录，以下是建议：
+        </div>
+
+        <Collapse
+          defaultActiveKey={['1']}
+          ghost
+          items={[
+            {
+              key: '1',
+              label: '📊 分析结果',
+              children: (
+                <Alert
+                  message="现有目录中存在相似体验项"
+                  description={
+                    <div style={{ marginTop: 8 }}>
+                      <Typography.Text type="secondary">
+                        E1-产品使用 &gt; E2-识别能源信息-感知 &gt; E3-感知环境
+                      </Typography.Text>
+                      <br />
+                      <Typography.Text>
+                        E4-环境感知实时: 系统能够实时、精确地感知环境信息...
+                      </Typography.Text>
+                    </div>
+                  }
+                  type="info"
+                  showIcon
+                />
+              )
+            },
+            {
+              key: '2',
+              label: '💡 变更建议',
+              children: (
+                <Card size="small" style={{ background: '#f0f9ff' }}>
+                  <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                    <Tag color="success">建议【新增】E4体验项</Tag>
+                    <Divider style={{ margin: '8px 0' }} />
+                    <div>
+                      <Typography.Text strong>路径：</Typography.Text>
+                      <br />
+                      <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                        E1-产品使用 &gt; E2-识别能源信息-感知 &gt; E3-感知环境
+                      </Typography.Text>
+                    </div>
+                    <div>
+                      <Typography.Text strong>E4-低温环境适配：</Typography.Text>
+                      <br />
+                      <Typography.Text>
+                        系统在-20℃~0℃低温环境下能够准确感知环境信息，
+                        确保数据采集稳定可靠。
+                      </Typography.Text>
+                    </div>
+                  </Space>
+                </Card>
+              )
+            }
+          ]}
+        />
+
+        <div style={{ marginTop: 8 }}>
+          您是否认可此建议？
+        </div>
+
+        <QuickActionButtons>
+          <Button type="primary" icon={<CheckOutlined />}>
+            认可建议
+          </Button>
+          <Button icon={<EditOutlined />}>
+            修改建议
+          </Button>
+          <Button icon={<ReloadOutlined />}>
+            重新分析
+          </Button>
+        </QuickActionButtons>
+      </Space>
+    </div>
+  </MessageBubble>
+);
+```
+
+**阶段4：变更确认**
+
+```tsx
+const ChangeConfirmMessage = ({ onConfirm, onCancel }) => (
+  <MessageBubble role="assistant">
+    <div className="bubble-content">
+      <Space direction="vertical" size={12} style={{ width: '100%' }}>
+        <div>
+          <CheckCircleOutlined style={{ color: '#52c41a', fontSize: 20 }} />
+          <span style={{ marginLeft: 8 }}>太好了！</span>
+        </div>
+        <div>是否需要发起体验目录变更申请？</div>
+        <Alert
+          message="提示"
+          description="变更申请将提交给ETC代表审批，预计3个工作日内完成审批。"
+          type="info"
+          showIcon
+        />
+        <QuickActionButtons>
+          <Button
+            type="primary"
+            icon={<FileAddOutlined />}
+            onClick={onConfirm}
+          >
+            发起变更
+          </Button>
+          <Button onClick={onCancel}>
+            暂不变更
+          </Button>
+        </QuickActionButtons>
+      </Space>
+    </div>
+  </MessageBubble>
+);
+```
+
+**阶段5：变更理由输入**
+
+```tsx
+const ChangeReasonInput = ({ onSubmit }) => {
+  const [reason, setReason] = useState('');
+
+  return (
+    <MessageBubble role="assistant">
+      <div className="bubble-content">
+        <Space direction="vertical" size={12} style={{ width: '100%' }}>
+          <div>请简要说明变更理由（必填）</div>
+          <Input.TextArea
+            placeholder="例如：用户VOC反馈低温场景体验差，需要补充相关体验项"
+            autoSize={{ minRows: 3, maxRows: 6 }}
+            maxLength={500}
+            showCount
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+          />
+          <Button
+            type="primary"
+            block
+            disabled={!reason.trim()}
+            onClick={() => onSubmit(reason)}
+          >
+            提交变更申请
+          </Button>
+        </Space>
+      </div>
+    </MessageBubble>
+  );
+};
+```
+
+**阶段6：提交成功**
+
+```tsx
+const SubmitSuccessMessage = ({ requestId }) => (
+  <MessageBubble role="assistant">
+    <div className="bubble-content">
+      <Result
+        status="success"
+        title="变更申请已提交"
+        subTitle={
+          <Space direction="vertical" size={8}>
+            <div>
+              变更单号：<Tag color="blue">{requestId}</Tag>
+            </div>
+            <div style={{ color: '#595959' }}>
+              ETC代表将在3个工作日内完成审批。
+              <br />
+              您可以在【待办中心-Inbox】查看审批进度。
+            </div>
+          </Space>
+        }
+        extra={[
+          <Button type="primary" key="inbox">
+            前往待办中心
+          </Button>,
+          <Button key="continue">继续探索</Button>
+        ]}
+      />
+    </div>
+  </MessageBubble>
+);
+```
+
+---
+
+### 2. 变更申请详情页
+
+#### 2.1 页面结构
+
+```tsx
+// ChangeRequestDetail.tsx
+import {
+  Card,
+  Descriptions,
+  Steps,
+  Timeline,
+  Tag,
+  Space,
+  Button,
+  Divider,
+  Typography,
+  Row,
+  Col
+} from 'antd';
+import styled from 'styled-components';
+
+const DetailContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+`;
+
+const SectionCard = styled(Card)`
+  margin-bottom: 16px;
+
+  .ant-card-head {
+    background: #fafafa;
+    border-bottom: 2px solid #1890ff;
+  }
+`;
+
+const DiffContainer = styled.div`
+  display: flex;
+  gap: 16px;
+
+  .diff-panel {
+    flex: 1;
+    padding: 16px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+
+    &.before {
+      border-left: 3px solid #faad14;
+    }
+
+    &.after {
+      border-left: 3px solid #52c41a;
+    }
+  }
+
+  ins {
+    background: #d4f5d4;
+    text-decoration: none;
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+
+  del {
+    background: #ffd4d4;
+    text-decoration: line-through;
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+`;
+
+const ChangeRequestDetail = ({ requestId }) => {
+  return (
+    <DetailContainer>
+      {/* 状态进度 */}
+      <SectionCard title="审批进度">
+        <Steps
+          current={1}
+          items={[
+            {
+              title: '提交申请',
+              description: '2025-11-05 14:30',
+              status: 'finish'
+            },
+            {
+              title: 'ETC审批',
+              description: '待审批',
+              status: 'process'
+            },
+            {
+              title: '审批完成',
+              description: '待处理',
+              status: 'wait'
+            }
+          ]}
+        />
+      </SectionCard>
+
+      {/* 基本信息 */}
+      <SectionCard title="基本信息">
+        <Descriptions column={2} bordered>
+          <Descriptions.Item label="变更单号">
+            <Tag color="blue">CR202511050001</Tag>
+          </Descriptions.Item>
+          <Descriptions.Item label="状态">
+            <Tag color="processing">待审批</Tag>
+          </Descriptions.Item>
+          <Descriptions.Item label="发起人">
+            李杰 (jerry.li)
+          </Descriptions.Item>
+          <Descriptions.Item label="提交时间">
+            2025-11-05 14:30
+          </Descriptions.Item>
+          <Descriptions.Item label="目录名称">
+            充电最佳体验目录
+          </Descriptions.Item>
+          <Descriptions.Item label="品类">
+            充电摄像机
+          </Descriptions.Item>
+          <Descriptions.Item label="审批人" span={2}>
+            <Space>
+              <Tag>王涛 (tom.wang)</Tag>
+              <Tag>陈丽 (lisa.chen)</Tag>
+            </Space>
+          </Descriptions.Item>
+          <Descriptions.Item label="变更理由" span={2}>
+            用户VOC反馈低温场景体验差，需要补充相关体验项
+          </Descriptions.Item>
+        </Descriptions>
+      </SectionCard>
+
+      {/* 变更详情 */}
+      <SectionCard title="变更详情（共2项）">
+        <Space direction="vertical" size={24} style={{ width: '100%' }}>
+          {/* 变更项1 */}
+          <div>
+            <Typography.Title level={5}>
+              <Tag color="success">变更1：新增E4</Tag>
+            </Typography.Title>
+            <Descriptions column={1} bordered size="small">
+              <Descriptions.Item label="路径">
+                E1-产品使用 &gt; E2-识别能源信息-感知 &gt; E3-感知环境
+              </Descriptions.Item>
+              <Descriptions.Item label="新增内容">
+                <Card size="small" style={{ background: '#f6ffed' }}>
+                  <Space direction="vertical">
+                    <Typography.Text strong>E4-低温环境适配</Typography.Text>
+                    <Typography.Paragraph style={{ margin: 0 }}>
+                      系统在-20℃~0℃低温环境下能够准确感知环境信息，
+                      确保数据采集稳定可靠。
+                    </Typography.Paragraph>
+                  </Space>
+                </Card>
+              </Descriptions.Item>
+            </Descriptions>
+          </div>
+
+          <Divider />
+
+          {/* 变更项2 */}
+          <div>
+            <Typography.Title level={5}>
+              <Tag color="orange">变更2：修改E4</Tag>
+            </Typography.Title>
+            <Descriptions column={1} bordered size="small">
+              <Descriptions.Item label="路径">
+                E1-产品使用 &gt; E2-识别能源信息-感知 &gt; E3-感知环境
+              </Descriptions.Item>
+              <Descriptions.Item label="变更对比">
+                <DiffContainer>
+                  <div className="diff-panel before">
+                    <Typography.Text strong style={{ color: '#faad14' }}>
+                      ✏️ 修改前
+                    </Typography.Text>
+                    <Divider style={{ margin: '8px 0' }} />
+                    <div>
+                      <Typography.Text strong>E4-环境感知实时</Typography.Text>
+                      <br />
+                      <Typography.Text>
+                        系统能够<del>事时</del>、<del>青确</del>地感知环境信息，
+                        确保环境数据及时可靠。
+                      </Typography.Text>
+                    </div>
+                  </div>
+                  <div className="diff-panel after">
+                    <Typography.Text strong style={{ color: '#52c41a' }}>
+                      ✅ 修改后
+                    </Typography.Text>
+                    <Divider style={{ margin: '8px 0' }} />
+                    <div>
+                      <Typography.Text strong>E4-环境感知实时</Typography.Text>
+                      <br />
+                      <Typography.Text>
+                        系统能够<ins>实时</ins>、<ins>精确</ins>地感知环境信息，
+                        确保环境数据及时可靠。
+                      </Typography.Text>
+                    </div>
+                  </div>
+                </DiffContainer>
+              </Descriptions.Item>
+              <Descriptions.Item label="变更说明">
+                修正错别字（事时→实时，青确→精确）
+              </Descriptions.Item>
+            </Descriptions>
+          </div>
+        </Space>
+      </SectionCard>
+
+      {/* 审批记录 */}
+      <SectionCard title="审批记录">
+        <Timeline
+          items={[
+            {
+              color: 'blue',
+              children: (
+                <Space direction="vertical">
+                  <Typography.Text strong>提交申请</Typography.Text>
+                  <Typography.Text type="secondary">
+                    李杰 (jerry.li) 于 2025-11-05 14:30 提交变更申请
+                  </Typography.Text>
+                </Space>
+              )
+            },
+            {
+              color: 'gray',
+              children: (
+                <Typography.Text type="secondary">
+                  等待ETC代表审批...
+                </Typography.Text>
+              )
+            }
+          ]}
+        />
+      </SectionCard>
+
+      {/* 操作区 */}
+      <Card>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Button block size="large" onClick={() => window.history.back()}>
+              返回
+            </Button>
+          </Col>
+          <Col span={12}>
+            <Button type="primary" block size="large">
+              催办审批
+            </Button>
+          </Col>
+        </Row>
+      </Card>
+    </DetailContainer>
+  );
+};
+```
+
+**视觉原型**:
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  [← 返回]  变更申请详情 - CR202511050001                  │
+├──────────────────────────────────────────────────────────┤
+│                                                            │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │ 审批进度                                            │  │
+│  ├────────────────────────────────────────────────────┤  │
+│  │ ✅ 提交申请 ──→ ⏳ ETC审批 ──→ ⏸️ 审批完成          │  │
+│  │  2025-11-05       待审批        待处理              │  │
+│  └────────────────────────────────────────────────────┘  │
+│                                                            │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │ 基本信息                                            │  │
+│  ├────────────────────────────────────────────────────┤  │
+│  │ 变更单号   [CR202511050001]  │  状态  [待审批]    │  │
+│  │ 发起人     李杰 (jerry.li)   │  提交  2025-11-05  │  │
+│  │ 目录名称   充电最佳体验目录   │  品类  充电摄像机   │  │
+│  │ 审批人     [王涛] [陈丽]                          │  │
+│  │ 变更理由   用户VOC反馈低温场景体验差...           │  │
+│  └────────────────────────────────────────────────────┘  │
+│                                                            │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │ 变更详情（共2项）                                   │  │
+│  ├────────────────────────────────────────────────────┤  │
+│  │ [✨ 变更1：新增E4]                                 │  │
+│  │ 路径: E1-产品使用 > E2-识别能源信息 > E3-感知环境  │  │
+│  │ ┌──────────────────────────────────────────────┐  │  │
+│  │ │ E4-低温环境适配                               │  │  │
+│  │ │ 系统在-20℃~0℃低温环境下能够准确感知...        │  │  │
+│  │ └──────────────────────────────────────────────┘  │  │
+│  │                                                      │  │
+│  │ ────────────────────────────────────────────────  │  │
+│  │                                                      │  │
+│  │ [✏️ 变更2：修改E4]                                 │  │
+│  │ ┌──────────────────┐  ┌──────────────────┐       │  │
+│  │ │ ✏️ 修改前          │  │ ✅ 修改后         │       │  │
+│  │ │ 事时、青确         │  │ 实时、精确        │       │  │
+│  │ └──────────────────┘  └──────────────────┘       │  │
+│  │ 变更说明: 修正错别字                              │  │
+│  └────────────────────────────────────────────────────┘  │
+│                                                            │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │ 审批记录                                            │  │
+│  ├────────────────────────────────────────────────────┤  │
+│  │ ● 提交申请                                          │  │
+│  │ │ 李杰 (jerry.li) 于 2025-11-05 14:30 提交        │  │
+│  │ ○ 等待ETC代表审批...                               │  │
+│  └────────────────────────────────────────────────────┘  │
+│                                                            │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │ [      返回      ]         [    催办审批    ]      │  │
+│  └────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 3. Inbox待办中心增强
+
+#### 3.1 列表页面
+
+```tsx
+// CatalogChangeInbox.tsx
+import { AiosPage } from '@anker/aios-design';
+import { Tag, Space, Button, Badge, Tooltip } from 'antd';
+import {
+  ClockCircleOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  EyeOutlined
+} from '@ant-design/icons';
+
+const CatalogChangeInbox = () => {
+  // 自定义列配置
+  const columns = [
+    {
+      title: '变更单号',
+      dataIndex: 'requestId',
+      width: 150,
+      fixed: 'left',
+      render: (text) => (
+        <Typography.Link onClick={() => handleViewDetail(text)}>
+          {text}
+        </Typography.Link>
+      )
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      width: 100,
+      filters: [
+        { text: '待审批', value: 'PENDING' },
+        { text: '已通过', value: 'APPROVED' },
+        { text: '已驳回', value: 'REJECTED' }
+      ],
+      render: (status) => {
+        const statusConfig = {
+          PENDING: { color: 'processing', icon: <ClockCircleOutlined />, text: '待审批' },
+          APPROVED: { color: 'success', icon: <CheckCircleOutlined />, text: '已通过' },
+          REJECTED: { color: 'error', icon: <CloseCircleOutlined />, text: '已驳回' }
+        };
+        const config = statusConfig[status];
+        return (
+          <Tag icon={config.icon} color={config.color}>
+            {config.text}
+          </Tag>
+        );
+      }
+    },
+    {
+      title: '目录名称',
+      dataIndex: 'catalogName',
+      width: 180,
+      ellipsis: true
+    },
+    {
+      title: '发起人',
+      dataIndex: 'submitter',
+      width: 120,
+      render: (text) => (
+        <Space>
+          <Avatar size="small">{text.name[0]}</Avatar>
+          <span>{text.name}</span>
+        </Space>
+      )
+    },
+    {
+      title: '变更内容',
+      dataIndex: 'changesSummary',
+      width: 200,
+      render: (text, record) => (
+        <Tooltip title={text}>
+          <Space size={4}>
+            {record.addCount > 0 && (
+              <Tag color="success" style={{ margin: 0 }}>
+                新增{record.addCount}项
+              </Tag>
+            )}
+            {record.modifyCount > 0 && (
+              <Tag color="orange" style={{ margin: 0 }}>
+                修改{record.modifyCount}项
+              </Tag>
+            )}
+          </Space>
+        </Tooltip>
+      )
+    },
+    {
+      title: '提交时间',
+      dataIndex: 'submitTime',
+      width: 180,
+      sorter: true,
+      render: (time, record) => {
+        const waitingTime = calculateWaitingTime(time);
+        return (
+          <Space direction="vertical" size={0}>
+            <span>{time}</span>
+            {record.status === 'PENDING' && (
+              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                <ClockCircleOutlined /> 已等待{waitingTime}
+              </Typography.Text>
+            )}
+          </Space>
+        );
+      }
+    },
+    {
+      title: '审批人',
+      dataIndex: 'approvers',
+      width: 150,
+      render: (approvers) => (
+        <Space size={4} wrap>
+          {approvers.map(approver => (
+            <Tag key={approver.id}>{approver.name}</Tag>
+          ))}
+        </Space>
+      )
+    },
+    {
+      title: '操作',
+      key: 'action',
+      width: 180,
+      fixed: 'right',
+      render: (_, record) => (
+        <Space size="small">
+          <Button
+            size="small"
+            icon={<EyeOutlined />}
+            onClick={() => handleViewDetail(record.requestId)}
+          >
+            查看详情
+          </Button>
+          {record.status === 'PENDING' && record.canApprove && (
+            <Button
+              type="primary"
+              size="small"
+              onClick={() => handleApprove(record.requestId)}
+            >
+              审批
+            </Button>
+          )}
+          {record.status === 'REJECTED' && record.isOwner && (
+            <Button
+              size="small"
+              onClick={() => handleModify(record.requestId)}
+            >
+              修改重新提交
+            </Button>
+          )}
+        </Space>
+      )
+    }
+  ];
+
+  // 批量操作
+  const batchActions = [
+    {
+      children: '批量催办',
+      icon: <BellOutlined />,
+      onClick: handleBatchHasten,
+      visible: (selectedRecords) =>
+        selectedRecords.every(r => r.status === 'PENDING')
+    },
+    {
+      children: '批量导出',
+      icon: <DownloadOutlined />,
+      onClick: handleBatchExport
+    }
+  ];
+
+  // 顶部工具栏
+  const toolbarActions = [
+    {
+      children: '我发起的',
+      key: 'myRequests',
+      onClick: () => handleViewChange('myRequests')
+    },
+    {
+      children: '待我审批',
+      key: 'myReview',
+      onClick: () => handleViewChange('myReview')
+    },
+    {
+      children: '全部',
+      key: 'all',
+      onClick: () => handleViewChange('all')
+    }
+  ];
+
+  return (
+    <PageWrapper>
+      <AiosPage
+        pageId="CATALOG_CHANGE_INBOX"
+        title="目录变更审批"
+        columns={columns}
+        batchActions={batchActions}
+        toolbarActions={toolbarActions}
+        defaultView="myReview"
+      />
+    </PageWrapper>
+  );
+};
+```
+
+**视觉原型**:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ 目录变更审批 (3条待处理)                                               │
+│ [我发起的] [待我审批] [全部]                     🔍筛选  📊统计  ⚙️设置│
+├────────────────────────────────────────────────────────────────────────┤
+│ ☐ 全选  [批量催办] [批量导出]                                         │
+├────┬─────┬─────────┬────────┬──────────┬──────────┬────────┬────────┤
+│☐   │状态 │ 变更单号 │目录名称│  发起人   │ 变更内容  │提交时间│ 操作   │
+├────┼─────┼─────────┼────────┼──────────┼──────────┼────────┼────────┤
+│☐   │⏳待 │CR...0001│充电最佳│ 👤李杰   │[+1] [✏️1]│11-05   │[详情]  │
+│    │审批 │         │体验目录│          │          │14:30   │[审批]  │
+│    │     │         │        │          │          │已等待2h│        │
+├────┼─────┼─────────┼────────┼──────────┼──────────┼────────┼────────┤
+│☐   │❌已 │CR...0023│扫地机器│ 👤张三   │[+3]      │11-04   │[详情]  │
+│    │驳回 │         │人目录  │          │          │10:15   │[修改]  │
+│    │     │         │        │          │          │已驳回  │        │
+├────┼─────┼─────────┼────────┼──────────┼──────────┼────────┼────────┤
+│☐   │✅已 │CR...0012│投影仪  │ 👤李四   │[✏️2]     │11-03   │[详情]  │
+│    │通过 │         │最佳体验│          │          │09:00   │        │
+│    │     │         │        │          │          │已通过  │        │
+└────┴─────┴─────────┴────────┴──────────┴──────────┴────────┴────────┘
+```
+
+---
+
+#### 3.2 审批弹窗
+
+```tsx
+// ApprovalModal.tsx
+import { Modal, Form, Input, Radio, Space, Alert, Divider } from 'antd';
+
+const ApprovalModal = ({ visible, requestData, onSubmit, onCancel }) => {
+  const [form] = Form.useForm();
+  const [action, setAction] = useState<'approve' | 'reject'>('approve');
+
+  return (
+    <Modal
+      title={
+        <Space>
+          <FileProtectOutlined />
+          <span>审批变更申请</span>
+        </Space>
+      }
+      open={visible}
+      width={800}
+      onOk={() => {
+        form.validateFields().then(values => {
+          onSubmit({ ...values, action });
+        });
+      }}
+      onCancel={onCancel}
+      okText={action === 'approve' ? '同意' : '驳回'}
+      okButtonProps={{
+        danger: action === 'reject',
+        type: action === 'approve' ? 'primary' : 'default'
+      }}
+    >
+      <Form form={form} layout="vertical">
+        {/* 变更申请概要 */}
+        <Alert
+          message={
+            <Space direction="vertical" size={4}>
+              <div>
+                <Tag color="blue">{requestData.requestId}</Tag>
+                <span>{requestData.catalogName}</span>
+              </div>
+              <div style={{ fontSize: 12, color: '#595959' }}>
+                发起人：{requestData.submitter.name} |
+                提交时间：{requestData.submitTime}
+              </div>
+            </Space>
+          }
+          type="info"
+          showIcon
+          style={{ marginBottom: 16 }}
+        />
+
+        {/* 变更内容概要 */}
+        <Card size="small" style={{ marginBottom: 16 }}>
+          <Typography.Text type="secondary">变更内容：</Typography.Text>
+          <Space size={4} style={{ marginTop: 8 }}>
+            {requestData.addCount > 0 && (
+              <Tag color="success">新增 {requestData.addCount} 个E4体验项</Tag>
+            )}
+            {requestData.modifyCount > 0 && (
+              <Tag color="orange">修改 {requestData.modifyCount} 个E4体验项</Tag>
+            )}
+          </Space>
+          <Divider style={{ margin: '12px 0' }} />
+          <Typography.Text type="secondary">变更理由：</Typography.Text>
+          <div style={{ marginTop: 8 }}>{requestData.changeReason}</div>
+          <Button
+            type="link"
+            size="small"
+            style={{ padding: 0, marginTop: 8 }}
+            onClick={() => handleViewFullDetail(requestData.requestId)}
+          >
+            查看完整变更详情 →
+          </Button>
+        </Card>
+
+        {/* 审批决定 */}
+        <Form.Item
+          label="审批决定"
+          name="action"
+          initialValue="approve"
+          rules={[{ required: true }]}
+        >
+          <Radio.Group onChange={(e) => setAction(e.target.value)}>
+            <Radio.Button value="approve">
+              <CheckOutlined /> 同意
+            </Radio.Button>
+            <Radio.Button value="reject">
+              <CloseOutlined /> 驳回
+            </Radio.Button>
+          </Radio.Group>
+        </Form.Item>
+
+        {/* 审批意见 */}
+        <Form.Item
+          label={action === 'approve' ? '审批意见（选填）' : '驳回理由（必填）'}
+          name="opinion"
+          rules={[
+            {
+              required: action === 'reject',
+              message: '请填写驳回理由'
+            }
+          ]}
+        >
+          <Input.TextArea
+            placeholder={
+              action === 'approve'
+                ? '例如：变更合理，补充了低温场景的体验描述。'
+                : '例如：新增的低温环境适配描述与现有"极端环境适配"存在重叠...'
+            }
+            autoSize={{ minRows: 4, maxRows: 8 }}
+            maxLength={500}
+            showCount
+          />
+        </Form.Item>
+
+        {action === 'reject' && (
+          <Alert
+            message="温馨提示"
+            description="驳回后，发起人可以修改变更内容并重新提交审批。"
+            type="warning"
+            showIcon
+            closable
+          />
+        )}
+      </Form>
+    </Modal>
+  );
+};
+```
+
+---
+
+### 4. 飞书卡片交互原型
+
+#### 4.1 审批通知卡片
+
+```json
+{
+  "config": {
+    "wide_screen_mode": true
+  },
+  "header": {
+    "template": "blue",
+    "title": {
+      "content": "📋 最佳体验目录变更审批通知",
+      "tag": "plain_text"
+    }
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "fields": [
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**🧑‍💼 发起人：**李杰 (jerry.li)"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**🕐 提交时间：**2025-11-05 14:30"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**📂 目录名称：**充电最佳体验目录"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**⏰ 等待时长：**2小时"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**📝 变更理由：**\n用户VOC反馈低温场景体验差，需要补充相关体验项"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**🔄 变更详情 (共2项)：**"
+      }
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "div",
+          "text": {
+            "tag": "lark_md",
+            "content": "**【变更1：新增E4】**\n路径：E1-产品使用 > E2-识别能源信息-感知 > E3-感知环境\n➕ 新增：E4-低温环境适配\n系统在-20℃~0℃低温环境下能够准确感知环境信息..."
+          }
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "div",
+          "text": {
+            "tag": "lark_md",
+            "content": "**【变更2：修改E4】**\n路径：E1-产品使用 > E2-识别能源信息-感知 > E3-感知环境\n✏️ 修改前：事时、青确\n✏️ 修改后：实时、精确"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "📖 查看详情"
+          },
+          "type": "default",
+          "url": "https://bees.anker-in.com/change/CR202511050001"
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "✅ 同意"
+          },
+          "type": "primary",
+          "value": {
+            "action": "approve",
+            "change_request_id": "CR202511050001"
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "❌ 驳回"
+          },
+          "type": "danger",
+          "value": {
+            "action": "reject",
+            "change_request_id": "CR202511050001"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+**飞书卡片视觉预览**:
+
+```
+┌────────────────────────────────────────────┐
+│ 📋 最佳体验目录变更审批通知                  │
+├────────────────────────────────────────────┤
+│                                             │
+│ 🧑‍💼 发起人：李杰 (jerry.li)                  │
+│ 📂 目录名称：充电最佳体验目录                 │
+│ 🕐 提交时间：2025-11-05 14:30              │
+│ ⏰ 等待时长：2小时                          │
+│                                             │
+│ 📝 变更理由：                               │
+│ 用户VOC反馈低温场景体验差，需要补充相关      │
+│ 体验项                                      │
+│                                             │
+│ ─────────────────────────────────────────  │
+│                                             │
+│ 🔄 变更详情 (共2项)：                       │
+│                                             │
+│ ┌───────────────────────────────────────┐ │
+│ │ 【变更1：新增E4】                      │ │
+│ │ 路径：E1-产品使用 > E2-识别能源信息... │ │
+│ │ ➕ 新增：E4-低温环境适配               │ │
+│ │ 系统在-20℃~0℃低温环境下...            │ │
+│ └───────────────────────────────────────┘ │
+│                                             │
+│ ┌───────────────────────────────────────┐ │
+│ │ 【变更2：修改E4】                      │ │
+│ │ 路径：E1-产品使用 > E2-识别能源信息... │ │
+│ │ ✏️ 修改前：事时、青确                  │ │
+│ │ ✏️ 修改后：实时、精确                  │ │
+│ └───────────────────────────────────────┘ │
+│                                             │
+│ [📖 查看详情]  [✅ 同意]  [❌ 驳回]       │
+│                                             │
+└────────────────────────────────────────────┘
+```
+
+---
+
+#### 4.2 审批结果通知卡片（通过）
+
+```json
+{
+  "config": {
+    "wide_screen_mode": true
+  },
+  "header": {
+    "template": "green",
+    "title": {
+      "content": "✅ 目录变更已通过",
+      "tag": "plain_text"
+    }
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "🎉 **好消息！您的变更申请已通过审批**"
+      }
+    },
+    {
+      "tag": "div",
+      "fields": [
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**📋 变更单号：**CR202511050001"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**📂 目录名称：**充电最佳体验目录"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**👤 审批人：**王涛 (tom.wang)"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**🕐 审批时间：**2025-11-05 16:45"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**💬 审批意见：**\n变更合理，补充了低温场景的体验描述。"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**📊 变更结果：**\n• 新增 1 个E4体验项\n• 修改 1 个E4体验项\n• 目录版本：V1.5 → V2.0"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**⚠️ 影响范围：**\n• 3个PN Checklist需同步更新\n• 156条已打标数据需重新打标"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "📖 查看详情"
+          },
+          "type": "primary",
+          "url": "https://bees.anker-in.com/change/CR202511050001"
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "🔍 查看变更记录"
+          },
+          "type": "default",
+          "url": "https://bees.anker-in.com/catalog/history/CR202511050001"
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+#### 4.3 审批超时通知卡片（给ETC Leader）
+
+```json
+{
+  "config": {
+    "wide_screen_mode": true
+  },
+  "header": {
+    "template": "red",
+    "title": {
+      "content": "⚠️ 目录变更审批超时提醒",
+      "tag": "plain_text"
+    }
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "fields": [
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**📋 变更单号：**CR202511050001"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**📂 目录名称：**充电最佳体验目录"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**🧑‍💼 发起人：**李杰 (jerry.li)"
+          }
+        },
+        {
+          "is_short": true,
+          "text": {
+            "tag": "lark_md",
+            "content": "**⏰ 已等待：**3个工作日"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**👥 待审批人：**\n• 王涛 (tom.wang) - 未处理\n• 陈丽 (lisa.chen) - 未处理"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**📝 变更概要：**\n• 新增 1 个E4体验项\n• 修改 1 个E4体验项"
+      }
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "div",
+          "text": {
+            "tag": "lark_md",
+            "content": "💡 **建议：**请关注审批进度，必要时可指派专人处理或进行审批授权。"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "📖 查看详情"
+          },
+          "type": "primary",
+          "url": "https://bees.anker-in.com/change/CR202511050001"
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "👉 指派审批"
+          },
+          "type": "default",
+          "value": {
+            "action": "assign",
+            "change_request_id": "CR202511050001"
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "📞 联系提醒"
+          },
+          "type": "default",
+          "value": {
+            "action": "remind",
+            "change_request_id": "CR202511050001"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## 📱 响应式设计
+
+### 桌面端布局 (≥1200px)
+
+```
+┌──────────────────────────────────────────────────────────┐
+│                    顶部导航栏                             │
+├───────────────┬──────────────────────────────────────────┤
+│               │                                           │
+│   侧边导航    │              主内容区域                   │
+│               │                                           │
+│   • 首页      │    ┌──────────────────────────┐          │
+│   • 目录管理  │    │                          │          │
+│   • Checklist │    │     页面内容             │          │
+│   • 高价值... │    │                          │          │
+│   • 待办中心  │    │                          │          │
+│               │    └──────────────────────────┘          │
+│               │                                           │
+│               │                              🤖 浮动按钮  │
+└───────────────┴──────────────────────────────────────────┘
+```
+
+### 平板端布局 (768px - 1199px)
+
+```
+┌──────────────────────────────────────────────┐
+│           顶部导航栏 + 菜单按钮                │
+├──────────────────────────────────────────────┤
+│                                               │
+│           主内容区域（全宽）                   │
+│                                               │
+│  ┌────────────────────────────────────────┐  │
+│  │                                         │  │
+│  │       页面内容（适配宽度）              │  │
+│  │                                         │  │
+│  └────────────────────────────────────────┘  │
+│                                               │
+│                               🤖 浮动按钮     │
+└──────────────────────────────────────────────┘
+```
+
+---
+
+## 🎨 主题和样式变量
+
+```typescript
+// theme.ts
+export const theme = {
+  colors: {
+    primary: '#1890ff',
+    success: '#52c41a',
+    warning: '#faad14',
+    error: '#f5222d',
+    info: '#1890ff',
+    text: {
+      primary: '#262626',
+      secondary: '#595959',
+      disabled: '#bfbfbf'
+    },
+    background: {
+      default: '#ffffff',
+      paper: '#fafafa',
+      hover: '#f5f5f5'
+    },
+    border: {
+      default: '#d9d9d9',
+      light: '#f0f0f0'
+    }
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32
+  },
+  borderRadius: {
+    sm: 2,
+    md: 4,
+    lg: 8,
+    xl: 16,
+    full: 9999
+  },
+  shadows: {
+    sm: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    md: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    lg: '0 6px 16px rgba(0, 0, 0, 0.25)'
+  },
+  typography: {
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+    fontSize: {
+      xs: 12,
+      sm: 14,
+      md: 16,
+      lg: 18,
+      xl: 20,
+      xxl: 24
+    },
+    fontWeight: {
+      normal: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700
+    }
+  }
+};
+```
+
+---
+
+## 🔄 交互动画
+
+```typescript
+// animations.ts
+export const animations = {
+  // 淡入淡出
+  fadeIn: css`
+    animation: fadeIn 0.3s ease-in;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  `,
+
+  // 滑入
+  slideIn: css`
+    animation: slideIn 0.3s ease-out;
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+  `,
+
+  // 缩放
+  scaleIn: css`
+    animation: scaleIn 0.2s ease-out;
+    @keyframes scaleIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  `,
+
+  // 脉冲
+  pulse: css`
+    animation: pulse 2s ease-in-out infinite;
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.6;
+      }
+    }
+  `
+};
+```
+
+---
+
+## 📦 组件导出清单
+
+### 核心组件
+
+1. **CatalogAssistantButton** - 目录助手浮动按钮
+2. **CatalogAssistantDrawer** - 目录助手抽屉组件
+3. **ChangeRequestDetail** - 变更申请详情页
+4. **CatalogChangeInbox** - 目录变更Inbox列表
+5. **ApprovalModal** - 审批弹窗
+6. **MessageBubble** - 对话气泡组件
+7. **DiffContainer** - 变更对比容器
+8. **ChangeTimelineCard** - 变更时间线卡片
+
+### 工具组件
+
+1. **QuickActionButtons** - 快速操作按钮组
+2. **StatusTag** - 状态标签
+3. **WaitingTimeDisplay** - 等待时长显示
+4. **CategorySelector** - 品类选择器
+
+---
+
+## 🧪 组件测试要点
+
+### 功能测试
+
+- [ ] 目录助手对话流程完整性
+- [ ] 变更申请提交成功
+- [ ] 审批通过流程正常
+- [ ] 审批驳回流程正常
+- [ ] 飞书卡片正确渲染
+- [ ] Inbox列表筛选和排序
+- [ ] 批量操作功能正常
+
+### 交互测试
+
+- [ ] 对话输入支持Enter发送
+- [ ] 快速操作按钮点击响应
+- [ ] 抽屉打开关闭动画流畅
+- [ ] 详情页滚动和锚点跳转
+- [ ] 移动端触摸手势支持
+
+### 兼容性测试
+
+- [ ] Chrome 最新版
+- [ ] Safari 最新版
+- [ ] Firefox 最新版
+- [ ] Edge 最新版
+- [ ] iPad (Safari)
+
+---
+
+## 📝 开发注意事项
+
+### 1. 性能优化
+
+```typescript
+// 使用 React.memo 优化重渲染
+const MessageBubble = React.memo(({ message }) => {
+  // ...
+});
+
+// 使用 useMemo 缓存计算结果
+const sortedMessages = useMemo(() => {
+  return messages.sort((a, b) => a.timestamp - b.timestamp);
+}, [messages]);
+
+// 使用 useCallback 缓存回调函数
+const handleSendMessage = useCallback((content) => {
+  sendMessage(content);
+}, [sendMessage]);
+```
+
+### 2. 无障碍支持
+
+```typescript
+// 添加 aria 属性
+<Button
+  aria-label="发送消息"
+  aria-describedby="send-help-text"
+  onClick={handleSend}
+>
+  <SendOutlined />
+</Button>
+
+// 键盘导航支持
+<div
+  role="button"
+  tabIndex={0}
+  onKeyDown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleClick();
+    }
+  }}
+>
+  点击操作
+</div>
+```
+
+### 3. 错误处理
+
+```typescript
+// 使用 ErrorBoundary 捕获错误
+class CatalogAssistantErrorBoundary extends React.Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <ErrorFallback />;
+    }
+    return this.props.children;
+  }
+}
+
+// API错误处理
+try {
+  const result = await submitChangeRequest(data);
+  message.success('提交成功');
+} catch (error) {
+  if (error.response?.status === 403) {
+    message.error('权限不足');
+  } else {
+    message.error('提交失败，请重试');
+  }
+}
+```
+
+---
+
+**文档维护**: @Jerry Li
+**设计审核**: 待审核
+**开发状态**: 待开发
